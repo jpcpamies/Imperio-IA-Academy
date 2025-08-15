@@ -41,10 +41,21 @@ export function VideoModal({ isOpen, onClose, videoId }: VideoModalProps) {
 
   return (
     <div 
-      className="fixed inset-0 z-50 flex items-center justify-center bg-white bg-opacity-80"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40"
+      style={{ backdropFilter: 'blur(8px)' }}
       onClick={handleOverlayClick}
     >
       <div className="relative w-full max-w-4xl mx-4 aspect-video">
+        {/* Close Button */}
+        <button
+          onClick={onClose}
+          className="absolute -top-4 -right-4 z-10 w-12 h-12 bg-white rounded-full shadow-lg flex items-center justify-center hover:bg-gray-100 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-[#635BFF] focus:ring-offset-2"
+          aria-label="Close video"
+        >
+          <X className="h-6 w-6 text-gray-700" />
+        </button>
+        
+        {/* Video iframe */}
         <iframe
           src={`https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0&modestbranding=1`}
           title="Sistema Demo Video"
