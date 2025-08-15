@@ -93,6 +93,7 @@ export interface ClientOptions {
 import { adminResetPassword as api_auth_admin_reset_password_adminResetPassword } from "~backend/auth/admin_reset_password";
 import { changePassword as api_auth_change_password_changePassword } from "~backend/auth/change_password";
 import { debugLogin as api_auth_debug_login_debugLogin } from "~backend/auth/debug_login";
+import { forceLogin as api_auth_force_login_forceLogin } from "~backend/auth/force_login";
 import { login as api_auth_login_login } from "~backend/auth/login";
 import { logout as api_auth_logout_logout } from "~backend/auth/logout";
 import { me as api_auth_me_me } from "~backend/auth/me";
@@ -110,6 +111,7 @@ export namespace auth {
             this.adminResetPassword = this.adminResetPassword.bind(this)
             this.changePassword = this.changePassword.bind(this)
             this.debugLogin = this.debugLogin.bind(this)
+            this.forceLogin = this.forceLogin.bind(this)
             this.login = this.login.bind(this)
             this.logout = this.logout.bind(this)
             this.me = this.me.bind(this)
@@ -143,6 +145,15 @@ export namespace auth {
             // Now make the actual call to the API
             const resp = await this.baseClient.callTypedAPI(`/auth/debug/login`, {method: "POST", body: JSON.stringify(params)})
             return JSON.parse(await resp.text(), dateReviver) as ResponseType<typeof api_auth_debug_login_debugLogin>
+        }
+
+        /**
+         * Development-only force login endpoint (bypasses password verification).
+         */
+        public async forceLogin(params: RequestType<typeof api_auth_force_login_forceLogin>): Promise<ResponseType<typeof api_auth_force_login_forceLogin>> {
+            // Now make the actual call to the API
+            const resp = await this.baseClient.callTypedAPI(`/auth/force-login`, {method: "POST", body: JSON.stringify(params)})
+            return JSON.parse(await resp.text(), dateReviver) as ResponseType<typeof api_auth_force_login_forceLogin>
         }
 
         /**

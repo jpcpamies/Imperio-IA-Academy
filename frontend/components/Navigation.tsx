@@ -3,6 +3,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Menu, X, BookOpen, LogOut, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "../hooks/useAuth";
+import { useToast } from "@/components/ui/use-toast";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -13,15 +14,40 @@ import {
 
 export function Navigation() {
   const [isOpen, setIsOpen] = useState(false);
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
   const { user, logout, isAuthenticated } = useAuth();
+  const { toast } = useToast();
 
   const isActive = (path: string) => location.pathname === path;
 
   const handleLogout = async () => {
-    await logout();
-    navigate("/");
+    setIsLoggingOut(true);
+    try {
+      console.log(`🔐 NAVIGATION - Starting logout process`);
+      await logout();
+      
+      toast({
+        title: "Sesión cerrada",
+        description: "Has cerrado sesión exitosamente.",
+      });
+      
+      console.log(`🔐 NAVIGATION - Redirecting to home page`);
+      navigate("/", { replace: true });
+    } catch (error) {
+      console.error("🔐 NAVIGATION - Logout error:", error);
+      toast({
+        title: "Error",
+        description: "Hubo un problema al cerrar sesión, pero se ha limpiado tu sesión local.",
+        variant: "destructive",
+      });
+      // Still redirect even if there was an error
+      navigate("/", { replace: true });
+    } finally {
+      setIsLoggingOut(false);
+      setIsOpen(false); // Close mobile menu if open
+    }
   };
 
   const handleLoginClick = () => {
@@ -90,7 +116,7 @@ export function Navigation() {
               {isAuthenticated ? (
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
-                    <Button variant="outline" size="sm" className="text-gray-700 border-gray-300 hover:bg-gray-50">
+                    <Button variant="outline" size="sm" className="text-gray-700 border-gray-300 hover:bg-gray-50" disabled={isLoggingOut}>
                       <User className="h-4 w-4 mr-2" />
                       {user?.name}
                     </Button>
@@ -101,9 +127,9 @@ export function Navigation() {
                       Perfil
                     </DropdownMenuItem>
                     <DropdownMenuSeparator />
-                    <DropdownMenuItem onClick={handleLogout}>
+                    <DropdownMenuItem onClick={handleLogout} disabled={isLoggingOut}>
                       <LogOut className="h-4 w-4 mr-2" />
-                      Cerrar Sesión
+                      {isLoggingOut ? "Cerrando..." : "Cerrar Sesión"}
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
@@ -142,6 +168,7 @@ export function Navigation() {
             <button
               onClick={() => setIsOpen(!isOpen)}
               className="text-gray-700 hover:text-[#6B7BFF] focus:outline-none"
+              disabled={isLoggingOut}
             >
               {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
             </button>
@@ -209,18 +236,17 @@ export function Navigation() {
                         navigate("/profile");
                         setIsOpen(false);
                       }}
+                      disabled={isLoggingOut}
                     >
                       Perfil
                     </Button>
                     <Button 
                       size="sm" 
                       className="w-full bg-red-600 hover:bg-red-700 text-white"
-                      onClick={() => {
-                        handleLogout();
-                        setIsOpen(false);
-                      }}
+                      onClick={handleLogout}
+                      disabled={isLoggingOut}
                     >
-                      Cerrar Sesión
+                      {isLoggingOut ? "Cerrando..." : "Cerrar Sesión"}
                     </Button>
                   </>
                 ) : (
