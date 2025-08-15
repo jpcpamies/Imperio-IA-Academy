@@ -15,7 +15,7 @@ export function Navigation() {
         <div className="flex justify-between h-16">
           <div className="flex items-center">
             <Link to="/" className="flex items-center">
-              <BookOpen className="h-8 w-8 text-blue-600 mr-3" />
+              <BookOpen className="h-8 w-8 text-[#6B7BFF] mr-3" />
               <span className="text-xl font-bold text-gray-900">AI Academia</span>
             </Link>
           </div>
@@ -25,7 +25,7 @@ export function Navigation() {
             <Link
               to="/"
               className={`text-sm font-medium transition-colors ${
-                isActive("/") ? "text-blue-600" : "text-gray-700 hover:text-blue-600"
+                isActive("/") ? "text-[#6B7BFF]" : "text-gray-700 hover:text-[#6B7BFF]"
               }`}
             >
               Home
@@ -33,25 +33,25 @@ export function Navigation() {
             <Link
               to="/courses"
               className={`text-sm font-medium transition-colors ${
-                isActive("/courses") ? "text-blue-600" : "text-gray-700 hover:text-blue-600"
+                isActive("/courses") ? "text-[#6B7BFF]" : "text-gray-700 hover:text-[#6B7BFF]"
               }`}
             >
-              Courses
+              Programas
             </Link>
             <Link
               to="/dashboard"
               className={`text-sm font-medium transition-colors ${
-                isActive("/dashboard") ? "text-blue-600" : "text-gray-700 hover:text-blue-600"
+                isActive("/dashboard") ? "text-[#6B7BFF]" : "text-gray-700 hover:text-[#6B7BFF]"
               }`}
             >
-              Dashboard
+              Portal Ejecutivo
             </Link>
             <div className="flex items-center space-x-4">
-              <Button variant="outline" size="sm">
-                Sign In
+              <Button variant="outline" size="sm" className="text-gray-700 border-gray-300 hover:bg-gray-50 hover:text-gray-900">
+                Acceso Ejecutivo
               </Button>
-              <Button size="sm">
-                Get Started
+              <Button size="sm" className="bg-[#D95D39] hover:bg-[#C54A2C] text-white">
+                Inscribirse Ahora
               </Button>
             </div>
           </div>
@@ -60,7 +60,7 @@ export function Navigation() {
           <div className="md:hidden flex items-center">
             <button
               onClick={() => setIsOpen(!isOpen)}
-              className="text-gray-700 hover:text-blue-600 focus:outline-none"
+              className="text-gray-700 hover:text-[#6B7BFF] focus:outline-none"
             >
               {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
             </button>
@@ -74,7 +74,7 @@ export function Navigation() {
               <Link
                 to="/"
                 className={`block px-3 py-2 text-sm font-medium transition-colors ${
-                  isActive("/") ? "text-blue-600 bg-blue-50" : "text-gray-700 hover:text-blue-600"
+                  isActive("/") ? "text-[#6B7BFF] bg-blue-50" : "text-gray-700 hover:text-[#6B7BFF]"
                 }`}
                 onClick={() => setIsOpen(false)}
               >
@@ -83,27 +83,27 @@ export function Navigation() {
               <Link
                 to="/courses"
                 className={`block px-3 py-2 text-sm font-medium transition-colors ${
-                  isActive("/courses") ? "text-blue-600 bg-blue-50" : "text-gray-700 hover:text-blue-600"
+                  isActive("/courses") ? "text-[#6B7BFF] bg-blue-50" : "text-gray-700 hover:text-[#6B7BFF]"
                 }`}
                 onClick={() => setIsOpen(false)}
               >
-                Courses
+                Programas
               </Link>
               <Link
                 to="/dashboard"
                 className={`block px-3 py-2 text-sm font-medium transition-colors ${
-                  isActive("/dashboard") ? "text-blue-600 bg-blue-50" : "text-gray-700 hover:text-blue-600"
+                  isActive("/dashboard") ? "text-[#6B7BFF] bg-blue-50" : "text-gray-700 hover:text-[#6B7BFF]"
                 }`}
                 onClick={() => setIsOpen(false)}
               >
-                Dashboard
+                Portal Ejecutivo
               </Link>
               <div className="px-3 py-2 space-y-2">
-                <Button variant="outline" size="sm" className="w-full">
-                  Sign In
+                <Button variant="outline" size="sm" className="w-full text-gray-700 border-gray-300 hover:bg-gray-50 hover:text-gray-900">
+                  Acceso Ejecutivo
                 </Button>
-                <Button size="sm" className="w-full">
-                  Get Started
+                <Button size="sm" className="w-full bg-[#D95D39] hover:bg-[#C54A2C] text-white">
+                  Inscribirse Ahora
                 </Button>
               </div>
             </div>
