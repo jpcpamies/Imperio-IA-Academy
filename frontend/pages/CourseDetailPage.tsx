@@ -36,19 +36,6 @@ export function CourseDetailPage() {
     fetchCourse();
   }, [id, toast]);
 
-  const getDifficultyColor = (level: string) => {
-    switch (level.toLowerCase()) {
-      case "beginner":
-        return "bg-green-100 text-green-800";
-      case "intermediate":
-        return "bg-yellow-100 text-yellow-800";
-      case "advanced":
-        return "bg-red-100 text-red-800";
-      default:
-        return "bg-gray-100 text-gray-800";
-    }
-  };
-
   if (loading) {
     return (
       <div className="min-h-screen bg-white">
@@ -73,10 +60,10 @@ export function CourseDetailPage() {
       <div className="min-h-screen bg-white">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           <div className="text-center">
-            <h1 className="text-2xl font-bold text-gray-900 mb-4">Course Not Found</h1>
-            <p className="text-gray-600 mb-8">The course you're looking for doesn't exist.</p>
+            <h1 className="text-2xl font-bold text-gray-900 mb-4">Programa No Encontrado</h1>
+            <p className="text-gray-600 mb-8">El programa que buscas no existe.</p>
             <Link to="/courses">
-              <Button>Back to Courses</Button>
+              <Button>Volver a Programas</Button>
             </Link>
           </div>
         </div>
@@ -89,21 +76,21 @@ export function CourseDetailPage() {
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <Link to="/courses" className="inline-flex items-center text-blue-600 hover:text-blue-800 mb-8">
           <ArrowLeft className="h-4 w-4 mr-2" />
-          Back to Courses
+          Volver a Programas
         </Link>
 
         <div className="mb-8">
           <div className="flex items-center gap-4 mb-4">
-            <Badge className={getDifficultyColor(course.difficultyLevel)}>
-              {course.difficultyLevel}
+            <Badge className="bg-blue-100 text-blue-800">
+              Profesional
             </Badge>
             <div className="flex items-center text-gray-600">
               <Clock className="h-4 w-4 mr-1" />
-              {course.durationHours}h total
+              8-12h total
             </div>
             <div className="flex items-center text-gray-600">
               <BookOpen className="h-4 w-4 mr-1" />
-              {course.lessons.length} lessons
+              {course.lessons.length} módulos
             </div>
           </div>
           
@@ -115,13 +102,13 @@ export function CourseDetailPage() {
             {course.description}
           </p>
 
-          <Button size="lg">
-            Enroll in Course
+          <Button size="lg" className="bg-[#D95D39] hover:bg-[#C54A2C] text-white">
+            Inscribirse en el Programa
           </Button>
         </div>
 
         <div>
-          <h2 className="text-2xl font-bold text-gray-900 mb-6">Course Content</h2>
+          <h2 className="text-2xl font-bold text-gray-900 mb-6">Contenido del Programa</h2>
           <div className="space-y-4">
             {course.lessons.map((lesson, index) => (
               <Card key={lesson.id} className="hover:shadow-md transition-shadow duration-300">
@@ -135,7 +122,7 @@ export function CourseDetailPage() {
                     </CardTitle>
                     <div className="flex items-center text-gray-600">
                       <Clock className="h-4 w-4 mr-1" />
-                      {lesson.durationMinutes}m
+                      30-45m
                     </div>
                   </div>
                 </CardHeader>
@@ -146,7 +133,7 @@ export function CourseDetailPage() {
                   <Link to={`/lessons/${lesson.id}`}>
                     <Button variant="outline" size="sm">
                       <Play className="h-4 w-4 mr-2" />
-                      Start Lesson
+                      Iniciar Módulo
                     </Button>
                   </Link>
                 </CardContent>

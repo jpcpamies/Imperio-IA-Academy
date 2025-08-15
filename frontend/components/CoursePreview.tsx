@@ -52,27 +52,14 @@ export function CoursePreview() {
     );
   }
 
-  const getDifficultyColor = (level: string) => {
-    switch (level.toLowerCase()) {
-      case "beginner":
-        return "bg-green-100 text-green-800";
-      case "intermediate":
-        return "bg-yellow-100 text-yellow-800";
-      case "advanced":
-        return "bg-red-100 text-red-800";
-      default:
-        return "bg-gray-100 text-gray-800";
-    }
-  };
-
   return (
     <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
       {courses.map((course) => (
         <Card key={course.id} className="hover:shadow-lg transition-shadow duration-300">
           <CardHeader>
             <div className="flex justify-between items-start mb-2">
-              <Badge className={getDifficultyColor(course.difficultyLevel)}>
-                {course.difficultyLevel}
+              <Badge className="bg-green-100 text-green-800">
+                Profesional
               </Badge>
               <div className="flex items-center text-yellow-500">
                 <Star className="h-4 w-4 fill-current" />
@@ -88,16 +75,16 @@ export function CoursePreview() {
             <div className="flex items-center justify-between text-sm text-gray-500 mb-4">
               <div className="flex items-center">
                 <Clock className="h-4 w-4 mr-1" />
-                {course.durationHours}h
+                8-12h
               </div>
               <div className="flex items-center">
                 <BookOpen className="h-4 w-4 mr-1" />
-                Course
+                Programa
               </div>
             </div>
             <Link to={`/courses/${course.id}`}>
-              <Button className="w-full">
-                View Course
+              <Button className="w-full bg-[#6B7BFF] hover:bg-[#5A6AEF] text-white">
+                Ver Programa
               </Button>
             </Link>
           </CardContent>

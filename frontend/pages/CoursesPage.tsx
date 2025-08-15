@@ -33,19 +33,6 @@ export function CoursesPage() {
     fetchCourses();
   }, [toast]);
 
-  const getDifficultyColor = (level: string) => {
-    switch (level.toLowerCase()) {
-      case "beginner":
-        return "bg-green-100 text-green-800";
-      case "intermediate":
-        return "bg-yellow-100 text-yellow-800";
-      case "advanced":
-        return "bg-red-100 text-red-800";
-      default:
-        return "bg-gray-100 text-gray-800";
-    }
-  };
-
   if (loading) {
     return (
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
@@ -76,10 +63,10 @@ export function CoursesPage() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="mb-8">
           <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-            AI Courses
+            Programas de IA
           </h1>
           <p className="text-xl text-gray-600">
-            Explore our comprehensive collection of AI and machine learning courses
+            Explora nuestra colección completa de programas de inteligencia artificial y aprendizaje automático
           </p>
         </div>
 
@@ -88,8 +75,8 @@ export function CoursesPage() {
             <Card key={course.id} className="border-0 shadow-lg hover:shadow-xl transition-shadow duration-300">
               <CardHeader>
                 <div className="flex justify-between items-start mb-2">
-                  <Badge className={getDifficultyColor(course.difficultyLevel)}>
-                    {course.difficultyLevel}
+                  <Badge className="bg-blue-100 text-blue-800">
+                    Profesional
                   </Badge>
                   <div className="flex items-center text-yellow-500">
                     <Star className="h-4 w-4 fill-current" />
@@ -105,16 +92,16 @@ export function CoursesPage() {
                 <div className="flex items-center justify-between text-sm text-gray-500 mb-4">
                   <div className="flex items-center">
                     <Clock className="h-4 w-4 mr-1" />
-                    {course.durationHours}h
+                    8-12h
                   </div>
                   <div className="flex items-center">
                     <BookOpen className="h-4 w-4 mr-1" />
-                    Course
+                    Programa
                   </div>
                 </div>
                 <Link to={`/courses/${course.id}`}>
-                  <Button className="w-full">
-                    View Course
+                  <Button className="w-full bg-[#6B7BFF] hover:bg-[#5A6AEF] text-white">
+                    Ver Programa
                   </Button>
                 </Link>
               </CardContent>
