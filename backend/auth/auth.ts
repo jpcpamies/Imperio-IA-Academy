@@ -1,7 +1,6 @@
 import { authHandler } from "encore.dev/auth";
 import { APIError, Header, Cookie } from "encore.dev/api";
 import { SQLDatabase } from "encore.dev/storage/sqldb";
-import * as bcrypt from "bcrypt";
 import * as jwt from "jsonwebtoken";
 import { secret } from "encore.dev/config";
 
@@ -22,24 +21,13 @@ export interface AuthData {
 
 const auth = authHandler<AuthParams, AuthData>(
   async (data) => {
-    console.log(`🔐 AUTH HANDLER - Starting authentication check`);
-    
     const token = data.authorization?.replace("Bearer ", "") ?? data.session?.value;
     if (!token) {
-      console.log(`🔐 AUTH HANDLER - No token provided`);
       throw APIError.unauthenticated("missing token");
     }
 
-    console.log(`🔐 AUTH HANDLER - Token found, length: ${token.length}`);
-    console.log(`🔐 AUTH HANDLER - Token starts with: ${token.substring(0, 20)}...`);
-
     try {
-      const jwtSecretValue = jwtSecret();
-      console.log(`🔐 AUTH HANDLER - JWT secret available: ${!!jwtSecretValue}`);
-      
-      const decoded = jwt.verify(token, jwtSecretValue) as any;
-      console.log(`🔐 AUTH HANDLER - Token decoded successfully`);
-      console.log(`🔐 AUTH HANDLER - Decoded userId: ${decoded.userId}, email: ${decoded.email}`);
+      const decoded = jwt.verify(token, jwtSecret()) as any;
       
       const user = await coursesDB.queryRow<{
         id: number;
@@ -49,29 +37,17 @@ const auth = authHandler<AuthParams, AuthData>(
       }>`SELECT id, email, name, role FROM users WHERE id = ${decoded.userId}`;
 
       if (!user) {
-        console.log(`🔐 AUTH HANDLER - User not found for ID: ${decoded.userId}`);
         throw APIError.unauthenticated("user not found");
       }
 
-      console.log(`🔐 AUTH HANDLER - User found: ${user.email}, Role: ${user.role}`);
-
-      const authData = {
+      return {
         userID: user.id.toString(),
         email: user.email,
         name: user.name,
         role: user.role,
       };
 
-      console.log(`🔐 AUTH HANDLER - Authentication successful for: ${user.email}`);
-      return authData;
-
     } catch (err) {
-      console.error(`🔐 AUTH HANDLER - Authentication failed:`, err);
-      
-      if (err instanceof jwt.JsonWebTokenError) {
-        console.log(`🔐 AUTH HANDLER - JWT error type: ${err.name}, message: ${err.message}`);
-      }
-      
       throw APIError.unauthenticated("invalid token", err);
     }
   }

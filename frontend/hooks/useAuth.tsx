@@ -29,63 +29,28 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setUser(userInfo);
     } catch (error) {
       setUser(null);
-      // Clear any stored auth data on auth check failure
-      clearAuthData();
     } finally {
       setLoading(false);
     }
   };
 
-  const clearAuthData = () => {
-    // Clear localStorage
-    localStorage.removeItem('authToken');
-    localStorage.removeItem('user');
-    localStorage.removeItem('session');
-    
-    // Clear sessionStorage
-    sessionStorage.removeItem('authToken');
-    sessionStorage.removeItem('user');
-    sessionStorage.removeItem('session');
-    
-    // Note: HTTP-only cookies are automatically cleared by the server response
-    console.log(`🔐 AUTH - Cleared local authentication data`);
-  };
-
   const login = async (email: string, password: string) => {
     const response = await backend.auth.login({ email, password });
     setUser(response.user);
-    console.log(`🔐 AUTH - User logged in: ${response.user.email}`);
   };
 
   const register = async (email: string, password: string, name: string) => {
     const response = await backend.auth.register({ email, password, name });
     setUser(response.user);
-    console.log(`🔐 AUTH - User registered: ${response.user.email}`);
   };
 
   const logout = async () => {
     try {
-      console.log(`🔐 AUTH - Starting logout process for user: ${user?.email}`);
-      
-      // Call backend logout to clear server-side session
       await backend.auth.logout();
-      console.log(`🔐 AUTH - Server logout successful`);
-      
-      // Clear local user state
-      setUser(null);
-      
-      // Clear any stored authentication data
-      clearAuthData();
-      
-      console.log(`🔐 AUTH - Logout completed successfully`);
     } catch (error) {
-      console.error(`🔐 AUTH - Logout error:`, error);
-      
-      // Even if server logout fails, clear local state for security
+      // Even if server logout fails, clear local state
+    } finally {
       setUser(null);
-      clearAuthData();
-      
-      console.log(`🔐 AUTH - Local logout completed despite server error`);
     }
   };
 

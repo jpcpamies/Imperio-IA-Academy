@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
-import { BookOpen, Eye, EyeOff, AlertCircle, Zap } from "lucide-react";
+import { BookOpen, Eye, EyeOff, AlertCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -8,15 +8,12 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { useToast } from "@/components/ui/use-toast";
 import { useAuth } from "../hooks/useAuth";
-import backend from "~backend/client";
 
 export function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [debugMode, setDebugMode] = useState(false);
-  const [debugInfo, setDebugInfo] = useState<any>(null);
   const [error, setError] = useState("");
   const { login } = useAuth();
   const { toast } = useToast();
@@ -25,135 +22,28 @@ export function LoginPage() {
 
   const from = location.state?.from?.pathname || "/dashboard";
 
-  const handleDebugCheck = async () => {
-    if (!email) {
-      toast({
-        title: "Debug Mode",
-        description: "Ingresa un email para verificar el estado del usuario.",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    try {
-      console.log(`🐛 Frontend Debug - Checking user: ${email}`);
-      const response = await backend.auth.debugLogin({ email });
-      setDebugInfo(response);
-      console.log("🐛 Frontend Debug Info:", response);
-      
-      if (response.userExists) {
-        let debugMessage = `Rol: ${response.userInfo?.role}, Tiene contraseña: ${response.userInfo?.hasPassword ? 'Sí' : 'No'}`;
-        
-        if (response.hashAnalysis) {
-          debugMessage += `, Hash válido: ${response.hashAnalysis.isValidBcryptFormat ? 'Sí' : 'No'}`;
-          if (response.hashAnalysis.saltRounds) {
-            debugMessage += `, Salt rounds: ${response.hashAnalysis.saltRounds}`;
-          }
-        }
-        
-        // Check if any test passwords worked
-        const workingPasswords = response.testPasswordResults?.filter(result => result.isValid) || [];
-        if (workingPasswords.length > 0) {
-          debugMessage += `, Contraseñas que funcionan: ${workingPasswords.map(p => p.testPassword).join(', ')}`;
-        }
-        
-        toast({
-          title: "Debug: Usuario encontrado",
-          description: debugMessage,
-        });
-      } else {
-        toast({
-          title: "Debug: Usuario no encontrado",
-          description: "Este email no está registrado en el sistema.",
-          variant: "destructive",
-        });
-      }
-    } catch (error) {
-      console.error("Frontend Debug check failed:", error);
-      toast({
-        title: "Error de debug",
-        description: "No se pudo verificar el estado del usuario.",
-        variant: "destructive",
-      });
-    }
-  };
-
-  const handleForceLogin = async () => {
-    if (!email) {
-      toast({
-        title: "Force Login",
-        description: "Ingresa un email para hacer force login.",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    setLoading(true);
-    try {
-      console.log(`🔐 Frontend Force Login - Attempting for: ${email}`);
-      const response = await backend.auth.forceLogin({ email, devKey: "dev123" });
-      
-      // Manually set the user in auth context (simulate successful login)
-      console.log(`🔐 Frontend Force Login - Success for: ${email}`);
-      
-      toast({
-        title: "Force Login Exitoso",
-        description: `${response.warning} - Logueado como ${response.user.name}`,
-      });
-      
-      // Redirect to dashboard
-      navigate(from, { replace: true });
-      
-      // Refresh the page to ensure auth state is updated
-      window.location.reload();
-      
-    } catch (error: any) {
-      console.error("🔐 Frontend Force Login - Failed:", error);
-      toast({
-        title: "Force Login Falló",
-        description: error?.message || "No se pudo hacer force login.",
-        variant: "destructive",
-      });
-    } finally {
-      setLoading(false);
-    }
-  };
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setError("");
 
-    console.log(`🔐 Frontend Login - Starting login attempt for: ${email}`);
-
     try {
       await login(email, password);
-      console.log(`🔐 Frontend Login - Login successful for: ${email}`);
       toast({
         title: "¡Bienvenido!",
         description: "Has iniciado sesión exitosamente.",
       });
       navigate(from, { replace: true });
     } catch (error: any) {
-      console.error("🔐 Frontend Login - Login failed:", error);
-      
       let errorMessage = "Error de conexión. Por favor, intenta de nuevo.";
       
       if (error?.message) {
-        console.log(`🔐 Frontend Login - Error message: ${error.message}`);
-        
         if (error.message.includes("Email o contraseña incorrectos")) {
           errorMessage = "Email o contraseña incorrectos. Verifica tus credenciales.";
         } else if (error.message.includes("Usuario no encontrado")) {
           errorMessage = "Usuario no encontrado. ¿Necesitas crear una cuenta?";
         } else if (error.message.includes("Usuario no tiene contraseña")) {
           errorMessage = "Tu cuenta necesita una contraseña. Usa 'Olvidé mi contraseña' para configurar una.";
-        } else if (error.message.includes("Error interno del servidor")) {
-          errorMessage = "Error interno del servidor. Por favor, contacta al soporte.";
-        } else if (error.message.includes("Error during password verification")) {
-          errorMessage = "Error en la verificación de contraseña. Por favor, intenta de nuevo.";
-        } else if (error.message.includes("Error during token generation")) {
-          errorMessage = "Error en la generación de sesión. Por favor, intenta de nuevo.";
         }
       }
       
@@ -257,98 +147,6 @@ export function LoginPage() {
                 {loading ? "Iniciando sesión..." : "Acceder al Portal"}
               </Button>
             </form>
-
-            {/* Debug Mode Toggle */}
-            <div className="mt-6 pt-6 border-t border-gray-200">
-              <div className="flex items-center justify-between mb-4">
-                <span className="text-sm text-gray-600">Modo Debug (Desarrollo)</span>
-                <button
-                  type="button"
-                  onClick={() => setDebugMode(!debugMode)}
-                  className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
-                    debugMode ? 'bg-[#6B7BFF]' : 'bg-gray-200'
-                  }`}
-                >
-                  <span
-                    className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
-                      debugMode ? 'translate-x-6' : 'translate-x-1'
-                    }`}
-                  />
-                </button>
-              </div>
-
-              {debugMode && (
-                <div className="space-y-3">
-                  <div className="grid grid-cols-2 gap-2">
-                    <Button
-                      type="button"
-                      variant="outline"
-                      size="sm"
-                      onClick={handleDebugCheck}
-                      className="text-gray-700 border-gray-300 hover:bg-gray-50"
-                    >
-                      Debug Usuario
-                    </Button>
-                    
-                    <Button
-                      type="button"
-                      variant="outline"
-                      size="sm"
-                      onClick={handleForceLogin}
-                      disabled={loading}
-                      className="text-orange-700 border-orange-300 hover:bg-orange-50"
-                    >
-                      <Zap className="h-3 w-3 mr-1" />
-                      Force Login
-                    </Button>
-                  </div>
-                  
-                  {debugInfo && (
-                    <div className="bg-gray-50 p-3 rounded text-xs">
-                      <div className="mb-2 font-semibold">Debug Info:</div>
-                      
-                      {debugInfo.userExists && debugInfo.userInfo && (
-                        <div className="mb-3 p-2 bg-blue-50 rounded">
-                          <div className="font-semibold text-blue-800">Usuario:</div>
-                          <div className="text-blue-700">
-                            Email: {debugInfo.userInfo.email}<br/>
-                            Nombre: {debugInfo.userInfo.name}<br/>
-                            Rol: {debugInfo.userInfo.role}<br/>
-                            Tiene contraseña: {debugInfo.userInfo.hasPassword ? 'Sí' : 'No'}<br/>
-                            Hash completo: <code className="text-xs break-all">{debugInfo.userInfo.passwordHashFull}</code>
-                          </div>
-                        </div>
-                      )}
-
-                      {debugInfo.hashAnalysis && (
-                        <div className="mb-3 p-2 bg-purple-50 rounded">
-                          <div className="font-semibold text-purple-800">Análisis de Hash:</div>
-                          <div className="text-purple-700">
-                            Formato válido: {debugInfo.hashAnalysis.isValidBcryptFormat ? 'Sí' : 'No'}<br/>
-                            {debugInfo.hashAnalysis.saltRounds && `Salt rounds: ${debugInfo.hashAnalysis.saltRounds}`}<br/>
-                            {debugInfo.hashAnalysis.hashVersion && `Versión: ${debugInfo.hashAnalysis.hashVersion}`}
-                          </div>
-                        </div>
-                      )}
-                      
-                      {debugInfo.testPasswordResults && debugInfo.testPasswordResults.length > 0 && (
-                        <div className="mt-3 p-2 bg-green-50 rounded">
-                          <div className="font-semibold text-green-800">Test de Contraseñas:</div>
-                          <div className="text-green-700 text-xs">
-                            {debugInfo.testPasswordResults.map((result: any, index: number) => (
-                              <div key={index} className={result.isValid ? 'text-green-600 font-bold' : 'text-gray-600'}>
-                                "{result.testPassword}": {result.isValid ? '✅ VÁLIDA' : '❌ INVÁLIDA'}
-                                {result.error && ` (Error: ${result.error})`}
-                              </div>
-                            ))}
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                  )}
-                </div>
-              )}
-            </div>
 
             <div className="mt-6 text-center">
               <p className="text-gray-600">
