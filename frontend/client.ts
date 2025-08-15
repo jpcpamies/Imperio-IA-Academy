@@ -33,11 +33,9 @@ const BROWSER = typeof globalThis === "object" && ("window" in globalThis);
  * Client is an API client for the  Encore application.
  */
 export class Client {
-    public readonly auth: auth.ServiceClient
     public readonly courses: courses.ServiceClient
     public readonly lessons: lessons.ServiceClient
     public readonly progress: progress.ServiceClient
-    public readonly users: users.ServiceClient
     private readonly options: ClientOptions
     private readonly target: string
 
@@ -52,11 +50,9 @@ export class Client {
         this.target = target
         this.options = options ?? {}
         const base = new BaseClient(this.target, this.options)
-        this.auth = new auth.ServiceClient(base)
         this.courses = new courses.ServiceClient(base)
         this.lessons = new lessons.ServiceClient(base)
         this.progress = new progress.ServiceClient(base)
-        this.users = new users.ServiceClient(base)
     }
 
     /**
@@ -85,53 +81,6 @@ export interface ClientOptions {
 
     /** Default RequestInit to be used for the client */
     requestInit?: Omit<RequestInit, "headers"> & { headers?: Record<string, string> }
-}
-
-/**
- * Import the endpoint handlers to derive the types for the client.
- */
-import { login as api_auth_login_login } from "~backend/auth/login";
-import { logout as api_auth_logout_logout } from "~backend/auth/logout";
-import { me as api_auth_me_me } from "~backend/auth/me";
-import { register as api_auth_register_register } from "~backend/auth/register";
-
-export namespace auth {
-
-    export class ServiceClient {
-        private baseClient: BaseClient
-
-        constructor(baseClient: BaseClient) {
-            this.baseClient = baseClient
-            this.login = this.login.bind(this)
-            this.logout = this.logout.bind(this)
-            this.me = this.me.bind(this)
-            this.register = this.register.bind(this)
-        }
-
-        public async login(params: RequestType<typeof api_auth_login_login>): Promise<ResponseType<typeof api_auth_login_login>> {
-            // Now make the actual call to the API
-            const resp = await this.baseClient.callTypedAPI(`/auth/login`, {method: "POST", body: JSON.stringify(params)})
-            return JSON.parse(await resp.text(), dateReviver) as ResponseType<typeof api_auth_login_login>
-        }
-
-        public async logout(): Promise<ResponseType<typeof api_auth_logout_logout>> {
-            // Now make the actual call to the API
-            const resp = await this.baseClient.callTypedAPI(`/auth/logout`, {method: "POST", body: undefined})
-            return JSON.parse(await resp.text(), dateReviver) as ResponseType<typeof api_auth_logout_logout>
-        }
-
-        public async me(params: RequestType<typeof api_auth_me_me>): Promise<ResponseType<typeof api_auth_me_me>> {
-            // Now make the actual call to the API
-            const resp = await this.baseClient.callTypedAPI(`/auth/me`, {method: "GET", body: undefined})
-            return JSON.parse(await resp.text(), dateReviver) as ResponseType<typeof api_auth_me_me>
-        }
-
-        public async register(params: RequestType<typeof api_auth_register_register>): Promise<ResponseType<typeof api_auth_register_register>> {
-            // Now make the actual call to the API
-            const resp = await this.baseClient.callTypedAPI(`/auth/register`, {method: "POST", body: JSON.stringify(params)})
-            return JSON.parse(await resp.text(), dateReviver) as ResponseType<typeof api_auth_register_register>
-        }
-    }
 }
 
 /**
@@ -241,43 +190,6 @@ export namespace progress {
             // Now make the actual call to the API
             const resp = await this.baseClient.callTypedAPI(`/progress/complete`, {method: "POST", body: JSON.stringify(params)})
             return JSON.parse(await resp.text(), dateReviver) as ResponseType<typeof api_progress_mark_complete_markComplete>
-        }
-    }
-}
-
-/**
- * Import the endpoint handlers to derive the types for the client.
- */
-import { get as api_users_get_get } from "~backend/users/get";
-import { list as api_users_list_list } from "~backend/users/list";
-
-export namespace users {
-
-    export class ServiceClient {
-        private baseClient: BaseClient
-
-        constructor(baseClient: BaseClient) {
-            this.baseClient = baseClient
-            this.get = this.get.bind(this)
-            this.list = this.list.bind(this)
-        }
-
-        /**
-         * Retrieves a specific user by ID.
-         */
-        public async get(params: { id: number }): Promise<ResponseType<typeof api_users_get_get>> {
-            // Now make the actual call to the API
-            const resp = await this.baseClient.callTypedAPI(`/users/${encodeURIComponent(params.id)}`, {method: "GET", body: undefined})
-            return JSON.parse(await resp.text(), dateReviver) as ResponseType<typeof api_users_get_get>
-        }
-
-        /**
-         * Retrieves all users (admin only).
-         */
-        public async list(): Promise<ResponseType<typeof api_users_list_list>> {
-            // Now make the actual call to the API
-            const resp = await this.baseClient.callTypedAPI(`/users`, {method: "GET", body: undefined})
-            return JSON.parse(await resp.text(), dateReviver) as ResponseType<typeof api_users_list_list>
         }
     }
 }

@@ -5,7 +5,6 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
-import { useAuth } from "../hooks/useAuth";
 import backend from "~backend/client";
 import type { Course } from "~backend/courses/list";
 
@@ -13,7 +12,6 @@ export function CoursePreview() {
   const [courses, setCourses] = useState<Course[]>([]);
   const [loading, setLoading] = useState(true);
   const { toast } = useToast();
-  const { isAuthenticated } = useAuth();
 
   useEffect(() => {
     const fetchCourses = async () => {
@@ -84,19 +82,11 @@ export function CoursePreview() {
                 Programa
               </div>
             </div>
-            {isAuthenticated ? (
-              <Link to={`/courses/${course.id}`}>
-                <Button className="w-full bg-[#6B7BFF] hover:bg-[#5A6AEF] text-white">
-                  Ver Programa
-                </Button>
-              </Link>
-            ) : (
-              <Link to="/login">
-                <Button className="w-full bg-[#6B7BFF] hover:bg-[#5A6AEF] text-white">
-                  Acceder al Programa
-                </Button>
-              </Link>
-            )}
+            <Link to={`/courses/${course.id}`}>
+              <Button className="w-full bg-[#6B7BFF] hover:bg-[#5A6AEF] text-white">
+                Ver Programa
+              </Button>
+            </Link>
           </CardContent>
         </Card>
       ))}

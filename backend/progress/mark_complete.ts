@@ -26,15 +26,6 @@ export const markComplete = api<MarkCompleteParams, MarkCompleteResponse>(
       throw APIError.notFound("lesson not found");
     }
 
-    // Verify user exists
-    const user = await coursesDB.queryRow<{ id: number }>`
-      SELECT id FROM users WHERE id = ${params.userId}
-    `;
-
-    if (!user) {
-      throw APIError.notFound("user not found");
-    }
-
     const completedAt = new Date();
 
     // Insert or update progress record

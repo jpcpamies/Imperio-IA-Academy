@@ -6,7 +6,6 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { useToast } from "@/components/ui/use-toast";
-import { useAuth } from "../hooks/useAuth";
 import backend from "~backend/client";
 import type { Course } from "~backend/courses/list";
 
@@ -14,9 +13,9 @@ export function DashboardPage() {
   const [courses, setCourses] = useState<Course[]>([]);
   const [loading, setLoading] = useState(true);
   const { toast } = useToast();
-  const { user } = useAuth();
 
-  // Mock progress data - in a real app, this would come from the backend
+  // Mock user name and stats
+  const mockUserName = "Ejecutivo";
   const [stats] = useState({
     totalCourses: 4,
     completedCourses: 0,
@@ -73,7 +72,7 @@ export function DashboardPage() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="mb-8">
           <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-            ¡Bienvenido de vuelta, {user?.name}!
+            ¡Bienvenido de vuelta, {mockUserName}!
           </h1>
           <p className="text-xl text-gray-600">
             Continúa tu transformación profesional con IA. Estás haciendo un gran progreso.

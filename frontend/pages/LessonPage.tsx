@@ -4,7 +4,6 @@ import { ArrowLeft, ArrowRight, Clock, CheckCircle } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
-import { useAuth } from "../hooks/useAuth";
 import backend from "~backend/client";
 import type { LessonDetail } from "~backend/lessons/get";
 
@@ -14,7 +13,9 @@ export function LessonPage() {
   const [loading, setLoading] = useState(true);
   const [completed, setCompleted] = useState(false);
   const { toast } = useToast();
-  const { user } = useAuth();
+
+  // Mock user ID for now (in a real app, this would come from authentication)
+  const mockUserId = 1;
 
   useEffect(() => {
     const fetchLesson = async () => {
@@ -39,11 +40,11 @@ export function LessonPage() {
   }, [id, toast]);
 
   const handleMarkComplete = async () => {
-    if (!lesson || !user) return;
+    if (!lesson) return;
 
     try {
       await backend.progress.markComplete({
-        userId: parseInt(user.id),
+        userId: mockUserId,
         lessonId: lesson.id,
       });
       setCompleted(true);

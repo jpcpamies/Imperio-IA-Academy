@@ -1,14 +1,4 @@
--- Users table
-CREATE TABLE users (
-  id BIGSERIAL PRIMARY KEY,
-  email TEXT NOT NULL UNIQUE,
-  password_hash TEXT NOT NULL,
-  name TEXT NOT NULL,
-  avatar_url TEXT,
-  role TEXT NOT NULL DEFAULT 'user' CHECK (role IN ('user', 'admin')),
-  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
-);
+-- Core application tables without authentication dependencies
 
 -- Courses table
 CREATE TABLE courses (
@@ -36,10 +26,10 @@ CREATE TABLE lessons (
   UNIQUE(course_id, slug)
 );
 
--- User progress table
+-- User progress table (simplified without user authentication)
 CREATE TABLE user_progress (
   id BIGSERIAL PRIMARY KEY,
-  user_id BIGINT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  user_id INTEGER NOT NULL, -- Simple integer ID, no foreign key constraint
   lesson_id BIGINT NOT NULL REFERENCES lessons(id) ON DELETE CASCADE,
   completed BOOLEAN NOT NULL DEFAULT FALSE,
   completed_at TIMESTAMP WITH TIME ZONE,
@@ -53,13 +43,6 @@ CREATE INDEX idx_lessons_course_id ON lessons(course_id);
 CREATE INDEX idx_lessons_slug ON lessons(slug);
 CREATE INDEX idx_user_progress_user_id ON user_progress(user_id);
 CREATE INDEX idx_user_progress_lesson_id ON user_progress(lesson_id);
-
--- Insert sample users
-INSERT INTO users (email, password_hash, name, avatar_url, role) VALUES
-('admin@aiacademia.com', '$2b$10$example_hash_admin', 'Administrador Principal', '/avatars/admin.jpg', 'admin'),
-('maria.rodriguez@empresa.com', '$2b$10$example_hash_maria', 'María Elena Rodríguez', '/avatars/maria.jpg', 'user'),
-('carlos.lopez@corporativo.com', '$2b$10$example_hash_carlos', 'Carlos López Mendoza', '/avatars/carlos.jpg', 'user'),
-('ana.martinez@consultora.com', '$2b$10$example_hash_ana', 'Ana Martínez Silva', '/avatars/ana.jpg', 'user');
 
 -- Insert sample courses
 INSERT INTO courses (title, description, thumbnail_url, slug) VALUES
@@ -196,28 +179,28 @@ Te guiaré a través del proceso de evaluación de tu situación actual, definic
 
 Incluye plantillas de planes de transformación para diferentes tamaños de organización, métricas de éxito y estrategias para mantener el momentum a largo plazo. Al finalizar, tendrás un plan detallado y las herramientas necesarias para convertirte en el líder de transformación que tu organización necesita.', '/videos/liderazgo-lesson-5.mp4', 5, 'plan-transformacion-digital');
 
--- Insert sample user progress data
+-- Insert sample user progress data (using simple integer user IDs)
 INSERT INTO user_progress (user_id, lesson_id, completed, completed_at) VALUES
--- María has completed first course and is working on second
-(2, 1, true, '2024-01-10 10:30:00'),
-(2, 2, true, '2024-01-11 14:15:00'),
-(2, 3, true, '2024-01-12 09:45:00'),
-(2, 4, true, '2024-01-13 16:20:00'),
-(2, 5, true, '2024-01-14 11:10:00'),
-(2, 6, true, '2024-01-15 13:30:00'),
-(2, 7, true, '2024-01-16 10:45:00'),
-(2, 8, false, null),
+-- User 1 has completed first course and is working on second
+(1, 1, true, '2024-01-10 10:30:00'),
+(1, 2, true, '2024-01-11 14:15:00'),
+(1, 3, true, '2024-01-12 09:45:00'),
+(1, 4, true, '2024-01-13 16:20:00'),
+(1, 5, true, '2024-01-14 11:10:00'),
+(1, 6, true, '2024-01-15 13:30:00'),
+(1, 7, true, '2024-01-16 10:45:00'),
+(1, 8, false, null),
 
--- Carlos is progressing through first and third courses
-(3, 1, true, '2024-01-08 09:15:00'),
-(3, 2, true, '2024-01-09 15:30:00'),
-(3, 3, true, '2024-01-10 11:20:00'),
-(3, 11, true, '2024-01-12 14:45:00'),
-(3, 12, true, '2024-01-13 10:30:00'),
-(3, 13, false, null),
+-- User 2 is progressing through first and third courses
+(2, 1, true, '2024-01-08 09:15:00'),
+(2, 2, true, '2024-01-09 15:30:00'),
+(2, 3, true, '2024-01-10 11:20:00'),
+(2, 11, true, '2024-01-12 14:45:00'),
+(2, 12, true, '2024-01-13 10:30:00'),
+(2, 13, false, null),
 
--- Ana is working on leadership course
-(4, 16, true, '2024-01-05 08:30:00'),
-(4, 17, true, '2024-01-07 16:15:00'),
-(4, 18, true, '2024-01-09 12:45:00'),
-(4, 19, false, null);
+-- User 3 is working on leadership course
+(3, 16, true, '2024-01-05 08:30:00'),
+(3, 17, true, '2024-01-07 16:15:00'),
+(3, 18, true, '2024-01-09 12:45:00'),
+(3, 19, false, null);
