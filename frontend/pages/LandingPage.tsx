@@ -3,7 +3,6 @@ import { ArrowRight, Brain, TrendingUp, Users, AlertTriangle, Clock, Target, Che
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { CoursePreview } from "../components/CoursePreview";
 
@@ -421,7 +420,7 @@ export function LandingPage() {
         </div>
       </section>
 
-      {/* Comparison Table Section */}
+      {/* Traditional Comparison Table Section */}
       <section className="py-20 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
@@ -435,131 +434,144 @@ export function LandingPage() {
           </div>
 
           <div className="bg-white rounded-lg shadow-lg overflow-hidden">
-            <Table>
-              <TableHeader>
-                <TableRow className="bg-gray-50">
-                  <TableHead className="font-bold text-gray-900 text-lg py-6">Aspecto</TableHead>
-                  <TableHead className="font-bold text-[#635BFF] text-lg py-6 text-center">
-                    <div className="flex items-center justify-center">
-                      <CheckCircle className="h-5 w-5 mr-2" />
+            <div className="overflow-x-auto">
+              <table className="w-full border-collapse">
+                <thead>
+                  <tr className="bg-gray-100">
+                    <th className="border border-black px-6 py-4 text-left font-bold text-gray-900 text-lg">
+                      Aspecto
+                    </th>
+                    <th className="border border-black px-6 py-4 text-center font-bold text-[#635BFF] text-lg">
                       Nuestra Academia
-                    </div>
-                  </TableHead>
-                  <TableHead className="font-bold text-gray-500 text-lg py-6 text-center">
-                    <div className="flex items-center justify-center">
-                      <X className="h-5 w-5 mr-2" />
+                    </th>
+                    <th className="border border-black px-6 py-4 text-center font-bold text-gray-500 text-lg">
                       Otras Academias
-                    </div>
-                  </TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                <TableRow className="border-b">
-                  <TableCell className="font-semibold text-gray-900 py-6">
-                    <div className="flex items-center">
-                      <Users className="h-5 w-5 mr-3 text-gray-600" />
-                      Enfoque
-                    </div>
-                  </TableCell>
-                  <TableCell className="py-6 text-center">
-                    <div className="bg-green-50 border border-green-200 rounded-lg p-4">
-                      <p className="font-medium text-green-800">Profesionales 30+ con experiencia</p>
-                      <p className="text-sm text-green-600 mt-1">Metodología específica para ejecutivos</p>
-                    </div>
-                  </TableCell>
-                  <TableCell className="py-6 text-center">
-                    <div className="bg-red-50 border border-red-200 rounded-lg p-4">
-                      <p className="font-medium text-red-800">Programadores jóvenes/audiencia general</p>
-                      <p className="text-sm text-red-600 mt-1">Enfoque técnico sin contexto empresarial</p>
-                    </div>
-                  </TableCell>
-                </TableRow>
-
-                <TableRow className="border-b">
-                  <TableCell className="font-semibold text-gray-900 py-6">
-                    <div className="flex items-center">
-                      <BookOpen className="h-5 w-5 mr-3 text-gray-600" />
-                      Contenido
-                    </div>
-                  </TableCell>
-                  <TableCell className="py-6 text-center">
-                    <div className="bg-green-50 border border-green-200 rounded-lg p-4">
-                      <p className="font-medium text-green-800">Casos reales que inspiran</p>
-                      <p className="text-sm text-green-600 mt-1">Aplicación inmediata en tu trabajo</p>
-                    </div>
-                  </TableCell>
-                  <TableCell className="py-6 text-center">
-                    <div className="bg-red-50 border border-red-200 rounded-lg p-4">
-                      <p className="font-medium text-red-800">Teoría profunda, contenido obsoleto</p>
-                      <p className="text-sm text-red-600 mt-1">Información que cambia constantemente</p>
-                    </div>
-                  </TableCell>
-                </TableRow>
-
-                <TableRow className="border-b">
-                  <TableCell className="font-semibold text-gray-900 py-6">
-                    <div className="flex items-center">
-                      <Target className="h-5 w-5 mr-3 text-gray-600" />
-                      Metodología
-                    </div>
-                  </TableCell>
-                  <TableCell className="py-6 text-center">
-                    <div className="bg-green-50 border border-green-200 rounded-lg p-4">
-                      <p className="font-medium text-green-800">80/20, aplicación inmediata</p>
-                      <p className="text-sm text-green-600 mt-1">Solo lo que realmente necesitas</p>
-                    </div>
-                  </TableCell>
-                  <TableCell className="py-6 text-center">
-                    <div className="bg-red-50 border border-red-200 rounded-lg p-4">
-                      <p className="font-medium text-red-800">Cursos técnicos complejos</p>
-                      <p className="text-sm text-red-600 mt-1">Información abrumadora sin priorización</p>
-                    </div>
-                  </TableCell>
-                </TableRow>
-
-                <TableRow className="border-b">
-                  <TableCell className="font-semibold text-gray-900 py-6">
-                    <div className="flex items-center">
-                      <Users className="h-5 w-5 mr-3 text-gray-600" />
-                      Comunidad
-                    </div>
-                  </TableCell>
-                  <TableCell className="py-6 text-center">
-                    <div className="bg-green-50 border border-green-200 rounded-lg p-4">
-                      <p className="font-medium text-green-800">Profesionales de tu nivel</p>
-                      <p className="text-sm text-green-600 mt-1">Networking con ejecutivos y directores</p>
-                    </div>
-                  </TableCell>
-                  <TableCell className="py-6 text-center">
-                    <div className="bg-red-50 border border-red-200 rounded-lg p-4">
-                      <p className="font-medium text-red-800">Edades mixtas, estudiantes</p>
-                      <p className="text-sm text-red-600 mt-1">Diferentes niveles de experiencia</p>
-                    </div>
-                  </TableCell>
-                </TableRow>
-
-                <TableRow>
-                  <TableCell className="font-semibold text-gray-900 py-6">
-                    <div className="flex items-center">
-                      <TrendingUp className="h-5 w-5 mr-3 text-gray-600" />
-                      Resultado
-                    </div>
-                  </TableCell>
-                  <TableCell className="py-6 text-center">
-                    <div className="bg-green-50 border border-green-200 rounded-lg p-4">
-                      <p className="font-medium text-green-800">Pensamiento estratégico + liderazgo</p>
-                      <p className="text-sm text-green-600 mt-1">Transformación profesional completa</p>
-                    </div>
-                  </TableCell>
-                  <TableCell className="py-6 text-center">
-                    <div className="bg-red-50 border border-red-200 rounded-lg p-4">
-                      <p className="font-medium text-red-800">Solo uso de herramientas</p>
-                      <p className="text-sm text-red-600 mt-1">Conocimiento superficial sin impacto</p>
-                    </div>
-                  </TableCell>
-                </TableRow>
-              </TableBody>
-            </Table>
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr className="bg-white">
+                    <td className="border border-black px-6 py-4 font-semibold text-gray-900">
+                      <strong>Enfoque</strong>
+                    </td>
+                    <td className="border border-black px-6 py-4 text-center">
+                      <div className="flex items-center justify-center mb-2">
+                        <span className="text-2xl">✅</span>
+                      </div>
+                      <p className="font-medium text-gray-900">Profesionales 30+ con experiencia</p>
+                    </td>
+                    <td className="border border-black px-6 py-4 text-center">
+                      <div className="flex items-center justify-center mb-2">
+                        <span className="text-2xl">❌</span>
+                      </div>
+                      <p className="font-medium text-gray-900">Programadores jóvenes/audiencia general</p>
+                    </td>
+                  </tr>
+                  <tr className="bg-gray-50">
+                    <td className="border border-black px-6 py-4 font-semibold text-gray-900">
+                      <strong>Contenido</strong>
+                    </td>
+                    <td className="border border-black px-6 py-4 text-center">
+                      <div className="flex items-center justify-center mb-2">
+                        <span className="text-2xl">✅</span>
+                      </div>
+                      <p className="font-medium text-gray-900">Casos reales que inspiran aplicación inmediata</p>
+                    </td>
+                    <td className="border border-black px-6 py-4 text-center">
+                      <div className="flex items-center justify-center mb-2">
+                        <span className="text-2xl">❌</span>
+                      </div>
+                      <p className="font-medium text-gray-900">Teoría profunda, contenido obsoleto</p>
+                    </td>
+                  </tr>
+                  <tr className="bg-white">
+                    <td className="border border-black px-6 py-4 font-semibold text-gray-900">
+                      <strong>Metodología</strong>
+                    </td>
+                    <td className="border border-black px-6 py-4 text-center">
+                      <div className="flex items-center justify-center mb-2">
+                        <span className="text-2xl">✅</span>
+                      </div>
+                      <p className="font-medium text-gray-900">80/20, aplicación inmediata</p>
+                    </td>
+                    <td className="border border-black px-6 py-4 text-center">
+                      <div className="flex items-center justify-center mb-2">
+                        <span className="text-2xl">❌</span>
+                      </div>
+                      <p className="font-medium text-gray-900">Cursos técnicos complejos</p>
+                    </td>
+                  </tr>
+                  <tr className="bg-gray-50">
+                    <td className="border border-black px-6 py-4 font-semibold text-gray-900">
+                      <strong>Comunidad</strong>
+                    </td>
+                    <td className="border border-black px-6 py-4 text-center">
+                      <div className="flex items-center justify-center mb-2">
+                        <span className="text-2xl">✅</span>
+                      </div>
+                      <p className="font-medium text-gray-900">Profesionales de tu nivel</p>
+                    </td>
+                    <td className="border border-black px-6 py-4 text-center">
+                      <div className="flex items-center justify-center mb-2">
+                        <span className="text-2xl">❌</span>
+                      </div>
+                      <p className="font-medium text-gray-900">Edades mixtas, estudiantes</p>
+                    </td>
+                  </tr>
+                  <tr className="bg-white">
+                    <td className="border border-black px-6 py-4 font-semibold text-gray-900">
+                      <strong>Soporte</strong>
+                    </td>
+                    <td className="border border-black px-6 py-4 text-center">
+                      <div className="flex items-center justify-center mb-2">
+                        <span className="text-2xl">✅</span>
+                      </div>
+                      <p className="font-medium text-gray-900">Mentoría personalizada 1:1</p>
+                    </td>
+                    <td className="border border-black px-6 py-4 text-center">
+                      <div className="flex items-center justify-center mb-2">
+                        <span className="text-2xl">❌</span>
+                      </div>
+                      <p className="font-medium text-gray-900">Foros genéricos sin contexto</p>
+                    </td>
+                  </tr>
+                  <tr className="bg-gray-50">
+                    <td className="border border-black px-6 py-4 font-semibold text-gray-900">
+                      <strong>Resultado</strong>
+                    </td>
+                    <td className="border border-black px-6 py-4 text-center">
+                      <div className="flex items-center justify-center mb-2">
+                        <span className="text-2xl">✅</span>
+                      </div>
+                      <p className="font-medium text-gray-900">Pensamiento estratégico + liderazgo</p>
+                    </td>
+                    <td className="border border-black px-6 py-4 text-center">
+                      <div className="flex items-center justify-center mb-2">
+                        <span className="text-2xl">❌</span>
+                      </div>
+                      <p className="font-medium text-gray-900">Solo uso de herramientas</p>
+                    </td>
+                  </tr>
+                  <tr className="bg-white">
+                    <td className="border border-black px-6 py-4 font-semibold text-gray-900">
+                      <strong>Actualización</strong>
+                    </td>
+                    <td className="border border-black px-6 py-4 text-center">
+                      <div className="flex items-center justify-center mb-2">
+                        <span className="text-2xl">✅</span>
+                      </div>
+                      <p className="font-medium text-gray-900">Contenido que evoluciona con el mercado</p>
+                    </td>
+                    <td className="border border-black px-6 py-4 text-center">
+                      <div className="flex items-center justify-center mb-2">
+                        <span className="text-2xl">❌</span>
+                      </div>
+                      <p className="font-medium text-gray-900">Información que se vuelve obsoleta</p>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
           </div>
 
           <div className="text-center mt-12">
