@@ -12,7 +12,7 @@ export function Navigation() {
   return (
     <nav className="bg-white shadow-sm border-b border-gray-200">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between h-16">
+        <div className="flex justify-between md:h-[calc(var(--spacing)*20)] h-16">
           <div className="flex items-center">
             <Link to="/" className="flex items-center">
               <BookOpen className="h-8 w-8 text-[#6B7BFF] mr-3" />
@@ -25,7 +25,7 @@ export function Navigation() {
             <Link
               to="/"
               className={`font-medium transition-colors ${
-                isActive("/") ? "text-[#6B7BFF]" : "text-[#6c757d] hover:text-[#6B7BFF]"
+                isActive("/") ? "text-black" : "text-[#6c757d] hover:text-[#6B7BFF]"
               }`}
               style={{ 
                 fontFamily: 'var(--default-font-family, ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji")',
@@ -37,7 +37,7 @@ export function Navigation() {
             <Link
               to="/courses"
               className={`font-medium transition-colors ${
-                isActive("/courses") ? "text-[#6B7BFF]" : "text-[#6c757d] hover:text-[#6B7BFF]"
+                isActive("/courses") ? "text-black" : "text-[#6c757d] hover:text-[#6B7BFF]"
               }`}
               style={{ 
                 fontFamily: 'var(--default-font-family, ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji")',
@@ -49,7 +49,7 @@ export function Navigation() {
             <Link
               to="/dashboard"
               className={`font-medium transition-colors ${
-                isActive("/dashboard") ? "text-[#6B7BFF]" : "text-[#6c757d] hover:text-[#6B7BFF]"
+                isActive("/dashboard") ? "text-black" : "text-[#6c757d] hover:text-[#6B7BFF]"
               }`}
               style={{ 
                 fontFamily: 'var(--default-font-family, ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji")',
@@ -65,7 +65,7 @@ export function Navigation() {
                 className="text-gray-700 border-gray-300 hover:bg-[#6c757d] hover:text-white hover:border-[#6c757d] transition-colors"
                 style={{ 
                   fontFamily: 'var(--default-font-family, ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji")',
-                  fontSize: '18px'
+                  fontSize: '16px'
                 }}
               >
                 Acceso Ejecutivo
@@ -75,7 +75,7 @@ export function Navigation() {
                 className="bg-[#D95D39] hover:bg-[#C54A2C] text-white"
                 style={{ 
                   fontFamily: 'var(--default-font-family, ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji")',
-                  fontSize: '18px'
+                  fontSize: '16px'
                 }}
               >
                 Inscribirse Ahora
@@ -101,7 +101,7 @@ export function Navigation() {
               <Link
                 to="/"
                 className={`block px-3 py-2 font-medium transition-colors ${
-                  isActive("/") ? "text-[#6B7BFF] bg-blue-50" : "text-[#6c757d] hover:text-[#6B7BFF]"
+                  isActive("/") ? "text-black bg-blue-50" : "text-[#6c757d] hover:text-[#6B7BFF]"
                 }`}
                 style={{ 
                   fontFamily: 'var(--default-font-family, ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji")',
@@ -114,7 +114,7 @@ export function Navigation() {
               <Link
                 to="/courses"
                 className={`block px-3 py-2 font-medium transition-colors ${
-                  isActive("/courses") ? "text-[#6B7BFF] bg-blue-50" : "text-[#6c757d] hover:text-[#6B7BFF]"
+                  isActive("/courses") ? "text-black bg-blue-50" : "text-[#6c757d] hover:text-[#6B7BFF]"
                 }`}
                 style={{ 
                   fontFamily: 'var(--default-font-family, ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji")',
@@ -127,7 +127,7 @@ export function Navigation() {
               <Link
                 to="/dashboard"
                 className={`block px-3 py-2 font-medium transition-colors ${
-                  isActive("/dashboard") ? "text-[#6B7BFF] bg-blue-50" : "text-[#6c757d] hover:text-[#6B7BFF]"
+                  isActive("/dashboard") ? "text-black bg-blue-50" : "text-[#6c757d] hover:text-[#6B7BFF]"
                 }`}
                 style={{ 
                   fontFamily: 'var(--default-font-family, ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji")',
@@ -144,7 +144,7 @@ export function Navigation() {
                   className="w-full text-gray-700 border-gray-300 hover:bg-[#6c757d] hover:text-white hover:border-[#6c757d] transition-colors"
                   style={{ 
                     fontFamily: 'var(--default-font-family, ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji")',
-                    fontSize: '18px'
+                    fontSize: '16px'
                   }}
                 >
                   Acceso Ejecutivo
@@ -154,7 +154,7 @@ export function Navigation() {
                   className="w-full bg-[#D95D39] hover:bg-[#C54A2C] text-white"
                   style={{ 
                     fontFamily: 'var(--default-font-family, ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji")',
-                    fontSize: '18px'
+                    fontSize: '16px'
                   }}
                 >
                   Inscribirse Ahora
