@@ -16,7 +16,7 @@ export function Navigation() {
           <div className="flex items-center">
             <Link to="/" className="flex items-center">
               <BookOpen className="h-8 w-8 text-[#6B7BFF] mr-3" />
-              <span className="text-xl font-bold text-gray-900">AI Academia</span>
+              <span className="text-xl font-bold text-gray-900" style={{ fontFamily: 'var(--default-font-family, ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji")' }}>AI Academia</span>
             </Link>
           </div>
 
@@ -24,33 +24,60 @@ export function Navigation() {
           <div className="hidden md:flex items-center space-x-8">
             <Link
               to="/"
-              className={`text-sm font-medium transition-colors ${
-                isActive("/") ? "text-[#6B7BFF]" : "text-gray-700 hover:text-[#6B7BFF]"
+              className={`font-medium transition-colors ${
+                isActive("/") ? "text-[#6B7BFF]" : "text-[#6c757d] hover:text-[#6B7BFF]"
               }`}
+              style={{ 
+                fontFamily: 'var(--default-font-family, ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji")',
+                fontSize: '18px'
+              }}
             >
               Home
             </Link>
             <Link
               to="/courses"
-              className={`text-sm font-medium transition-colors ${
-                isActive("/courses") ? "text-[#6B7BFF]" : "text-gray-700 hover:text-[#6B7BFF]"
+              className={`font-medium transition-colors ${
+                isActive("/courses") ? "text-[#6B7BFF]" : "text-[#6c757d] hover:text-[#6B7BFF]"
               }`}
+              style={{ 
+                fontFamily: 'var(--default-font-family, ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji")',
+                fontSize: '18px'
+              }}
             >
               Programas
             </Link>
             <Link
               to="/dashboard"
-              className={`text-sm font-medium transition-colors ${
-                isActive("/dashboard") ? "text-[#6B7BFF]" : "text-gray-700 hover:text-[#6B7BFF]"
+              className={`font-medium transition-colors ${
+                isActive("/dashboard") ? "text-[#6B7BFF]" : "text-[#6c757d] hover:text-[#6B7BFF]"
               }`}
+              style={{ 
+                fontFamily: 'var(--default-font-family, ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji")',
+                fontSize: '18px'
+              }}
             >
               Portal Ejecutivo
             </Link>
             <div className="flex items-center space-x-4">
-              <Button variant="outline" size="sm" className="text-gray-700 border-gray-300 hover:bg-gray-50 hover:text-gray-900">
+              <Button 
+                variant="outline" 
+                size="sm" 
+                className="text-gray-700 border-gray-300 hover:bg-[#6c757d] hover:text-white hover:border-[#6c757d] transition-colors"
+                style={{ 
+                  fontFamily: 'var(--default-font-family, ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji")',
+                  fontSize: '18px'
+                }}
+              >
                 Acceso Ejecutivo
               </Button>
-              <Button size="sm" className="bg-[#D95D39] hover:bg-[#C54A2C] text-white">
+              <Button 
+                size="sm" 
+                className="bg-[#D95D39] hover:bg-[#C54A2C] text-white"
+                style={{ 
+                  fontFamily: 'var(--default-font-family, ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji")',
+                  fontSize: '18px'
+                }}
+              >
                 Inscribirse Ahora
               </Button>
             </div>
@@ -73,36 +100,63 @@ export function Navigation() {
             <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-white border-t border-gray-200">
               <Link
                 to="/"
-                className={`block px-3 py-2 text-sm font-medium transition-colors ${
-                  isActive("/") ? "text-[#6B7BFF] bg-blue-50" : "text-gray-700 hover:text-[#6B7BFF]"
+                className={`block px-3 py-2 font-medium transition-colors ${
+                  isActive("/") ? "text-[#6B7BFF] bg-blue-50" : "text-[#6c757d] hover:text-[#6B7BFF]"
                 }`}
+                style={{ 
+                  fontFamily: 'var(--default-font-family, ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji")',
+                  fontSize: '18px'
+                }}
                 onClick={() => setIsOpen(false)}
               >
                 Home
               </Link>
               <Link
                 to="/courses"
-                className={`block px-3 py-2 text-sm font-medium transition-colors ${
-                  isActive("/courses") ? "text-[#6B7BFF] bg-blue-50" : "text-gray-700 hover:text-[#6B7BFF]"
+                className={`block px-3 py-2 font-medium transition-colors ${
+                  isActive("/courses") ? "text-[#6B7BFF] bg-blue-50" : "text-[#6c757d] hover:text-[#6B7BFF]"
                 }`}
+                style={{ 
+                  fontFamily: 'var(--default-font-family, ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji")',
+                  fontSize: '18px'
+                }}
                 onClick={() => setIsOpen(false)}
               >
                 Programas
               </Link>
               <Link
                 to="/dashboard"
-                className={`block px-3 py-2 text-sm font-medium transition-colors ${
-                  isActive("/dashboard") ? "text-[#6B7BFF] bg-blue-50" : "text-gray-700 hover:text-[#6B7BFF]"
+                className={`block px-3 py-2 font-medium transition-colors ${
+                  isActive("/dashboard") ? "text-[#6B7BFF] bg-blue-50" : "text-[#6c757d] hover:text-[#6B7BFF]"
                 }`}
+                style={{ 
+                  fontFamily: 'var(--default-font-family, ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji")',
+                  fontSize: '18px'
+                }}
                 onClick={() => setIsOpen(false)}
               >
                 Portal Ejecutivo
               </Link>
               <div className="px-3 py-2 space-y-2">
-                <Button variant="outline" size="sm" className="w-full text-gray-700 border-gray-300 hover:bg-gray-50 hover:text-gray-900">
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  className="w-full text-gray-700 border-gray-300 hover:bg-[#6c757d] hover:text-white hover:border-[#6c757d] transition-colors"
+                  style={{ 
+                    fontFamily: 'var(--default-font-family, ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji")',
+                    fontSize: '18px'
+                  }}
+                >
                   Acceso Ejecutivo
                 </Button>
-                <Button size="sm" className="w-full bg-[#D95D39] hover:bg-[#C54A2C] text-white">
+                <Button 
+                  size="sm" 
+                  className="w-full bg-[#D95D39] hover:bg-[#C54A2C] text-white"
+                  style={{ 
+                    fontFamily: 'var(--default-font-family, ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji")',
+                    fontSize: '18px'
+                  }}
+                >
                   Inscribirse Ahora
                 </Button>
               </div>
