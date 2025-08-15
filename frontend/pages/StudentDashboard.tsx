@@ -132,12 +132,12 @@ export function StudentDashboard() {
                 
                 <div className="flex flex-col sm:flex-row gap-2">
                   <Link to={`/courses/${course.id}`} className="flex-1">
-                    <Button variant="outline" className="w-full">
+                    <Button variant="outline" className="w-full text-gray-700 border-gray-300 hover:bg-gray-50 hover:text-gray-900">
                       View Course
                     </Button>
                   </Link>
                   <Link to={`/lessons/${course.nextLessonId}`} className="flex-1">
-                    <Button className="w-full bg-[#635BFF] hover:bg-[#5048E5]">
+                    <Button className="w-full bg-[#635BFF] hover:bg-[#5048E5] text-white">
                       <Play className="h-4 w-4 mr-2" />
                       Continue Learning
                     </Button>

@@ -73,7 +73,7 @@ export function CourseDetailPage() {
           <h1 className="text-2xl font-bold text-gray-900 mb-4">Course Not Found</h1>
           <p className="text-gray-600 mb-8">The course you're looking for doesn't exist.</p>
           <Link to="/courses">
-            <Button>Back to Courses</Button>
+            <Button className="bg-[#635BFF] hover:bg-[#5048E5] text-white">Back to Courses</Button>
           </Link>
         </div>
       </div>
@@ -112,7 +112,7 @@ export function CourseDetailPage() {
           {course.description}
         </p>
 
-        <Button size="lg" className="bg-[#635BFF] hover:bg-[#5048E5]">
+        <Button size="lg" className="bg-[#635BFF] hover:bg-[#5048E5] text-white">
           Enroll in Course
         </Button>
       </div>
@@ -141,7 +141,7 @@ export function CourseDetailPage() {
                   {lesson.content.substring(0, 150)}...
                 </CardDescription>
                 <Link to={`/lessons/${lesson.id}`}>
-                  <Button variant="outline" size="sm">
+                  <Button variant="outline" size="sm" className="text-gray-700 border-gray-300 hover:bg-gray-50 hover:text-gray-900">
                     <Play className="h-4 w-4 mr-2" />
                     Start Lesson
                   </Button>

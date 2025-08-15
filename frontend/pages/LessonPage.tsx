@@ -68,7 +68,7 @@ export function LessonPage() {
           <h1 className="text-2xl font-bold text-gray-900 mb-4">Lesson Not Found</h1>
           <p className="text-gray-600 mb-8">The lesson you're looking for doesn't exist.</p>
           <Link to="/courses">
-            <Button>Back to Courses</Button>
+            <Button className="bg-[#635BFF] hover:bg-[#5048E5] text-white">Back to Courses</Button>
           </Link>
         </div>
       </div>
@@ -142,7 +142,7 @@ export function LessonPage() {
 
       {/* Navigation and completion */}
       <div className="flex flex-col sm:flex-row gap-4 justify-between">
-        <Button variant="outline">
+        <Button variant="outline" className="text-gray-700 border-gray-300 hover:bg-gray-50 hover:text-gray-900">
           <ArrowLeft className="h-4 w-4 mr-2" />
           Previous Lesson
         </Button>
@@ -151,13 +151,13 @@ export function LessonPage() {
           {!completed && (
             <Button 
               onClick={handleMarkComplete}
-              className="bg-green-600 hover:bg-green-700"
+              className="bg-green-600 hover:bg-green-700 text-white"
             >
               <CheckCircle className="h-4 w-4 mr-2" />
               Mark Complete
             </Button>
           )}
-          <Button className="bg-[#635BFF] hover:bg-[#5048E5]">
+          <Button className="bg-[#635BFF] hover:bg-[#5048E5] text-white">
             Next Lesson
             <ArrowRight className="h-4 w-4 ml-2" />
           </Button>

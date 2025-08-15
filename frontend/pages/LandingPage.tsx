@@ -30,7 +30,7 @@ export function LandingPage() {
                 Ver Cómo Funciona El Sistema
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Button>
-              <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-[#635BFF] font-semibold">
+              <Button size="lg" variant="outline" className="border-white text-white bg-transparent hover:bg-white hover:text-[#635BFF] font-semibold">
                 Ver Testimonios Reales
               </Button>
             </div>
@@ -338,7 +338,7 @@ export function LandingPage() {
               Comenzar Mi Transformación Ahora
               <ArrowRight className="ml-2 h-5 w-5" />
             </Button>
-            <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-[#635BFF] font-semibold">
+            <Button size="lg" variant="outline" className="border-white text-white bg-transparent hover:bg-white hover:text-[#635BFF] font-semibold">
               Hablar Con Un Asesor
             </Button>
           </div>

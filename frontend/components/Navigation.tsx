@@ -55,10 +55,10 @@ export function Navigation() {
               Admin
             </Link>
             <div className="flex items-center space-x-4">
-              <Button variant="outline" size="sm">
+              <Button variant="outline" size="sm" className="text-gray-700 border-gray-300 hover:bg-gray-50 hover:text-gray-900">
                 Login
               </Button>
-              <Button size="sm" className="bg-[#635BFF] hover:bg-[#5048E5]">
+              <Button size="sm" className="bg-[#635BFF] hover:bg-[#5048E5] text-white">
                 Sign Up
               </Button>
             </div>
@@ -116,10 +116,10 @@ export function Navigation() {
                 Admin
               </Link>
               <div className="px-3 py-2 space-y-2">
-                <Button variant="outline" size="sm" className="w-full">
+                <Button variant="outline" size="sm" className="w-full text-gray-700 border-gray-300 hover:bg-gray-50 hover:text-gray-900">
                   Login
                 </Button>
-                <Button size="sm" className="w-full bg-[#635BFF] hover:bg-[#5048E5]">
+                <Button size="sm" className="w-full bg-[#635BFF] hover:bg-[#5048E5] text-white">
                   Sign Up
                 </Button>
               </div>

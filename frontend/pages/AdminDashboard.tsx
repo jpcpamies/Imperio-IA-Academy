@@ -134,7 +134,7 @@ export function AdminDashboard() {
       <div className="mb-8">
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-2xl font-bold text-gray-900">Course Management</h2>
-          <Button className="bg-[#635BFF] hover:bg-[#5048E5]">
+          <Button className="bg-[#635BFF] hover:bg-[#5048E5] text-white">
             <Plus className="h-4 w-4 mr-2" />
             Create Course
           </Button>
@@ -167,13 +167,13 @@ export function AdminDashboard() {
                     <TableCell>{course.lastUpdated}</TableCell>
                     <TableCell>
                       <div className="flex space-x-2">
-                        <Button variant="outline" size="sm">
+                        <Button variant="outline" size="sm" className="text-gray-700 border-gray-300 hover:bg-gray-50 hover:text-gray-900">
                           <Eye className="h-4 w-4" />
                         </Button>
-                        <Button variant="outline" size="sm">
+                        <Button variant="outline" size="sm" className="text-gray-700 border-gray-300 hover:bg-gray-50 hover:text-gray-900">
                           <Edit className="h-4 w-4" />
                         </Button>
-                        <Button variant="outline" size="sm">
+                        <Button variant="outline" size="sm" className="text-gray-700 border-gray-300 hover:bg-gray-50 hover:text-gray-900">
                           <Trash2 className="h-4 w-4" />
                         </Button>
                       </div>
@@ -209,7 +209,7 @@ export function AdminDashboard() {
                     <TableCell>{student.enrolled}</TableCell>
                     <TableCell>{student.progress}%</TableCell>
                     <TableCell>
-                      <Button variant="outline" size="sm">
+                      <Button variant="outline" size="sm" className="text-gray-700 border-gray-300 hover:bg-gray-50 hover:text-gray-900">
                         View Details
                       </Button>
                     </TableCell>
