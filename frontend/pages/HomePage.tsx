@@ -8,24 +8,24 @@ export function HomePage() {
   return (
     <div className="min-h-screen bg-white">
       {/* Hero Section */}
-      <section className="bg-[#0A2342] text-white py-32">
+      <section className="bg-gradient-to-br from-blue-600 to-purple-700 text-white py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
-            <h1 className="text-4xl md:text-6xl font-serif font-bold mb-8 leading-tight">
-              Executive AI Leadership Development
+            <h1 className="text-4xl md:text-6xl font-bold mb-6">
+              Master AI for the Future
             </h1>
-            <p className="text-xl md:text-2xl mb-12 text-gray-200 font-light leading-relaxed">
-              Strategic artificial intelligence education designed for senior professionals and industry leaders
+            <p className="text-xl md:text-2xl mb-8 text-blue-100">
+              Learn artificial intelligence and machine learning from industry experts
             </p>
-            <div className="flex flex-col sm:flex-row gap-6 justify-center">
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link to="/courses">
-                <Button size="lg" className="bg-[#D95D39] text-white hover:bg-[#C54A2C] font-semibold px-10 py-6 rounded-lg">
-                  Explore Executive Programs
+                <Button size="lg" className="bg-white text-blue-600 hover:bg-gray-100">
+                  Explore Courses
                   <ArrowRight className="ml-2 h-5 w-5" />
                 </Button>
               </Link>
-              <Button size="lg" variant="outline" className="border-2 border-gray-300 text-white bg-transparent hover:bg-white hover:text-[#0A2342] font-semibold px-10 py-6 rounded-lg">
-                Leadership Case Studies
+              <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-blue-600">
+                Watch Demo
               </Button>
             </div>
           </div>
@@ -33,21 +33,21 @@ export function HomePage() {
       </section>
 
       {/* Featured Courses Section */}
-      <section className="py-32 bg-white">
+      <section className="py-16 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-20">
-            <h2 className="text-3xl md:text-4xl font-serif font-bold text-[#212529] mb-6">
-              Executive Development Programs
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+              Featured Courses
             </h2>
-            <p className="text-xl text-[#6C757D] font-light leading-relaxed">
-              Comprehensive AI leadership curricula designed for strategic business application
+            <p className="text-xl text-gray-600">
+              Start your AI journey with our most popular courses
             </p>
           </div>
           <CoursePreview />
-          <div className="text-center mt-16">
+          <div className="text-center mt-12">
             <Link to="/courses">
-              <Button size="lg" className="bg-[#0A2342] text-white hover:bg-[#0F2A4A] font-semibold px-10 py-6 rounded-lg">
-                View All Programs
+              <Button size="lg">
+                View All Courses
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Button>
             </Link>
@@ -56,56 +56,56 @@ export function HomePage() {
       </section>
 
       {/* Features Section */}
-      <section className="py-32 bg-[#F8F9FA]">
+      <section className="py-16 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-20">
-            <h2 className="text-3xl md:text-4xl font-serif font-bold text-[#212529] mb-6">
-              Distinguished Executive Education
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+              Why Choose AI Academia?
             </h2>
-            <p className="text-xl text-[#6C757D] font-light leading-relaxed">
-              Strategic AI education designed specifically for accomplished business leaders
+            <p className="text-xl text-gray-600">
+              Learn from the best with our comprehensive AI education platform
             </p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-12">
-            <Card className="text-center border-0 shadow-xl bg-white">
+          <div className="grid md:grid-cols-3 gap-8">
+            <Card className="text-center">
               <CardHeader>
-                <div className="bg-gray-100 rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-8">
-                  <BookOpen className="h-10 w-10 text-[#0A2342]" />
+                <div className="bg-blue-100 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+                  <BookOpen className="h-8 w-8 text-blue-600" />
                 </div>
-                <CardTitle className="text-xl font-serif font-bold text-[#212529]">Industry Expert Faculty</CardTitle>
+                <CardTitle>Expert-Led Content</CardTitle>
               </CardHeader>
               <CardContent>
-                <CardDescription className="text-lg text-[#6C757D] font-light leading-relaxed">
-                  Learn from distinguished practitioners with proven track records in enterprise AI implementation and strategic transformation
+                <CardDescription>
+                  Learn from industry professionals with years of experience in AI and machine learning
                 </CardDescription>
               </CardContent>
             </Card>
 
-            <Card className="text-center border-0 shadow-xl bg-white">
+            <Card className="text-center">
               <CardHeader>
-                <div className="bg-gray-100 rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-8">
-                  <Users className="h-10 w-10 text-[#0A2342]" />
+                <div className="bg-green-100 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+                  <Users className="h-8 w-8 text-green-600" />
                 </div>
-                <CardTitle className="text-xl font-serif font-bold text-[#212529]">Executive Peer Network</CardTitle>
+                <CardTitle>Community Support</CardTitle>
               </CardHeader>
               <CardContent>
-                <CardDescription className="text-lg text-[#6C757D] font-light leading-relaxed">
-                  Connect with a curated community of senior professionals and industry leaders navigating similar strategic challenges
+                <CardDescription>
+                  Join a vibrant community of learners and get help when you need it most
                 </CardDescription>
               </CardContent>
             </Card>
 
-            <Card className="text-center border-0 shadow-xl bg-white">
+            <Card className="text-center">
               <CardHeader>
-                <div className="bg-gray-100 rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-8">
-                  <Award className="h-10 w-10 text-[#0A2342]" />
+                <div className="bg-purple-100 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+                  <Award className="h-8 w-8 text-purple-600" />
                 </div>
-                <CardTitle className="text-xl font-serif font-bold text-[#212529]">Strategic Certification</CardTitle>
+                <CardTitle>Certificates</CardTitle>
               </CardHeader>
               <CardContent>
-                <CardDescription className="text-lg text-[#6C757D] font-light leading-relaxed">
-                  Earn prestigious credentials that validate your strategic AI leadership capabilities to boards and stakeholders
+                <CardDescription>
+                  Earn recognized certificates to showcase your AI skills to employers
                 </CardDescription>
               </CardContent>
             </Card>
@@ -114,17 +114,17 @@ export function HomePage() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-32 bg-[#0A2342] text-white">
+      <section className="py-16 bg-gray-900 text-white">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl md:text-4xl font-serif font-bold mb-8">
-            Advance Your Strategic Leadership in the AI Era
+          <h2 className="text-3xl md:text-4xl font-bold mb-6">
+            Ready to Start Your AI Journey?
           </h2>
-          <p className="text-xl mb-12 text-gray-200 font-light leading-relaxed">
-            Join distinguished executives who are establishing competitive advantages through strategic AI adoption and organizational transformation
+          <p className="text-xl mb-8 text-gray-300">
+            Join thousands of students who are already learning AI and machine learning
           </p>
           <Link to="/courses">
-            <Button size="lg" className="bg-[#D95D39] text-white hover:bg-[#C54A2C] font-semibold px-12 py-6 rounded-lg">
-              Begin Executive Development
+            <Button size="lg" className="bg-blue-600 hover:bg-blue-700">
+              Get Started Today
               <ArrowRight className="ml-2 h-5 w-5" />
             </Button>
           </Link>

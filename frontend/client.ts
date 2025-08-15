@@ -35,6 +35,8 @@ const BROWSER = typeof globalThis === "object" && ("window" in globalThis);
 export class Client {
     public readonly courses: courses.ServiceClient
     public readonly lessons: lessons.ServiceClient
+    public readonly progress: progress.ServiceClient
+    public readonly users: users.ServiceClient
     private readonly options: ClientOptions
     private readonly target: string
 
@@ -51,6 +53,8 @@ export class Client {
         const base = new BaseClient(this.target, this.options)
         this.courses = new courses.ServiceClient(base)
         this.lessons = new lessons.ServiceClient(base)
+        this.progress = new progress.ServiceClient(base)
+        this.users = new users.ServiceClient(base)
     }
 
     /**
@@ -140,6 +144,80 @@ export namespace lessons {
             // Now make the actual call to the API
             const resp = await this.baseClient.callTypedAPI(`/lessons/${encodeURIComponent(params.id)}`, {method: "GET", body: undefined})
             return JSON.parse(await resp.text(), dateReviver) as ResponseType<typeof api_lessons_get_get>
+        }
+    }
+}
+
+/**
+ * Import the endpoint handlers to derive the types for the client.
+ */
+import { getUserProgress as api_progress_get_user_progress_getUserProgress } from "~backend/progress/get_user_progress";
+import { markComplete as api_progress_mark_complete_markComplete } from "~backend/progress/mark_complete";
+
+export namespace progress {
+
+    export class ServiceClient {
+        private baseClient: BaseClient
+
+        constructor(baseClient: BaseClient) {
+            this.baseClient = baseClient
+            this.getUserProgress = this.getUserProgress.bind(this)
+            this.markComplete = this.markComplete.bind(this)
+        }
+
+        /**
+         * Retrieves user progress across all courses.
+         */
+        public async getUserProgress(params: { userId: number }): Promise<ResponseType<typeof api_progress_get_user_progress_getUserProgress>> {
+            // Now make the actual call to the API
+            const resp = await this.baseClient.callTypedAPI(`/progress/user/${encodeURIComponent(params.userId)}`, {method: "GET", body: undefined})
+            return JSON.parse(await resp.text(), dateReviver) as ResponseType<typeof api_progress_get_user_progress_getUserProgress>
+        }
+
+        /**
+         * Marks a lesson as completed for a user.
+         */
+        public async markComplete(params: RequestType<typeof api_progress_mark_complete_markComplete>): Promise<ResponseType<typeof api_progress_mark_complete_markComplete>> {
+            // Now make the actual call to the API
+            const resp = await this.baseClient.callTypedAPI(`/progress/complete`, {method: "POST", body: JSON.stringify(params)})
+            return JSON.parse(await resp.text(), dateReviver) as ResponseType<typeof api_progress_mark_complete_markComplete>
+        }
+    }
+}
+
+/**
+ * Import the endpoint handlers to derive the types for the client.
+ */
+import { get as api_users_get_get } from "~backend/users/get";
+import { list as api_users_list_list } from "~backend/users/list";
+
+export namespace users {
+
+    export class ServiceClient {
+        private baseClient: BaseClient
+
+        constructor(baseClient: BaseClient) {
+            this.baseClient = baseClient
+            this.get = this.get.bind(this)
+            this.list = this.list.bind(this)
+        }
+
+        /**
+         * Retrieves a specific user by ID.
+         */
+        public async get(params: { id: number }): Promise<ResponseType<typeof api_users_get_get>> {
+            // Now make the actual call to the API
+            const resp = await this.baseClient.callTypedAPI(`/users/${encodeURIComponent(params.id)}`, {method: "GET", body: undefined})
+            return JSON.parse(await resp.text(), dateReviver) as ResponseType<typeof api_users_get_get>
+        }
+
+        /**
+         * Retrieves all users (admin only).
+         */
+        public async list(): Promise<ResponseType<typeof api_users_list_list>> {
+            // Now make the actual call to the API
+            const resp = await this.baseClient.callTypedAPI(`/users`, {method: "GET", body: undefined})
+            return JSON.parse(await resp.text(), dateReviver) as ResponseType<typeof api_users_list_list>
         }
     }
 }
