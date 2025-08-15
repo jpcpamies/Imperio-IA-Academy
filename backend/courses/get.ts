@@ -11,16 +11,15 @@ export interface Lesson {
   content: string;
   videoUrl: string | null;
   orderIndex: number;
-  durationMinutes: number;
+  slug: string;
 }
 
 export interface CourseWithLessons {
   id: number;
   title: string;
   description: string;
-  imageUrl: string | null;
-  durationHours: number;
-  difficultyLevel: string;
+  thumbnailUrl: string | null;
+  slug: string;
   lessons: Lesson[];
   createdAt: Date;
   updatedAt: Date;
@@ -34,9 +33,8 @@ export const get = api<GetCourseParams, CourseWithLessons>(
       id: number;
       title: string;
       description: string;
-      image_url: string | null;
-      duration_hours: number;
-      difficulty_level: string;
+      thumbnail_url: string | null;
+      slug: string;
       created_at: Date;
       updated_at: Date;
     }>`SELECT * FROM courses WHERE id = ${params.id}`;
@@ -51,23 +49,22 @@ export const get = api<GetCourseParams, CourseWithLessons>(
       content: string;
       video_url: string | null;
       order_index: number;
-      duration_minutes: number;
+      slug: string;
     }>`SELECT * FROM lessons WHERE course_id = ${params.id} ORDER BY order_index`;
 
     return {
       id: course.id,
       title: course.title,
       description: course.description,
-      imageUrl: course.image_url,
-      durationHours: course.duration_hours,
-      difficultyLevel: course.difficulty_level,
+      thumbnailUrl: course.thumbnail_url,
+      slug: course.slug,
       lessons: lessons.map(lesson => ({
         id: lesson.id,
         title: lesson.title,
         content: lesson.content,
         videoUrl: lesson.video_url,
         orderIndex: lesson.order_index,
-        durationMinutes: lesson.duration_minutes,
+        slug: lesson.slug,
       })),
       createdAt: course.created_at,
       updatedAt: course.updated_at,

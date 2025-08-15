@@ -14,8 +14,9 @@ export interface LessonDetail {
   content: string;
   videoUrl: string | null;
   orderIndex: number;
-  durationMinutes: number;
+  slug: string;
   courseTitle: string;
+  courseSlug: string;
 }
 
 // Retrieves a specific lesson with course information.
@@ -29,10 +30,11 @@ export const get = api<GetLessonParams, LessonDetail>(
       content: string;
       video_url: string | null;
       order_index: number;
-      duration_minutes: number;
+      slug: string;
       course_title: string;
+      course_slug: string;
     }>`
-      SELECT l.*, c.title as course_title 
+      SELECT l.*, c.title as course_title, c.slug as course_slug
       FROM lessons l 
       JOIN courses c ON l.course_id = c.id 
       WHERE l.id = ${params.id}
@@ -49,8 +51,9 @@ export const get = api<GetLessonParams, LessonDetail>(
       content: lesson.content,
       videoUrl: lesson.video_url,
       orderIndex: lesson.order_index,
-      durationMinutes: lesson.duration_minutes,
+      slug: lesson.slug,
       courseTitle: lesson.course_title,
+      courseSlug: lesson.course_slug,
     };
   }
 );

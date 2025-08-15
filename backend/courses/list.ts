@@ -5,9 +5,8 @@ export interface Course {
   id: number;
   title: string;
   description: string;
-  imageUrl: string | null;
-  durationHours: number;
-  difficultyLevel: string;
+  thumbnailUrl: string | null;
+  slug: string;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -24,9 +23,8 @@ export const list = api<void, ListCoursesResponse>(
       id: number;
       title: string;
       description: string;
-      image_url: string | null;
-      duration_hours: number;
-      difficulty_level: string;
+      thumbnail_url: string | null;
+      slug: string;
       created_at: Date;
       updated_at: Date;
     }>`SELECT * FROM courses ORDER BY created_at DESC`;
@@ -35,9 +33,8 @@ export const list = api<void, ListCoursesResponse>(
       id: row.id,
       title: row.title,
       description: row.description,
-      imageUrl: row.image_url,
-      durationHours: row.duration_hours,
-      difficultyLevel: row.difficulty_level,
+      thumbnailUrl: row.thumbnail_url,
+      slug: row.slug,
       createdAt: row.created_at,
       updatedAt: row.updated_at,
     }));
