@@ -1,11 +1,7 @@
 import { api, APIError, Cookie } from "encore.dev/api";
 import { SQLDatabase } from "encore.dev/storage/sqldb";
-import * as bcrypt from "bcrypt";
-import * as jwt from "jsonwebtoken";
-import { secret } from "encore.dev/config";
 
 const coursesDB = SQLDatabase.named("courses");
-const jwtSecret = secret("JWTSecret");
 
 export interface LoginRequest {
   email: string;
@@ -22,7 +18,6 @@ export interface LoginResponse {
   session: Cookie<"session">;
 }
 
-// Authenticates a user and returns a session token.
 export const login = api<LoginRequest, LoginResponse>(
   { expose: true, method: "POST", path: "/auth/login" },
   async (req) => {
@@ -43,25 +38,16 @@ export const login = api<LoginRequest, LoginResponse>(
         throw APIError.unauthenticated("Email o contraseña incorrectos");
       }
 
-      if (!user.password_hash) {
-        throw APIError.unauthenticated("Usuario no tiene contraseña configurada");
-      }
-
-      const isValidPassword = await bcrypt.compare(req.password, user.password_hash);
-
-      if (!isValidPassword) {
+      // Simple password check
+      if (user.password_hash !== req.password) {
         throw APIError.unauthenticated("Email o contraseña incorrectos");
       }
 
-      // Generate JWT token
-      const token = jwt.sign(
-        { userId: user.id, email: user.email },
-        jwtSecret(),
-        { expiresIn: "7d" }
-      );
+      // Create simple session token
+      const sessionToken = `session_${user.id}_${Date.now()}`;
 
       const sessionCookie = {
-        value: token,
+        value: sessionToken,
         expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // 7 days
         httpOnly: true,
         secure: true,
@@ -79,12 +65,10 @@ export const login = api<LoginRequest, LoginResponse>(
       };
 
     } catch (error) {
-      // Re-throw APIErrors as-is
       if (error instanceof APIError) {
         throw error;
       }
       
-      // Wrap other errors
       throw APIError.internal("Error interno del servidor durante el login");
     }
   }

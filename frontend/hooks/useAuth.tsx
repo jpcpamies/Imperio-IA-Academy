@@ -8,8 +8,6 @@ interface AuthContextType {
   login: (email: string, password: string) => Promise<void>;
   register: (email: string, password: string, name: string) => Promise<void>;
   logout: () => Promise<void>;
-  updateProfile: (name: string) => Promise<void>;
-  changePassword: (currentPassword: string, newPassword: string) => Promise<void>;
   isAuthenticated: boolean;
 }
 
@@ -25,12 +23,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const checkAuth = async () => {
     try {
-      console.log(`🔐 AUTH PROVIDER - Checking authentication status...`);
       const userInfo = await backend.auth.me();
-      console.log(`🔐 AUTH PROVIDER - User authenticated:`, userInfo);
       setUser(userInfo);
     } catch (error) {
-      console.log(`🔐 AUTH PROVIDER - No authenticated user found`);
       setUser(null);
     } finally {
       setLoading(false);
@@ -38,43 +33,23 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   const login = async (email: string, password: string) => {
-    console.log(`🔐 AUTH PROVIDER - Login attempt for: ${email}`);
     const response = await backend.auth.login({ email, password });
-    console.log(`🔐 AUTH PROVIDER - Login successful for: ${email}`);
     setUser(response.user);
   };
 
   const register = async (email: string, password: string, name: string) => {
-    console.log(`🔐 AUTH PROVIDER - Registration attempt for: ${email}`);
     const response = await backend.auth.register({ email, password, name });
-    console.log(`🔐 AUTH PROVIDER - Registration successful for: ${email}`);
     setUser(response.user);
   };
 
   const logout = async () => {
     try {
-      console.log(`🔐 AUTH PROVIDER - Logout attempt...`);
       await backend.auth.logout();
-      console.log(`🔐 AUTH PROVIDER - Server logout successful`);
     } catch (error) {
-      console.log(`🔐 AUTH PROVIDER - Server logout failed, clearing local state anyway`);
+      // Even if server logout fails, clear local state
     } finally {
       setUser(null);
-      console.log(`🔐 AUTH PROVIDER - Local state cleared`);
     }
-  };
-
-  const updateProfile = async (name: string) => {
-    console.log(`🔐 AUTH PROVIDER - Profile update attempt...`);
-    const response = await backend.auth.updateProfile({ name });
-    setUser(prev => prev ? { ...prev, name: response.user.name } : null);
-    console.log(`🔐 AUTH PROVIDER - Profile updated successfully`);
-  };
-
-  const changePassword = async (currentPassword: string, newPassword: string) => {
-    console.log(`🔐 AUTH PROVIDER - Password change attempt...`);
-    await backend.auth.changePassword({ currentPassword, newPassword });
-    console.log(`🔐 AUTH PROVIDER - Password changed successfully`);
   };
 
   const value = {
@@ -83,8 +58,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     login,
     register,
     logout,
-    updateProfile,
-    changePassword,
     isAuthenticated: !!user,
   };
 

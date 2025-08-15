@@ -1,11 +1,10 @@
 import { useState } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
-import { BookOpen, Eye, EyeOff, AlertCircle } from "lucide-react";
+import { BookOpen, Eye, EyeOff } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Alert, AlertDescription } from "@/components/ui/alert";
 import { useToast } from "@/components/ui/use-toast";
 import { useAuth } from "../hooks/useAuth";
 
@@ -14,7 +13,6 @@ export function LoginPage() {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
   const { login } = useAuth();
   const { toast } = useToast();
   const navigate = useNavigate();
@@ -25,7 +23,6 @@ export function LoginPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    setError("");
 
     try {
       await login(email, password);
@@ -35,22 +32,9 @@ export function LoginPage() {
       });
       navigate(from, { replace: true });
     } catch (error: any) {
-      let errorMessage = "Error de conexión. Por favor, intenta de nuevo.";
-      
-      if (error?.message) {
-        if (error.message.includes("Email o contraseña incorrectos")) {
-          errorMessage = "Email o contraseña incorrectos. Verifica tus credenciales.";
-        } else if (error.message.includes("Usuario no encontrado")) {
-          errorMessage = "Usuario no encontrado. ¿Necesitas crear una cuenta?";
-        } else if (error.message.includes("Usuario no tiene contraseña")) {
-          errorMessage = "Tu cuenta necesita una contraseña. Usa 'Olvidé mi contraseña' para configurar una.";
-        }
-      }
-      
-      setError(errorMessage);
       toast({
         title: "Error de autenticación",
-        description: errorMessage,
+        description: "Email o contraseña incorrectos.",
         variant: "destructive",
       });
     } finally {
@@ -82,15 +66,6 @@ export function LoginPage() {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            {error && (
-              <Alert className="mb-6 border-red-200 bg-red-50">
-                <AlertCircle className="h-4 w-4 text-red-600" />
-                <AlertDescription className="text-red-800">
-                  {error}
-                </AlertDescription>
-              </Alert>
-            )}
-
             <form onSubmit={handleSubmit} className="space-y-6">
               <div>
                 <Label htmlFor="email">Email corporativo</Label>
@@ -114,7 +89,7 @@ export function LoginPage() {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     required
-                    placeholder="Tu contraseña segura"
+                    placeholder="Tu contraseña"
                   />
                   <button
                     type="button"
@@ -130,21 +105,12 @@ export function LoginPage() {
                 </div>
               </div>
 
-              <div className="flex items-center justify-between">
-                <Link 
-                  to="/reset-password" 
-                  className="text-sm text-[#6B7BFF] hover:text-[#5A6AEF] font-medium"
-                >
-                  ¿Olvidaste tu contraseña?
-                </Link>
-              </div>
-
               <Button
                 type="submit"
                 className="w-full bg-[#6B7BFF] hover:bg-[#5A6AEF] text-white"
                 disabled={loading}
               >
-                {loading ? "Iniciando sesión..." : "Acceder al Portal"}
+                {loading ? "Iniciando sesión..." : "Iniciar Sesión"}
               </Button>
             </form>
 
@@ -152,7 +118,7 @@ export function LoginPage() {
               <p className="text-gray-600">
                 ¿No tienes acceso ejecutivo?{" "}
                 <Link to="/register" className="text-[#6B7BFF] hover:text-[#5A6AEF] font-medium">
-                  Solicitar acceso
+                  Crear cuenta
                 </Link>
               </p>
             </div>
