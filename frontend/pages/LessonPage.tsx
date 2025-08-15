@@ -39,8 +39,8 @@ export function LessonPage() {
   const handleMarkComplete = () => {
     setCompleted(true);
     toast({
-      title: "¡Módulo Completado!",
-      description: "Excelente trabajo. Has completado este módulo.",
+      title: "Lesson Completed!",
+      description: "Great job! You've completed this lesson.",
     });
   };
 
@@ -68,10 +68,10 @@ export function LessonPage() {
       <div className="min-h-screen bg-white">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           <div className="text-center">
-            <h1 className="text-2xl font-bold text-gray-900 mb-4">Módulo No Encontrado</h1>
-            <p className="text-gray-600 mb-8">El módulo que buscas no existe.</p>
+            <h1 className="text-2xl font-bold text-gray-900 mb-4">Lesson Not Found</h1>
+            <p className="text-gray-600 mb-8">The lesson you're looking for doesn't exist.</p>
             <Link to="/courses">
-              <Button className="bg-[#6B7BFF] hover:bg-[#5A6AEF] text-white">Volver a Librerías</Button>
+              <Button>Back to Courses</Button>
             </Link>
           </div>
         </div>
@@ -84,26 +84,26 @@ export function LessonPage() {
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <Link 
           to={`/courses/${lesson.courseId}`} 
-          className="inline-flex items-center text-[#6B7BFF] hover:text-[#5A6AEF] mb-8"
+          className="inline-flex items-center text-blue-600 hover:text-blue-800 mb-8"
         >
           <ArrowLeft className="h-4 w-4 mr-2" />
-          Volver a {lesson.courseTitle}
+          Back to {lesson.courseTitle}
         </Link>
 
         <div className="mb-8">
           <div className="flex items-center gap-4 mb-4">
             <div className="flex items-center text-gray-600">
               <Clock className="h-4 w-4 mr-1" />
-              {lesson.durationMinutes} minutos
+              {lesson.durationMinutes} minutes
             </div>
             <span className="text-gray-400">•</span>
-            <span className="text-gray-600">Módulo {lesson.orderIndex}</span>
+            <span className="text-gray-600">Lesson {lesson.orderIndex}</span>
             {completed && (
               <>
                 <span className="text-gray-400">•</span>
                 <div className="flex items-center text-green-600">
                   <CheckCircle className="h-4 w-4 mr-1" />
-                  Completado
+                  Completed
                 </div>
               </>
             )}
@@ -115,26 +115,26 @@ export function LessonPage() {
         </div>
 
         {/* Video placeholder */}
-        <Card className="mb-8 border border-gray-200 bg-white shadow-sm">
+        <Card className="mb-8">
           <CardContent className="p-0">
             <div className="bg-gray-900 aspect-video rounded-lg flex items-center justify-center">
               <div className="text-white text-center">
-                <div className="w-16 h-16 bg-[#6B7BFF] rounded-full flex items-center justify-center mx-auto mb-4">
+                <div className="w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center mx-auto mb-4">
                   <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clipRule="evenodd" />
                   </svg>
                 </div>
-                <p className="text-lg">Contenido del módulo disponible aquí</p>
-                <p className="text-gray-400">Duración: {lesson.durationMinutes} minutos</p>
+                <p className="text-lg">Video content would be here</p>
+                <p className="text-gray-400">Duration: {lesson.durationMinutes} minutes</p>
               </div>
             </div>
           </CardContent>
         </Card>
 
         {/* Lesson content */}
-        <Card className="mb-8 border border-gray-200 bg-white shadow-sm">
+        <Card className="mb-8">
           <CardHeader>
-            <CardTitle className="text-gray-900">Contenido del Módulo</CardTitle>
+            <CardTitle>Lesson Content</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="prose max-w-none">
@@ -147,9 +147,9 @@ export function LessonPage() {
 
         {/* Navigation and completion */}
         <div className="flex flex-col sm:flex-row gap-4 justify-between">
-          <Button variant="outline" className="text-gray-700 border-gray-300 hover:bg-gray-50 hover:text-gray-900">
+          <Button variant="outline">
             <ArrowLeft className="h-4 w-4 mr-2" />
-            Módulo Anterior
+            Previous Lesson
           </Button>
           
           <div className="flex gap-4">
@@ -159,11 +159,11 @@ export function LessonPage() {
                 className="bg-green-600 hover:bg-green-700 text-white"
               >
                 <CheckCircle className="h-4 w-4 mr-2" />
-                Marcar Completado
+                Mark Complete
               </Button>
             )}
-            <Button className="bg-[#6B7BFF] hover:bg-[#5A6AEF] text-white">
-              Siguiente Módulo
+            <Button>
+              Next Lesson
               <ArrowRight className="h-4 w-4 ml-2" />
             </Button>
           </div>

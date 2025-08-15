@@ -39,13 +39,13 @@ export function CourseDetailPage() {
   const getDifficultyColor = (level: string) => {
     switch (level.toLowerCase()) {
       case "beginner":
-        return "bg-green-100 text-green-700";
+        return "bg-green-100 text-green-800";
       case "intermediate":
-        return "bg-yellow-100 text-yellow-700";
+        return "bg-yellow-100 text-yellow-800";
       case "advanced":
-        return "bg-red-100 text-red-700";
+        return "bg-red-100 text-red-800";
       default:
-        return "bg-gray-100 text-gray-700";
+        return "bg-gray-100 text-gray-800";
     }
   };
 
@@ -73,10 +73,10 @@ export function CourseDetailPage() {
       <div className="min-h-screen bg-white">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           <div className="text-center">
-            <h1 className="text-2xl font-bold text-gray-900 mb-4">Librería No Encontrada</h1>
-            <p className="text-gray-600 mb-8">La librería que buscas no existe.</p>
+            <h1 className="text-2xl font-bold text-gray-900 mb-4">Course Not Found</h1>
+            <p className="text-gray-600 mb-8">The course you're looking for doesn't exist.</p>
             <Link to="/courses">
-              <Button className="bg-[#6B7BFF] hover:bg-[#5A6AEF] text-white">Volver a Librerías</Button>
+              <Button>Back to Courses</Button>
             </Link>
           </div>
         </div>
@@ -87,9 +87,9 @@ export function CourseDetailPage() {
   return (
     <div className="min-h-screen bg-white">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <Link to="/courses" className="inline-flex items-center text-[#6B7BFF] hover:text-[#5A6AEF] mb-8">
+        <Link to="/courses" className="inline-flex items-center text-blue-600 hover:text-blue-800 mb-8">
           <ArrowLeft className="h-4 w-4 mr-2" />
-          Volver a Librerías
+          Back to Courses
         </Link>
 
         <div className="mb-8">
@@ -103,7 +103,7 @@ export function CourseDetailPage() {
             </div>
             <div className="flex items-center text-gray-600">
               <BookOpen className="h-4 w-4 mr-1" />
-              {course.lessons.length} módulos
+              {course.lessons.length} lessons
             </div>
           </div>
           
@@ -115,20 +115,20 @@ export function CourseDetailPage() {
             {course.description}
           </p>
 
-          <Button size="lg" className="bg-[#6B7BFF] hover:bg-[#5A6AEF] text-white">
-            Acceder a Esta Librería
+          <Button size="lg">
+            Enroll in Course
           </Button>
         </div>
 
         <div>
-          <h2 className="text-2xl font-bold text-gray-900 mb-6">Contenido de la Librería</h2>
+          <h2 className="text-2xl font-bold text-gray-900 mb-6">Course Content</h2>
           <div className="space-y-4">
             {course.lessons.map((lesson, index) => (
-              <Card key={lesson.id} className="border border-gray-200 bg-white shadow-sm hover:shadow-md transition-shadow duration-300">
+              <Card key={lesson.id} className="hover:shadow-md transition-shadow duration-300">
                 <CardHeader className="pb-3">
                   <div className="flex items-center justify-between">
-                    <CardTitle className="text-lg flex items-center text-gray-900">
-                      <span className="bg-[#6B7BFF] text-white rounded-full w-8 h-8 flex items-center justify-center text-sm mr-3">
+                    <CardTitle className="text-lg flex items-center">
+                      <span className="bg-blue-600 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm mr-3">
                         {index + 1}
                       </span>
                       {lesson.title}
@@ -140,13 +140,13 @@ export function CourseDetailPage() {
                   </div>
                 </CardHeader>
                 <CardContent>
-                  <CardDescription className="mb-4 text-gray-600">
+                  <CardDescription className="mb-4">
                     {lesson.content.substring(0, 150)}...
                   </CardDescription>
                   <Link to={`/lessons/${lesson.id}`}>
-                    <Button variant="outline" size="sm" className="text-gray-700 border-gray-300 hover:bg-gray-50 hover:text-gray-900">
+                    <Button variant="outline" size="sm">
                       <Play className="h-4 w-4 mr-2" />
-                      Comenzar Módulo
+                      Start Lesson
                     </Button>
                   </Link>
                 </CardContent>

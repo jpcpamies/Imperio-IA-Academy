@@ -1,12 +1,11 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { Toaster } from "@/components/ui/toaster";
 import { Navigation } from "./components/Navigation";
-import { LandingPage } from "./pages/LandingPage";
+import { HomePage } from "./pages/HomePage";
 import { CoursesPage } from "./pages/CoursesPage";
 import { CourseDetailPage } from "./pages/CourseDetailPage";
 import { LessonPage } from "./pages/LessonPage";
-import { StudentDashboard } from "./pages/StudentDashboard";
-import { AdminDashboard } from "./pages/AdminDashboard";
+import { DashboardPage } from "./pages/DashboardPage";
 
 export default function App() {
   return (
@@ -15,12 +14,11 @@ export default function App() {
         <Navigation />
         <main>
           <Routes>
-            <Route path="/" element={<LandingPage />} />
+            <Route path="/" element={<HomePage />} />
             <Route path="/courses" element={<CoursesPage />} />
             <Route path="/courses/:id" element={<CourseDetailPage />} />
             <Route path="/lessons/:id" element={<LessonPage />} />
-            <Route path="/dashboard" element={<StudentDashboard />} />
-            <Route path="/admin" element={<AdminDashboard />} />
+            <Route path="/dashboard" element={<DashboardPage />} />
           </Routes>
         </main>
         <Toaster />
