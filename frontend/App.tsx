@@ -6,6 +6,9 @@ import { CoursesPage } from "./pages/CoursesPage";
 import { CourseDetailPage } from "./pages/CourseDetailPage";
 import { LessonPage } from "./pages/LessonPage";
 import { DashboardPage } from "./pages/DashboardPage";
+import { LandingPage } from "./pages/LandingPage";
+import { AdminDashboard } from "./pages/AdminDashboard";
+import { StudentDashboard } from "./pages/StudentDashboard";
 
 export default function App() {
   return (
@@ -14,11 +17,14 @@ export default function App() {
         <Navigation />
         <main>
           <Routes>
-            <Route path="/" element={<HomePage />} />
+            <Route path="/" element={<LandingPage />} />
+            <Route path="/home" element={<HomePage />} />
             <Route path="/courses" element={<CoursesPage />} />
             <Route path="/courses/:id" element={<CourseDetailPage />} />
             <Route path="/lessons/:id" element={<LessonPage />} />
             <Route path="/dashboard" element={<DashboardPage />} />
+            <Route path="/admin" element={<AdminDashboard />} />
+            <Route path="/student" element={<StudentDashboard />} />
           </Routes>
         </main>
         <Toaster />
