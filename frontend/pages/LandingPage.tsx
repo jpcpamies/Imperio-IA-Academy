@@ -942,7 +942,7 @@ export function LandingPage() {
       <VideoModal 
         isOpen={isVideoModalOpen} 
         onClose={closeVideoModal} 
-        videoId="r-jaWpfoRP8" 
+        videoId="1VdpHMKVZvA" 
       />
     </div>
   );

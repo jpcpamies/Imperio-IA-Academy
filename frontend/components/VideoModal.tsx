@@ -41,14 +41,14 @@ export function VideoModal({ isOpen, onClose, videoId }: VideoModalProps) {
 
   return (
     <div 
-      className="fixed inset-0 z-50 flex items-center justify-center bg-white bg-opacity-90"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-white bg-opacity-80"
       style={{ backdropFilter: 'blur(8px)' }}
       onClick={handleOverlayClick}
     >
       {/* Close Button - positioned in top-right of white background */}
       <button
         onClick={onClose}
-        className="absolute top-8 right-8 z-10 w-12 h-12 bg-transparent rounded-full flex items-center justify-center hover:bg-black hover:bg-opacity-10 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-black focus:ring-offset-2"
+        className="absolute top-8 right-8 z-10 w-12 h-12 bg-transparent rounded-full flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-black focus:ring-offset-2"
         aria-label="Close video"
       >
         <X className="h-8 w-8 text-black" />
