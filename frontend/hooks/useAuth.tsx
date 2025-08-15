@@ -8,6 +8,8 @@ interface AuthContextType {
   login: (email: string, password: string) => Promise<void>;
   register: (email: string, password: string, name: string) => Promise<void>;
   logout: () => Promise<void>;
+  updateProfile: (name: string) => Promise<void>;
+  changePassword: (currentPassword: string, newPassword: string) => Promise<void>;
   isAuthenticated: boolean;
 }
 
@@ -47,12 +49,23 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setUser(null);
   };
 
+  const updateProfile = async (name: string) => {
+    const response = await backend.auth.updateProfile({ name });
+    setUser(prev => prev ? { ...prev, name: response.user.name } : null);
+  };
+
+  const changePassword = async (currentPassword: string, newPassword: string) => {
+    await backend.auth.changePassword({ currentPassword, newPassword });
+  };
+
   const value = {
     user,
     loading,
     login,
     register,
     logout,
+    updateProfile,
+    changePassword,
     isAuthenticated: !!user,
   };
 

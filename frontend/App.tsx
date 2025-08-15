@@ -11,6 +11,7 @@ import { DashboardPage } from "./pages/DashboardPage";
 import { LandingPage } from "./pages/LandingPage";
 import { LoginPage } from "./pages/LoginPage";
 import { RegisterPage } from "./pages/RegisterPage";
+import { ProfilePage } from "./pages/ProfilePage";
 import { AdminDashboard } from "./pages/AdminDashboard";
 import { StudentDashboard } from "./pages/StudentDashboard";
 
@@ -55,6 +56,22 @@ export default function App() {
                 element={
                   <ProtectedRoute>
                     <DashboardPage />
+                  </ProtectedRoute>
+                } 
+              />
+              <Route 
+                path="/profile" 
+                element={
+                  <ProtectedRoute>
+                    <ProfilePage />
+                  </ProtectedRoute>
+                } 
+              />
+              <Route 
+                path="/perfil" 
+                element={
+                  <ProtectedRoute>
+                    <ProfilePage />
                   </ProtectedRoute>
                 } 
               />
