@@ -18,7 +18,7 @@ export function AdminDashboard() {
   const [courses] = useState([
     {
       id: 1,
-      title: "AI Fundamentals for Professionals",
+      title: "Fundamentos de IA para Profesionales",
       students: 89,
       lessons: 4,
       status: "published",
@@ -26,7 +26,7 @@ export function AdminDashboard() {
     },
     {
       id: 2,
-      title: "Machine Learning in Business",
+      title: "Machine Learning en Negocios",
       students: 67,
       lessons: 4,
       status: "published",
@@ -34,7 +34,7 @@ export function AdminDashboard() {
     },
     {
       id: 3,
-      title: "Natural Language Processing Essentials",
+      title: "Fundamentos de Procesamiento de Lenguaje Natural",
       students: 45,
       lessons: 4,
       status: "draft",
@@ -42,7 +42,7 @@ export function AdminDashboard() {
     },
     {
       id: 4,
-      title: "AI Ethics and Governance",
+      title: "Ética y Gobernanza de IA",
       students: 78,
       lessons: 4,
       status: "published",
@@ -51,174 +51,176 @@ export function AdminDashboard() {
   ]);
 
   const [recentStudents] = useState([
-    { id: 1, name: "John Smith", email: "john@example.com", enrolled: "2024-01-15", progress: 75 },
-    { id: 2, name: "Sarah Johnson", email: "sarah@example.com", enrolled: "2024-01-14", progress: 45 },
-    { id: 3, name: "Mike Davis", email: "mike@example.com", enrolled: "2024-01-13", progress: 90 },
-    { id: 4, name: "Lisa Wilson", email: "lisa@example.com", enrolled: "2024-01-12", progress: 30 },
+    { id: 1, name: "Juan Pérez", email: "juan@example.com", enrolled: "2024-01-15", progress: 75 },
+    { id: 2, name: "María García", email: "maria@example.com", enrolled: "2024-01-14", progress: 45 },
+    { id: 3, name: "Carlos López", email: "carlos@example.com", enrolled: "2024-01-13", progress: 90 },
+    { id: 4, name: "Ana Martínez", email: "ana@example.com", enrolled: "2024-01-12", progress: 30 },
   ]);
 
   const getStatusColor = (status: string) => {
     switch (status) {
       case "published":
-        return "bg-green-100 text-green-800";
+        return "bg-green-100 text-green-700";
       case "draft":
-        return "bg-yellow-100 text-yellow-800";
+        return "bg-yellow-100 text-yellow-700";
       default:
-        return "bg-gray-100 text-gray-800";
+        return "bg-gray-100 text-gray-700";
     }
   };
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-      <div className="mb-8">
-        <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-          Admin Dashboard
-        </h1>
-        <p className="text-xl text-gray-600">
-          Manage your AI Academy courses, lessons, and student progress.
-        </p>
-      </div>
-
-      {/* Stats Overview */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-gray-600">Total Courses</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="flex items-center">
-              <BookOpen className="h-5 w-5 text-[#635BFF] mr-2" />
-              <span className="text-2xl font-bold">{stats.totalCourses}</span>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-gray-600">Total Students</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="flex items-center">
-              <Users className="h-5 w-5 text-[#635BFF] mr-2" />
-              <span className="text-2xl font-bold">{stats.totalStudents}</span>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-gray-600">Total Lessons</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="flex items-center">
-              <BookOpen className="h-5 w-5 text-[#635BFF] mr-2" />
-              <span className="text-2xl font-bold">{stats.totalLessons}</span>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-gray-600">Avg Progress</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="flex items-center">
-              <TrendingUp className="h-5 w-5 text-[#635BFF] mr-2" />
-              <span className="text-2xl font-bold">{stats.avgProgress}%</span>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-
-      {/* Course Management */}
-      <div className="mb-8">
-        <div className="flex justify-between items-center mb-6">
-          <h2 className="text-2xl font-bold text-gray-900">Course Management</h2>
-          <Button className="bg-[#635BFF] hover:bg-[#5048E5] text-white">
-            <Plus className="h-4 w-4 mr-2" />
-            Create Course
-          </Button>
+    <div className="min-h-screen bg-white">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div className="mb-8">
+          <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+            Panel de Administración
+          </h1>
+          <p className="text-xl text-gray-600">
+            Gestiona tu ecosistema de aprendizaje IA, librerías y progreso de estudiantes.
+          </p>
         </div>
 
-        <Card>
-          <CardContent className="p-0">
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Course Title</TableHead>
-                  <TableHead>Students</TableHead>
-                  <TableHead>Lessons</TableHead>
-                  <TableHead>Status</TableHead>
-                  <TableHead>Last Updated</TableHead>
-                  <TableHead>Actions</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {courses.map((course) => (
-                  <TableRow key={course.id}>
-                    <TableCell className="font-medium">{course.title}</TableCell>
-                    <TableCell>{course.students}</TableCell>
-                    <TableCell>{course.lessons}</TableCell>
-                    <TableCell>
-                      <Badge className={getStatusColor(course.status)}>
-                        {course.status}
-                      </Badge>
-                    </TableCell>
-                    <TableCell>{course.lastUpdated}</TableCell>
-                    <TableCell>
-                      <div className="flex space-x-2">
-                        <Button variant="outline" size="sm" className="text-gray-700 border-gray-300 hover:bg-gray-50 hover:text-gray-900">
-                          <Eye className="h-4 w-4" />
-                        </Button>
-                        <Button variant="outline" size="sm" className="text-gray-700 border-gray-300 hover:bg-gray-50 hover:text-gray-900">
-                          <Edit className="h-4 w-4" />
-                        </Button>
-                        <Button variant="outline" size="sm" className="text-gray-700 border-gray-300 hover:bg-gray-50 hover:text-gray-900">
-                          <Trash2 className="h-4 w-4" />
-                        </Button>
-                      </div>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </CardContent>
-        </Card>
-      </div>
+        {/* Stats Overview */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+          <Card className="border border-gray-200 bg-white shadow-sm">
+            <CardHeader className="pb-2">
+              <CardTitle className="text-sm font-medium text-gray-600">Total Librerías</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="flex items-center">
+                <BookOpen className="h-5 w-5 text-[#6B7BFF] mr-2" />
+                <span className="text-2xl font-bold text-gray-900">{stats.totalCourses}</span>
+              </div>
+            </CardContent>
+          </Card>
 
-      {/* Recent Students */}
-      <div>
-        <h2 className="text-2xl font-bold text-gray-900 mb-6">Recent Student Activity</h2>
-        <Card>
-          <CardContent className="p-0">
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Student Name</TableHead>
-                  <TableHead>Email</TableHead>
-                  <TableHead>Enrolled</TableHead>
-                  <TableHead>Progress</TableHead>
-                  <TableHead>Actions</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {recentStudents.map((student) => (
-                  <TableRow key={student.id}>
-                    <TableCell className="font-medium">{student.name}</TableCell>
-                    <TableCell>{student.email}</TableCell>
-                    <TableCell>{student.enrolled}</TableCell>
-                    <TableCell>{student.progress}%</TableCell>
-                    <TableCell>
-                      <Button variant="outline" size="sm" className="text-gray-700 border-gray-300 hover:bg-gray-50 hover:text-gray-900">
-                        View Details
-                      </Button>
-                    </TableCell>
+          <Card className="border border-gray-200 bg-white shadow-sm">
+            <CardHeader className="pb-2">
+              <CardTitle className="text-sm font-medium text-gray-600">Total Estudiantes</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="flex items-center">
+                <Users className="h-5 w-5 text-[#6B7BFF] mr-2" />
+                <span className="text-2xl font-bold text-gray-900">{stats.totalStudents}</span>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card className="border border-gray-200 bg-white shadow-sm">
+            <CardHeader className="pb-2">
+              <CardTitle className="text-sm font-medium text-gray-600">Total Módulos</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="flex items-center">
+                <BookOpen className="h-5 w-5 text-[#6B7BFF] mr-2" />
+                <span className="text-2xl font-bold text-gray-900">{stats.totalLessons}</span>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card className="border border-gray-200 bg-white shadow-sm">
+            <CardHeader className="pb-2">
+              <CardTitle className="text-sm font-medium text-gray-600">Progreso Promedio</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="flex items-center">
+                <TrendingUp className="h-5 w-5 text-[#6B7BFF] mr-2" />
+                <span className="text-2xl font-bold text-gray-900">{stats.avgProgress}%</span>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Course Management */}
+        <div className="mb-8">
+          <div className="flex justify-between items-center mb-6">
+            <h2 className="text-2xl font-bold text-gray-900">Gestión de Librerías</h2>
+            <Button className="bg-[#6B7BFF] hover:bg-[#5A6AEF] text-white">
+              <Plus className="h-4 w-4 mr-2" />
+              Crear Librería
+            </Button>
+          </div>
+
+          <Card className="border border-gray-200 bg-white shadow-sm">
+            <CardContent className="p-0">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Título de la Librería</TableHead>
+                    <TableHead>Estudiantes</TableHead>
+                    <TableHead>Módulos</TableHead>
+                    <TableHead>Estado</TableHead>
+                    <TableHead>Última Actualización</TableHead>
+                    <TableHead>Acciones</TableHead>
                   </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </CardContent>
-        </Card>
+                </TableHeader>
+                <TableBody>
+                  {courses.map((course) => (
+                    <TableRow key={course.id}>
+                      <TableCell className="font-medium text-gray-900">{course.title}</TableCell>
+                      <TableCell>{course.students}</TableCell>
+                      <TableCell>{course.lessons}</TableCell>
+                      <TableCell>
+                        <Badge className={getStatusColor(course.status)}>
+                          {course.status === 'published' ? 'Publicado' : 'Borrador'}
+                        </Badge>
+                      </TableCell>
+                      <TableCell>{course.lastUpdated}</TableCell>
+                      <TableCell>
+                        <div className="flex space-x-2">
+                          <Button variant="outline" size="sm" className="text-gray-700 border-gray-300 hover:bg-gray-50 hover:text-gray-900">
+                            <Eye className="h-4 w-4" />
+                          </Button>
+                          <Button variant="outline" size="sm" className="text-gray-700 border-gray-300 hover:bg-gray-50 hover:text-gray-900">
+                            <Edit className="h-4 w-4" />
+                          </Button>
+                          <Button variant="outline" size="sm" className="text-gray-700 border-gray-300 hover:bg-gray-50 hover:text-gray-900">
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Recent Students */}
+        <div>
+          <h2 className="text-2xl font-bold text-gray-900 mb-6">Actividad Reciente de Estudiantes</h2>
+          <Card className="border border-gray-200 bg-white shadow-sm">
+            <CardContent className="p-0">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Nombre del Estudiante</TableHead>
+                    <TableHead>Email</TableHead>
+                    <TableHead>Inscrito</TableHead>
+                    <TableHead>Progreso</TableHead>
+                    <TableHead>Acciones</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {recentStudents.map((student) => (
+                    <TableRow key={student.id}>
+                      <TableCell className="font-medium text-gray-900">{student.name}</TableCell>
+                      <TableCell>{student.email}</TableCell>
+                      <TableCell>{student.enrolled}</TableCell>
+                      <TableCell>{student.progress}%</TableCell>
+                      <TableCell>
+                        <Button variant="outline" size="sm" className="text-gray-700 border-gray-300 hover:bg-gray-50 hover:text-gray-900">
+                          Ver Detalles
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </CardContent>
+          </Card>
+        </div>
       </div>
     </div>
   );
