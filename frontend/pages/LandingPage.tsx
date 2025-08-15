@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { ArrowRight, Brain, TrendingUp, Users, AlertTriangle, Clock, Target, CheckCircle, Award, Briefcase, Star, Quote, X, BookOpen, Shield, Zap, Crown, HelpCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -5,8 +6,19 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { CoursePreview } from "../components/CoursePreview";
+import { VideoModal } from "../components/VideoModal";
 
 export function LandingPage() {
+  const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
+
+  const openVideoModal = () => {
+    setIsVideoModalOpen(true);
+  };
+
+  const closeVideoModal = () => {
+    setIsVideoModalOpen(false);
+  };
+
   return (
     <div className="min-h-screen">
       {/* Enhanced Hero Section */}
@@ -27,7 +39,11 @@ export function LandingPage() {
               incertidumbre en ventaja competitiva.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button size="lg" className="bg-yellow-400 text-gray-900 hover:bg-yellow-300 font-bold text-lg px-8 py-4">
+              <Button 
+                size="lg" 
+                className="bg-yellow-400 text-gray-900 hover:bg-yellow-300 font-bold text-lg px-8 py-4"
+                onClick={openVideoModal}
+              >
                 Ver Cómo Funciona El Sistema
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Button>
@@ -583,7 +599,11 @@ export function LandingPage() {
                 Mientras otras academias te enseñan herramientas, nosotros te enseñamos a liderar 
                 la transformación IA en tu industria.
               </p>
-              <Button size="lg" className="bg-yellow-400 text-gray-900 hover:bg-yellow-300 font-bold">
+              <Button 
+                size="lg" 
+                className="bg-yellow-400 text-gray-900 hover:bg-yellow-300 font-bold"
+                onClick={openVideoModal}
+              >
                 Ver Cómo Funciona Nuestro Sistema
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Button>
@@ -917,6 +937,13 @@ export function LandingPage() {
           </div>
         </div>
       </section>
+
+      {/* Video Modal */}
+      <VideoModal 
+        isOpen={isVideoModalOpen} 
+        onClose={closeVideoModal} 
+        videoId="r-jaWpfoRP8" 
+      />
     </div>
   );
 }
