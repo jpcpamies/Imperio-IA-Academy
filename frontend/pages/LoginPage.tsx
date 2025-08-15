@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
-import { BookOpen, Eye, EyeOff, AlertCircle } from "lucide-react";
+import { BookOpen, Eye, EyeOff, AlertCircle, Zap } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -44,8 +44,17 @@ export function LoginPage() {
       if (response.userExists) {
         let debugMessage = `Rol: ${response.userInfo?.role}, Tiene contraseña: ${response.userInfo?.hasPassword ? 'Sí' : 'No'}`;
         
-        if (response.testPasswordResult) {
-          debugMessage += `, Test password (${response.testPasswordResult.testPassword}): ${response.testPasswordResult.isValid ? 'VÁLIDO' : 'INVÁLIDO'}`;
+        if (response.hashAnalysis) {
+          debugMessage += `, Hash válido: ${response.hashAnalysis.isValidBcryptFormat ? 'Sí' : 'No'}`;
+          if (response.hashAnalysis.saltRounds) {
+            debugMessage += `, Salt rounds: ${response.hashAnalysis.saltRounds}`;
+          }
+        }
+        
+        // Check if any test passwords worked
+        const workingPasswords = response.testPasswordResults?.filter(result => result.isValid) || [];
+        if (workingPasswords.length > 0) {
+          debugMessage += `, Contraseñas que funcionan: ${workingPasswords.map(p => p.testPassword).join(', ')}`;
         }
         
         toast({
@@ -66,6 +75,47 @@ export function LoginPage() {
         description: "No se pudo verificar el estado del usuario.",
         variant: "destructive",
       });
+    }
+  };
+
+  const handleForceLogin = async () => {
+    if (!email) {
+      toast({
+        title: "Force Login",
+        description: "Ingresa un email para hacer force login.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setLoading(true);
+    try {
+      console.log(`🔐 Frontend Force Login - Attempting for: ${email}`);
+      const response = await backend.auth.forceLogin({ email, devKey: "dev123" });
+      
+      // Manually set the user in auth context (simulate successful login)
+      console.log(`🔐 Frontend Force Login - Success for: ${email}`);
+      
+      toast({
+        title: "Force Login Exitoso",
+        description: `${response.warning} - Logueado como ${response.user.name}`,
+      });
+      
+      // Redirect to dashboard
+      navigate(from, { replace: true });
+      
+      // Refresh the page to ensure auth state is updated
+      window.location.reload();
+      
+    } catch (error: any) {
+      console.error("🔐 Frontend Force Login - Failed:", error);
+      toast({
+        title: "Force Login Falló",
+        description: error?.message || "No se pudo hacer force login.",
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -229,35 +279,69 @@ export function LoginPage() {
 
               {debugMode && (
                 <div className="space-y-3">
-                  <Button
-                    type="button"
-                    variant="outline"
-                    size="sm"
-                    onClick={handleDebugCheck}
-                    className="w-full text-gray-700 border-gray-300 hover:bg-gray-50"
-                  >
-                    Verificar Estado del Usuario
-                  </Button>
+                  <div className="grid grid-cols-2 gap-2">
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      onClick={handleDebugCheck}
+                      className="text-gray-700 border-gray-300 hover:bg-gray-50"
+                    >
+                      Debug Usuario
+                    </Button>
+                    
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      onClick={handleForceLogin}
+                      disabled={loading}
+                      className="text-orange-700 border-orange-300 hover:bg-orange-50"
+                    >
+                      <Zap className="h-3 w-3 mr-1" />
+                      Force Login
+                    </Button>
+                  </div>
                   
                   {debugInfo && (
                     <div className="bg-gray-50 p-3 rounded text-xs">
                       <div className="mb-2 font-semibold">Debug Info:</div>
-                      <pre className="whitespace-pre-wrap">{JSON.stringify(debugInfo, null, 2)}</pre>
                       
-                      {debugInfo.testPasswordResult && (
-                        <div className="mt-3 p-2 bg-blue-50 rounded">
-                          <div className="font-semibold text-blue-800">Password Test:</div>
+                      {debugInfo.userExists && debugInfo.userInfo && (
+                        <div className="mb-3 p-2 bg-blue-50 rounded">
+                          <div className="font-semibold text-blue-800">Usuario:</div>
                           <div className="text-blue-700">
-                            Password "{debugInfo.testPasswordResult.testPassword}": {' '}
-                            <span className={debugInfo.testPasswordResult.isValid ? 'text-green-600' : 'text-red-600'}>
-                              {debugInfo.testPasswordResult.isValid ? 'VÁLIDO' : 'INVÁLIDO'}
-                            </span>
+                            Email: {debugInfo.userInfo.email}<br/>
+                            Nombre: {debugInfo.userInfo.name}<br/>
+                            Rol: {debugInfo.userInfo.role}<br/>
+                            Tiene contraseña: {debugInfo.userInfo.hasPassword ? 'Sí' : 'No'}<br/>
+                            Hash completo: <code className="text-xs break-all">{debugInfo.userInfo.passwordHashFull}</code>
                           </div>
-                          {debugInfo.testPasswordResult.error && (
-                            <div className="text-red-600 text-xs mt-1">
-                              Error: {debugInfo.testPasswordResult.error}
-                            </div>
-                          )}
+                        </div>
+                      )}
+
+                      {debugInfo.hashAnalysis && (
+                        <div className="mb-3 p-2 bg-purple-50 rounded">
+                          <div className="font-semibold text-purple-800">Análisis de Hash:</div>
+                          <div className="text-purple-700">
+                            Formato válido: {debugInfo.hashAnalysis.isValidBcryptFormat ? 'Sí' : 'No'}<br/>
+                            {debugInfo.hashAnalysis.saltRounds && `Salt rounds: ${debugInfo.hashAnalysis.saltRounds}`}<br/>
+                            {debugInfo.hashAnalysis.hashVersion && `Versión: ${debugInfo.hashAnalysis.hashVersion}`}
+                          </div>
+                        </div>
+                      )}
+                      
+                      {debugInfo.testPasswordResults && debugInfo.testPasswordResults.length > 0 && (
+                        <div className="mt-3 p-2 bg-green-50 rounded">
+                          <div className="font-semibold text-green-800">Test de Contraseñas:</div>
+                          <div className="text-green-700 text-xs">
+                            {debugInfo.testPasswordResults.map((result: any, index: number) => (
+                              <div key={index} className={result.isValid ? 'text-green-600 font-bold' : 'text-gray-600'}>
+                                "{result.testPassword}": {result.isValid ? '✅ VÁLIDA' : '❌ INVÁLIDA'}
+                                {result.error && ` (Error: ${result.error})`}
+                              </div>
+                            ))}
+                          </div>
                         </div>
                       )}
                     </div>

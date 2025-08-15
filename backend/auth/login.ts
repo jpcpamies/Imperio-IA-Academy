@@ -52,6 +52,7 @@ export const login = api<LoginRequest, LoginResponse>(
       console.log(`🔐 STEP 2 - User found: ${user.email}, ID: ${user.id}, Role: ${user.role}`);
       console.log(`🔐 STEP 2 - Password hash exists: ${!!user.password_hash}`);
       console.log(`🔐 STEP 2 - Password hash length: ${user.password_hash ? user.password_hash.length : 0}`);
+      console.log(`🔐 STEP 2 - Password hash format check: ${user.password_hash ? user.password_hash.substring(0, 7) : 'N/A'}`);
 
       if (!user.password_hash) {
         console.log(`🔐 LOGIN FAILED - No password hash for user: ${req.email}`);
@@ -59,20 +60,69 @@ export const login = api<LoginRequest, LoginResponse>(
       }
 
       console.log(`🔐 STEP 3 - Starting password verification for: ${req.email}`);
+      console.log(`🔐 STEP 3 - Input password: "${req.password}"`);
       console.log(`🔐 STEP 3 - Input password length: ${req.password.length}`);
-      console.log(`🔐 STEP 3 - Stored hash starts with: ${user.password_hash.substring(0, 10)}...`);
+      console.log(`🔐 STEP 3 - Stored hash: ${user.password_hash}`);
+      console.log(`🔐 STEP 3 - Hash starts with: ${user.password_hash.substring(0, 10)}...`);
+
+      // Validate bcrypt hash format
+      const bcryptRegex = /^\$2[aby]?\$\d{1,2}\$.{53}$/;
+      const isValidBcryptHash = bcryptRegex.test(user.password_hash);
+      console.log(`🔐 STEP 3 - Hash format validation: ${isValidBcryptHash ? 'VALID' : 'INVALID'}`);
+
+      if (!isValidBcryptHash) {
+        console.log(`🔐 STEP 3 - CRITICAL: Invalid bcrypt hash format detected!`);
+        console.log(`🔐 STEP 3 - Hash: ${user.password_hash}`);
+        throw APIError.internal("Invalid password hash format in database");
+      }
 
       let isValidPassword = false;
       try {
+        console.log(`🔐 STEP 3 - Calling bcrypt.compare...`);
         isValidPassword = await bcrypt.compare(req.password, user.password_hash);
-        console.log(`🔐 STEP 3 - Password verification result: ${isValidPassword}`);
+        console.log(`🔐 STEP 3 - bcrypt.compare result: ${isValidPassword}`);
+        
+        // Additional debugging: try manual verification
+        console.log(`🔐 STEP 3 - Manual verification attempt...`);
+        const manualHash = await bcrypt.hash(req.password, 10);
+        console.log(`🔐 STEP 3 - Manual hash of input password: ${manualHash}`);
+        
+        // Test with different salt rounds
+        const testHash12 = await bcrypt.hash(req.password, 12);
+        console.log(`🔐 STEP 3 - Test hash (12 rounds): ${testHash12}`);
+        
+        // Try comparing with different approaches
+        const directCompare = await bcrypt.compare(req.password, user.password_hash);
+        console.log(`🔐 STEP 3 - Direct compare result: ${directCompare}`);
+        
       } catch (bcryptError) {
         console.error(`🔐 STEP 3 - Bcrypt comparison error:`, bcryptError);
+        console.error(`🔐 STEP 3 - Error name: ${bcryptError.name}`);
+        console.error(`🔐 STEP 3 - Error message: ${bcryptError.message}`);
+        console.error(`🔐 STEP 3 - Error stack: ${bcryptError.stack}`);
         throw APIError.internal("Error during password verification");
       }
 
       if (!isValidPassword) {
         console.log(`🔐 LOGIN FAILED - Invalid password for user: ${req.email}`);
+        console.log(`🔐 LOGIN FAILED - Provided: "${req.password}"`);
+        console.log(`🔐 LOGIN FAILED - Hash in DB: ${user.password_hash}`);
+        
+        // Development mode: try some common test passwords
+        console.log(`🔐 DEV MODE - Testing common passwords...`);
+        const testPasswords = ['123456', 'password', 'test123', req.email.split('@')[0]];
+        for (const testPwd of testPasswords) {
+          try {
+            const testResult = await bcrypt.compare(testPwd, user.password_hash);
+            console.log(`🔐 DEV MODE - Test password "${testPwd}": ${testResult ? 'MATCH' : 'NO MATCH'}`);
+            if (testResult) {
+              console.log(`🔐 DEV MODE - FOUND WORKING PASSWORD: "${testPwd}"`);
+            }
+          } catch (e) {
+            console.log(`🔐 DEV MODE - Error testing "${testPwd}": ${e.message}`);
+          }
+        }
+        
         throw APIError.unauthenticated("Email o contraseña incorrectos");
       }
 
@@ -127,6 +177,9 @@ export const login = api<LoginRequest, LoginResponse>(
 
     } catch (error) {
       console.error(`🔐 LOGIN ERROR - Unexpected error for ${req.email}:`, error);
+      console.error(`🔐 LOGIN ERROR - Error type: ${error.constructor.name}`);
+      console.error(`🔐 LOGIN ERROR - Error message: ${error.message}`);
+      console.error(`🔐 LOGIN ERROR - Error stack: ${error.stack}`);
       
       // Re-throw APIErrors as-is
       if (error instanceof APIError) {
