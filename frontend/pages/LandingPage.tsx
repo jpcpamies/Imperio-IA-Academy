@@ -1,8 +1,9 @@
 import { Link } from "react-router-dom";
-import { ArrowRight, Brain, TrendingUp, Users, AlertTriangle, Clock, Target, CheckCircle, Award, Briefcase } from "lucide-react";
+import { ArrowRight, Brain, TrendingUp, Users, AlertTriangle, Clock, Target, CheckCircle, Award, Briefcase, Star, Quote, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { CoursePreview } from "../components/CoursePreview";
 
 export function LandingPage() {
@@ -293,6 +294,286 @@ export function LandingPage() {
                   <li>• Columnista en Forbes sobre IA Empresarial</li>
                 </ul>
               </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Testimonials Section */}
+      <section className="py-20 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
+              Resultados Reales de Profesionales Reales Como Tú
+            </h2>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              Estos profesionales experimentados transformaron su incertidumbre sobre IA en ventaja competitiva. 
+              Sus resultados hablan por sí solos.
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-8">
+            {/* Testimonial 1 */}
+            <Card className="relative overflow-hidden border-2 border-gray-100 hover:border-[#635BFF] transition-colors">
+              <CardHeader className="pb-4">
+                <div className="flex items-center mb-4">
+                  <div className="w-16 h-16 bg-gradient-to-br from-pink-400 to-pink-600 rounded-full flex items-center justify-center mr-4">
+                    <span className="text-white font-bold text-xl">MG</span>
+                  </div>
+                  <div>
+                    <h3 className="font-bold text-gray-900">María González</h3>
+                    <p className="text-sm text-gray-600">Marketing Director | 42 años</p>
+                    <p className="text-sm text-[#635BFF] font-medium">Banco Santander</p>
+                  </div>
+                </div>
+                <div className="flex text-yellow-400 mb-2">
+                  {[...Array(5)].map((_, i) => (
+                    <Star key={i} className="h-4 w-4 fill-current" />
+                  ))}
+                </div>
+              </CardHeader>
+              <CardContent>
+                <Quote className="h-8 w-8 text-[#635BFF] mb-4 opacity-20" />
+                <blockquote className="text-gray-700 mb-6 leading-relaxed">
+                  "Tenía 20 años de experiencia en marketing, pero me sentía como una novata frente a la IA. 
+                  En 6 semanas pasé de evitar el tema en reuniones a liderar la estrategia de marketing con IA 
+                  de todo el banco. Mi equipo aumentó productividad 340% y obtuve el ascenso que llevaba 3 años esperando."
+                </blockquote>
+                <div className="bg-green-50 border border-green-200 p-4 rounded-lg">
+                  <p className="text-sm font-bold text-green-800 mb-1">RESULTADO MEDIBLE:</p>
+                  <p className="text-sm text-green-700">Ascenso a Marketing Director + aumento salarial 45%</p>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Testimonial 2 */}
+            <Card className="relative overflow-hidden border-2 border-gray-100 hover:border-[#635BFF] transition-colors">
+              <CardHeader className="pb-4">
+                <div className="flex items-center mb-4">
+                  <div className="w-16 h-16 bg-gradient-to-br from-blue-400 to-blue-600 rounded-full flex items-center justify-center mr-4">
+                    <span className="text-white font-bold text-xl">CR</span>
+                  </div>
+                  <div>
+                    <h3 className="font-bold text-gray-900">Carlos Ruiz</h3>
+                    <p className="text-sm text-gray-600">Fundador & CEO | 38 años</p>
+                    <p className="text-sm text-[#635BFF] font-medium">Consultoría Legal Tech</p>
+                  </div>
+                </div>
+                <div className="flex text-yellow-400 mb-2">
+                  {[...Array(5)].map((_, i) => (
+                    <Star key={i} className="h-4 w-4 fill-current" />
+                  ))}
+                </div>
+              </CardHeader>
+              <CardContent>
+                <Quote className="h-8 w-8 text-[#635BFF] mb-4 opacity-20" />
+                <blockquote className="text-gray-700 mb-6 leading-relaxed">
+                  "Mi competencia estaba automatizando servicios que yo tardaba semanas en entregar. 
+                  En lugar de contratar desarrolladores, aprendí a estructurar servicios con IA que me 
+                  posicionaron 2 años por delante. Facturación creció 280% sin aumentar plantilla."
+                </blockquote>
+                <div className="bg-green-50 border border-green-200 p-4 rounded-lg">
+                  <p className="text-sm font-bold text-green-800 mb-1">RESULTADO MEDIBLE:</p>
+                  <p className="text-sm text-green-700">Facturación €180K → €684K anual</p>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Testimonial 3 */}
+            <Card className="relative overflow-hidden border-2 border-gray-100 hover:border-[#635BFF] transition-colors">
+              <CardHeader className="pb-4">
+                <div className="flex items-center mb-4">
+                  <div className="w-16 h-16 bg-gradient-to-br from-purple-400 to-purple-600 rounded-full flex items-center justify-center mr-4">
+                    <span className="text-white font-bold text-xl">AM</span>
+                  </div>
+                  <div>
+                    <h3 className="font-bold text-gray-900">Ana Martín</h3>
+                    <p className="text-sm text-gray-600">Consultora RRHH | 44 años</p>
+                    <p className="text-sm text-[#635BFF] font-medium">Freelance</p>
+                  </div>
+                </div>
+                <div className="flex text-yellow-400 mb-2">
+                  {[...Array(5)].map((_, i) => (
+                    <Star key={i} className="h-4 w-4 fill-current" />
+                  ))}
+                </div>
+              </CardHeader>
+              <CardContent>
+                <Quote className="h-8 w-8 text-[#635BFF] mb-4 opacity-20" />
+                <blockquote className="text-gray-700 mb-6 leading-relaxed">
+                  "A los 44 años pensé que era tarde para reinventarme. Ahora soy la consultora de referencia 
+                  en 'Gestión de Talento con IA' y mis tarifas aumentaron 200%. Tengo lista de espera de 3 meses."
+                </blockquote>
+                <div className="bg-green-50 border border-green-200 p-4 rounded-lg">
+                  <p className="text-sm font-bold text-green-800 mb-1">RESULTADO MEDIBLE:</p>
+                  <p className="text-sm text-green-700">€45/hora → €150/hora + retainers mensuales</p>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+
+          <div className="text-center mt-12">
+            <Badge className="bg-[#635BFF] text-white text-lg px-6 py-3">
+              Promedio de aumento salarial: 156% en 6 meses
+            </Badge>
+          </div>
+        </div>
+      </section>
+
+      {/* Comparison Table Section */}
+      <section className="py-20 bg-gray-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
+              Por Qué Somos Diferentes de Otras Academias IA
+            </h2>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              No todas las academias de IA son iguales. Nosotros entendemos las necesidades específicas 
+              de profesionales experimentados que buscan resultados, no solo conocimiento.
+            </p>
+          </div>
+
+          <div className="bg-white rounded-lg shadow-lg overflow-hidden">
+            <Table>
+              <TableHeader>
+                <TableRow className="bg-gray-50">
+                  <TableHead className="font-bold text-gray-900 text-lg py-6">Aspecto</TableHead>
+                  <TableHead className="font-bold text-[#635BFF] text-lg py-6 text-center">
+                    <div className="flex items-center justify-center">
+                      <CheckCircle className="h-5 w-5 mr-2" />
+                      Nuestra Academia
+                    </div>
+                  </TableHead>
+                  <TableHead className="font-bold text-gray-500 text-lg py-6 text-center">
+                    <div className="flex items-center justify-center">
+                      <X className="h-5 w-5 mr-2" />
+                      Otras Academias
+                    </div>
+                  </TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                <TableRow className="border-b">
+                  <TableCell className="font-semibold text-gray-900 py-6">
+                    <div className="flex items-center">
+                      <Users className="h-5 w-5 mr-3 text-gray-600" />
+                      Enfoque
+                    </div>
+                  </TableCell>
+                  <TableCell className="py-6 text-center">
+                    <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+                      <p className="font-medium text-green-800">Profesionales 30+ con experiencia</p>
+                      <p className="text-sm text-green-600 mt-1">Metodología específica para ejecutivos</p>
+                    </div>
+                  </TableCell>
+                  <TableCell className="py-6 text-center">
+                    <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+                      <p className="font-medium text-red-800">Programadores jóvenes/audiencia general</p>
+                      <p className="text-sm text-red-600 mt-1">Enfoque técnico sin contexto empresarial</p>
+                    </div>
+                  </TableCell>
+                </TableRow>
+
+                <TableRow className="border-b">
+                  <TableCell className="font-semibold text-gray-900 py-6">
+                    <div className="flex items-center">
+                      <BookOpen className="h-5 w-5 mr-3 text-gray-600" />
+                      Contenido
+                    </div>
+                  </TableCell>
+                  <TableCell className="py-6 text-center">
+                    <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+                      <p className="font-medium text-green-800">Casos reales que inspiran</p>
+                      <p className="text-sm text-green-600 mt-1">Aplicación inmediata en tu trabajo</p>
+                    </div>
+                  </TableCell>
+                  <TableCell className="py-6 text-center">
+                    <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+                      <p className="font-medium text-red-800">Teoría profunda, contenido obsoleto</p>
+                      <p className="text-sm text-red-600 mt-1">Información que cambia constantemente</p>
+                    </div>
+                  </TableCell>
+                </TableRow>
+
+                <TableRow className="border-b">
+                  <TableCell className="font-semibold text-gray-900 py-6">
+                    <div className="flex items-center">
+                      <Target className="h-5 w-5 mr-3 text-gray-600" />
+                      Metodología
+                    </div>
+                  </TableCell>
+                  <TableCell className="py-6 text-center">
+                    <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+                      <p className="font-medium text-green-800">80/20, aplicación inmediata</p>
+                      <p className="text-sm text-green-600 mt-1">Solo lo que realmente necesitas</p>
+                    </div>
+                  </TableCell>
+                  <TableCell className="py-6 text-center">
+                    <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+                      <p className="font-medium text-red-800">Cursos técnicos complejos</p>
+                      <p className="text-sm text-red-600 mt-1">Información abrumadora sin priorización</p>
+                    </div>
+                  </TableCell>
+                </TableRow>
+
+                <TableRow className="border-b">
+                  <TableCell className="font-semibold text-gray-900 py-6">
+                    <div className="flex items-center">
+                      <Users className="h-5 w-5 mr-3 text-gray-600" />
+                      Comunidad
+                    </div>
+                  </TableCell>
+                  <TableCell className="py-6 text-center">
+                    <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+                      <p className="font-medium text-green-800">Profesionales de tu nivel</p>
+                      <p className="text-sm text-green-600 mt-1">Networking con ejecutivos y directores</p>
+                    </div>
+                  </TableCell>
+                  <TableCell className="py-6 text-center">
+                    <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+                      <p className="font-medium text-red-800">Edades mixtas, estudiantes</p>
+                      <p className="text-sm text-red-600 mt-1">Diferentes niveles de experiencia</p>
+                    </div>
+                  </TableCell>
+                </TableRow>
+
+                <TableRow>
+                  <TableCell className="font-semibold text-gray-900 py-6">
+                    <div className="flex items-center">
+                      <TrendingUp className="h-5 w-5 mr-3 text-gray-600" />
+                      Resultado
+                    </div>
+                  </TableCell>
+                  <TableCell className="py-6 text-center">
+                    <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+                      <p className="font-medium text-green-800">Pensamiento estratégico + liderazgo</p>
+                      <p className="text-sm text-green-600 mt-1">Transformación profesional completa</p>
+                    </div>
+                  </TableCell>
+                  <TableCell className="py-6 text-center">
+                    <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+                      <p className="font-medium text-red-800">Solo uso de herramientas</p>
+                      <p className="text-sm text-red-600 mt-1">Conocimiento superficial sin impacto</p>
+                    </div>
+                  </TableCell>
+                </TableRow>
+              </TableBody>
+            </Table>
+          </div>
+
+          <div className="text-center mt-12">
+            <div className="bg-[#635BFF] text-white p-8 rounded-lg">
+              <h3 className="text-2xl font-bold mb-4">
+                La Diferencia Está en los Resultados
+              </h3>
+              <p className="text-lg text-purple-100 mb-6">
+                Mientras otras academias te enseñan herramientas, nosotros te enseñamos a liderar 
+                la transformación IA en tu industria.
+              </p>
+              <Button size="lg" className="bg-yellow-400 text-gray-900 hover:bg-yellow-300 font-bold">
+                Ver Cómo Funciona Nuestro Sistema
+                <ArrowRight className="ml-2 h-5 w-5" />
+              </Button>
             </div>
           </div>
         </div>
