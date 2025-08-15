@@ -36,14 +36,21 @@ export function LoginPage() {
     }
 
     try {
+      console.log(`🐛 Frontend Debug - Checking user: ${email}`);
       const response = await backend.auth.debugLogin({ email });
       setDebugInfo(response);
-      console.log("🐛 Debug Info:", response);
+      console.log("🐛 Frontend Debug Info:", response);
       
       if (response.userExists) {
+        let debugMessage = `Rol: ${response.userInfo?.role}, Tiene contraseña: ${response.userInfo?.hasPassword ? 'Sí' : 'No'}`;
+        
+        if (response.testPasswordResult) {
+          debugMessage += `, Test password (${response.testPasswordResult.testPassword}): ${response.testPasswordResult.isValid ? 'VÁLIDO' : 'INVÁLIDO'}`;
+        }
+        
         toast({
           title: "Debug: Usuario encontrado",
-          description: `Rol: ${response.userInfo?.role}, Tiene contraseña: ${response.userInfo?.hasPassword ? 'Sí' : 'No'}`,
+          description: debugMessage,
         });
       } else {
         toast({
@@ -53,7 +60,7 @@ export function LoginPage() {
         });
       }
     } catch (error) {
-      console.error("Debug check failed:", error);
+      console.error("Frontend Debug check failed:", error);
       toast({
         title: "Error de debug",
         description: "No se pudo verificar el estado del usuario.",
@@ -67,25 +74,36 @@ export function LoginPage() {
     setLoading(true);
     setError("");
 
+    console.log(`🔐 Frontend Login - Starting login attempt for: ${email}`);
+
     try {
       await login(email, password);
+      console.log(`🔐 Frontend Login - Login successful for: ${email}`);
       toast({
         title: "¡Bienvenido!",
         description: "Has iniciado sesión exitosamente.",
       });
       navigate(from, { replace: true });
     } catch (error: any) {
-      console.error("Login failed:", error);
+      console.error("🔐 Frontend Login - Login failed:", error);
       
       let errorMessage = "Error de conexión. Por favor, intenta de nuevo.";
       
       if (error?.message) {
+        console.log(`🔐 Frontend Login - Error message: ${error.message}`);
+        
         if (error.message.includes("Email o contraseña incorrectos")) {
           errorMessage = "Email o contraseña incorrectos. Verifica tus credenciales.";
         } else if (error.message.includes("Usuario no encontrado")) {
           errorMessage = "Usuario no encontrado. ¿Necesitas crear una cuenta?";
         } else if (error.message.includes("Usuario no tiene contraseña")) {
           errorMessage = "Tu cuenta necesita una contraseña. Usa 'Olvidé mi contraseña' para configurar una.";
+        } else if (error.message.includes("Error interno del servidor")) {
+          errorMessage = "Error interno del servidor. Por favor, contacta al soporte.";
+        } else if (error.message.includes("Error during password verification")) {
+          errorMessage = "Error en la verificación de contraseña. Por favor, intenta de nuevo.";
+        } else if (error.message.includes("Error during token generation")) {
+          errorMessage = "Error en la generación de sesión. Por favor, intenta de nuevo.";
         }
       }
       
@@ -223,7 +241,25 @@ export function LoginPage() {
                   
                   {debugInfo && (
                     <div className="bg-gray-50 p-3 rounded text-xs">
-                      <pre>{JSON.stringify(debugInfo, null, 2)}</pre>
+                      <div className="mb-2 font-semibold">Debug Info:</div>
+                      <pre className="whitespace-pre-wrap">{JSON.stringify(debugInfo, null, 2)}</pre>
+                      
+                      {debugInfo.testPasswordResult && (
+                        <div className="mt-3 p-2 bg-blue-50 rounded">
+                          <div className="font-semibold text-blue-800">Password Test:</div>
+                          <div className="text-blue-700">
+                            Password "{debugInfo.testPasswordResult.testPassword}": {' '}
+                            <span className={debugInfo.testPasswordResult.isValid ? 'text-green-600' : 'text-red-600'}>
+                              {debugInfo.testPasswordResult.isValid ? 'VÁLIDO' : 'INVÁLIDO'}
+                            </span>
+                          </div>
+                          {debugInfo.testPasswordResult.error && (
+                            <div className="text-red-600 text-xs mt-1">
+                              Error: {debugInfo.testPasswordResult.error}
+                            </div>
+                          )}
+                        </div>
+                      )}
                     </div>
                   )}
                 </div>
