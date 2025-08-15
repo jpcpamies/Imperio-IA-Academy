@@ -1,9 +1,10 @@
 import { Link } from "react-router-dom";
-import { ArrowRight, Brain, TrendingUp, Users, AlertTriangle, Clock, Target, CheckCircle, Award, Briefcase, Star, Quote, X, BookOpen } from "lucide-react";
+import { ArrowRight, Brain, TrendingUp, Users, AlertTriangle, Clock, Target, CheckCircle, Award, Briefcase, Star, Quote, X, BookOpen, Shield, Zap, Crown, HelpCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { CoursePreview } from "../components/CoursePreview";
 
 export function LandingPage() {
@@ -604,28 +605,304 @@ export function LandingPage() {
         </div>
       </section>
 
-      {/* CTA Section */}
+      {/* Pricing Section */}
+      <section className="py-20 bg-gray-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
+              Elige Tu Ruta de Transformación: 3 Formas de Convertirte en Líder con IA
+            </h2>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              Cada plan está diseñado para diferentes niveles de ambición profesional. 
+              Todos incluyen acceso inmediato y garantía de satisfacción.
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-8">
+            {/* Plan Fundamentos */}
+            <Card className="relative border-2 border-gray-200 hover:border-[#635BFF] transition-colors">
+              <CardHeader className="text-center pb-4">
+                <div className="flex items-center justify-center mb-4">
+                  <Shield className="h-8 w-8 text-[#635BFF]" />
+                </div>
+                <CardTitle className="text-2xl font-bold text-gray-900">Plan Fundamentos</CardTitle>
+                <div className="mt-4">
+                  <span className="text-4xl font-bold text-gray-900">€297</span>
+                </div>
+                <CardDescription className="mt-2">
+                  Perfecto para empezar tu transformación con IA
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <ul className="space-y-3 mb-8">
+                  <li className="flex items-start">
+                    <CheckCircle className="h-5 w-5 text-green-500 mr-3 mt-0.5 flex-shrink-0" />
+                    <span className="text-gray-700">Acceso completo a los 8 módulos de formación</span>
+                  </li>
+                  <li className="flex items-start">
+                    <CheckCircle className="h-5 w-5 text-green-500 mr-3 mt-0.5 flex-shrink-0" />
+                    <span className="text-gray-700">Librería básica de 150 prompts esenciales</span>
+                  </li>
+                  <li className="flex items-start">
+                    <CheckCircle className="h-5 w-5 text-green-500 mr-3 mt-0.5 flex-shrink-0" />
+                    <span className="text-gray-700">Acceso a comunidad privada de profesionales</span>
+                  </li>
+                  <li className="flex items-start">
+                    <CheckCircle className="h-5 w-5 text-green-500 mr-3 mt-0.5 flex-shrink-0" />
+                    <span className="text-gray-700">Soporte por email durante 3 meses</span>
+                  </li>
+                  <li className="flex items-start">
+                    <CheckCircle className="h-5 w-5 text-green-500 mr-3 mt-0.5 flex-shrink-0" />
+                    <span className="text-gray-700">Certificado de finalización</span>
+                  </li>
+                </ul>
+                <Button className="w-full bg-gray-900 hover:bg-gray-800 text-white">
+                  Seleccionar Fundamentos
+                </Button>
+              </CardContent>
+            </Card>
+
+            {/* Plan Profesional - Most Popular */}
+            <Card className="relative border-2 border-[#635BFF] hover:border-[#5048E5] transition-colors transform scale-105">
+              <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
+                <Badge className="bg-[#635BFF] text-white px-6 py-2 text-sm font-bold">
+                  ⭐ MÁS POPULAR
+                </Badge>
+              </div>
+              <CardHeader className="text-center pb-4 pt-8">
+                <div className="flex items-center justify-center mb-4">
+                  <Zap className="h-8 w-8 text-[#635BFF]" />
+                </div>
+                <CardTitle className="text-2xl font-bold text-gray-900">Plan Profesional</CardTitle>
+                <div className="mt-4">
+                  <span className="text-4xl font-bold text-[#635BFF]">€597</span>
+                </div>
+                <CardDescription className="mt-2">
+                  La opción más completa para profesionales ambiciosos
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="bg-[#635BFF] text-white p-3 rounded-lg mb-6 text-center">
+                  <p className="font-bold">AHORRO: €285 vs comprar por separado</p>
+                </div>
+                <ul className="space-y-3 mb-8">
+                  <li className="flex items-start">
+                    <CheckCircle className="h-5 w-5 text-green-500 mr-3 mt-0.5 flex-shrink-0" />
+                    <span className="text-gray-700 font-medium">TODO lo del Plan Fundamentos +</span>
+                  </li>
+                  <li className="flex items-start">
+                    <CheckCircle className="h-5 w-5 text-green-500 mr-3 mt-0.5 flex-shrink-0" />
+                    <span className="text-gray-700">Librería completa de 450+ prompts profesionales</span>
+                  </li>
+                  <li className="flex items-start">
+                    <CheckCircle className="h-5 w-5 text-green-500 mr-3 mt-0.5 flex-shrink-0" />
+                    <span className="text-gray-700">Base de datos de 200+ herramientas evaluadas</span>
+                  </li>
+                  <li className="flex items-start">
+                    <CheckCircle className="h-5 w-5 text-green-500 mr-3 mt-0.5 flex-shrink-0" />
+                    <span className="text-gray-700">25+ Templates y frameworks de implementación</span>
+                  </li>
+                  <li className="flex items-start">
+                    <CheckCircle className="h-5 w-5 text-green-500 mr-3 mt-0.5 flex-shrink-0" />
+                    <span className="text-gray-700">2 sesiones de mentoría 1:1 personalizada</span>
+                  </li>
+                  <li className="flex items-start">
+                    <CheckCircle className="h-5 w-5 text-green-500 mr-3 mt-0.5 flex-shrink-0" />
+                    <span className="text-gray-700">Actualizaciones de por vida</span>
+                  </li>
+                </ul>
+                <Button className="w-full bg-[#635BFF] hover:bg-[#5048E5] text-white font-bold">
+                  Seleccionar Profesional ⭐
+                </Button>
+              </CardContent>
+            </Card>
+
+            {/* Plan Elite */}
+            <Card className="relative border-2 border-gray-200 hover:border-[#635BFF] transition-colors">
+              <CardHeader className="text-center pb-4">
+                <div className="flex items-center justify-center mb-4">
+                  <Crown className="h-8 w-8 text-[#635BFF]" />
+                </div>
+                <CardTitle className="text-2xl font-bold text-gray-900">Plan Elite</CardTitle>
+                <div className="mt-4">
+                  <span className="text-4xl font-bold text-gray-900">€1,197</span>
+                </div>
+                <CardDescription className="mt-2">
+                  Para líderes que quieren transformar organizaciones
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="bg-green-50 border border-green-200 p-3 rounded-lg mb-6 text-center">
+                  <p className="font-bold text-green-800">AHORRO: €497 vs comprar por separado</p>
+                </div>
+                <ul className="space-y-3 mb-8">
+                  <li className="flex items-start">
+                    <CheckCircle className="h-5 w-5 text-green-500 mr-3 mt-0.5 flex-shrink-0" />
+                    <span className="text-gray-700 font-medium">TODO lo del Plan Profesional +</span>
+                  </li>
+                  <li className="flex items-start">
+                    <CheckCircle className="h-5 w-5 text-green-500 mr-3 mt-0.5 flex-shrink-0" />
+                    <span className="text-gray-700">6 sesiones de mentoría 1:1 con especialistas</span>
+                  </li>
+                  <li className="flex items-start">
+                    <CheckCircle className="h-5 w-5 text-green-500 mr-3 mt-0.5 flex-shrink-0" />
+                    <span className="text-gray-700">Certificación avanzada con badge LinkedIn</span>
+                  </li>
+                  <li className="flex items-start">
+                    <CheckCircle className="h-5 w-5 text-green-500 mr-3 mt-0.5 flex-shrink-0" />
+                    <span className="text-gray-700">Consulta estratégica para implementación organizacional</span>
+                  </li>
+                </ul>
+                <Button className="w-full bg-gray-900 hover:bg-gray-800 text-white">
+                  Seleccionar Elite
+                </Button>
+              </CardContent>
+            </Card>
+          </div>
+
+          <div className="text-center mt-12">
+            <div className="bg-yellow-50 border border-yellow-200 p-6 rounded-lg max-w-2xl mx-auto">
+              <p className="text-gray-700">
+                <strong>Garantía de satisfacción:</strong> 30 días para probar sin riesgo. 
+                Si no ves valor, reembolso completo sin preguntas.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* FAQ Section */}
+      <section className="py-20 bg-white">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <div className="flex justify-center mb-6">
+              <HelpCircle className="h-16 w-16 text-[#635BFF]" />
+            </div>
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
+              Las 5 Preguntas Que Hacen TODOS los Profesionales Antes de Transformar Su Carrera
+            </h2>
+            <p className="text-xl text-gray-600">
+              Resolvemos las dudas más comunes para que puedas tomar la mejor decisión para tu futuro.
+            </p>
+          </div>
+
+          <Accordion type="single" collapsible className="space-y-4">
+            <AccordionItem value="item-1" className="border border-gray-200 rounded-lg px-6">
+              <AccordionTrigger className="text-left font-semibold text-gray-900 hover:text-[#635BFF]">
+                "No tengo tiempo para esto ahora, trabajo 50+ horas semanales"
+              </AccordionTrigger>
+              <AccordionContent className="text-gray-700 leading-relaxed">
+                Por eso cada módulo está diseñado para 15-30 minutos máximo. La primera semana ya estarás 
+                aplicando IA para AHORRAR tiempo en tus tareas diarias. Nuestros estudiantes reportan 
+                recuperar 5-8 horas semanales después del primer mes. El tiempo que inviertes se multiplica 
+                inmediatamente en productividad.
+              </AccordionContent>
+            </AccordionItem>
+
+            <AccordionItem value="item-2" className="border border-gray-200 rounded-lg px-6">
+              <AccordionTrigger className="text-left font-semibold text-gray-900 hover:text-[#635BFF]">
+                "Esto parece muy técnico, no soy programador ni nativo digital"
+              </AccordionTrigger>
+              <AccordionContent className="text-gray-700 leading-relaxed">
+                CERO código requerido. El 78% de nuestros estudiantes tiene más de 35 años y muchos se 
+                consideraban "no técnicos" antes de empezar. Todo está explicado en lenguaje empresarial, 
+                con ejemplos de tu industria. Si sabes usar email y navegador web, puedes dominar estas herramientas.
+              </AccordionContent>
+            </AccordionItem>
+
+            <AccordionItem value="item-3" className="border border-gray-200 rounded-lg px-6">
+              <AccordionTrigger className="text-left font-semibold text-gray-900 hover:text-[#635BFF]">
+                "¿Realmente merece la pena invertir €597?"
+              </AccordionTrigger>
+              <AccordionContent className="text-gray-700 leading-relaxed">
+                Profesionales con habilidades IA ganan 25% más según LinkedIn. Este programa se paga solo 
+                con el primer proyecto que implementes. Nuestros graduados reportan aumentos salariales 
+                promedio de €8,400 anuales. Además, incluye garantía de 30 días - si no ves valor, 
+                reembolso completo.
+              </AccordionContent>
+            </AccordionItem>
+
+            <AccordionItem value="item-4" className="border border-gray-200 rounded-lg px-6">
+              <AccordionTrigger className="text-left font-semibold text-gray-900 hover:text-[#635BFF]">
+                "¿Y si para cuando lo aprenda ya ha cambiado todo?"
+              </AccordionTrigger>
+              <AccordionContent className="text-gray-700 leading-relaxed">
+                Te enseñamos PRINCIPIOS atemporales, no herramientas específicas. Los fundamentos de 
+                prompting, automatización y pensamiento estratégico con IA no cambian. Además, las 
+                actualizaciones de por vida están incluidas en el Plan Profesional y Elite. Siempre 
+                estarás al día con las últimas tendencias.
+              </AccordionContent>
+            </AccordionItem>
+
+            <AccordionItem value="item-5" className="border border-gray-200 rounded-lg px-6">
+              <AccordionTrigger className="text-left font-semibold text-gray-900 hover:text-[#635BFF]">
+                "A mi edad (45+) ¿no es demasiado tarde?"
+              </AccordionTrigger>
+              <AccordionContent className="text-gray-700 leading-relaxed">
+                Tu edad es tu VENTAJA. El 43% de nuestros mejores casos de éxito son profesionales de 45+ años. 
+                Tu experiencia + IA = combinación imparable. Los jóvenes saben tecnología, pero tú sabes 
+                negocios. Esa perspectiva estratégica es lo que las empresas más valoran en la era IA.
+              </AccordionContent>
+            </AccordionItem>
+          </Accordion>
+        </div>
+      </section>
+
+      {/* Final CTA Section */}
       <section className="py-20 bg-gradient-to-br from-[#635BFF] to-[#5048E5]">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
-            Tu Experiencia + IA = Ventaja Competitiva Imparable
+            Tu Momento de Decisión: Liderar o Ser Liderado
           </h2>
           <p className="text-xl text-purple-100 mb-8">
-            No permitas que la incertidumbre sobre IA limite tu potencial. Únete a miles de profesionales 
-            que ya están liderando con confianza en la era de la inteligencia artificial.
+            En 6 meses, habrá dos tipos de profesionales: los que dominan IA y los que fueron reemplazados por ella. 
+            ¿De qué lado quieres estar?
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" className="bg-yellow-400 text-gray-900 hover:bg-yellow-300 font-bold text-lg px-8 py-4">
-              Comenzar Mi Transformación Ahora
-              <ArrowRight className="ml-2 h-5 w-5" />
-            </Button>
-            <Button size="lg" variant="outline" className="border-white text-white bg-transparent hover:bg-white hover:text-[#635BFF] font-semibold">
-              Hablar Con Un Asesor
-            </Button>
+
+          <div className="bg-white/10 backdrop-blur-sm rounded-lg p-8 mb-8">
+            <div className="grid md:grid-cols-3 gap-6 text-white">
+              <div className="flex items-center justify-center">
+                <Shield className="h-8 w-8 mr-3" />
+                <div className="text-left">
+                  <p className="font-bold">30 días de garantía total</p>
+                  <p className="text-sm text-purple-200">Si no ves valor, reembolso completo</p>
+                </div>
+              </div>
+              <div className="flex items-center justify-center">
+                <Clock className="h-8 w-8 mr-3" />
+                <div className="text-left">
+                  <p className="font-bold">Solo 27 plazas restantes</p>
+                  <p className="text-sm text-purple-200">Para la cohorte de Marzo 2025</p>
+                </div>
+              </div>
+              <div className="flex items-center justify-center">
+                <Zap className="h-8 w-8 mr-3" />
+                <div className="text-left">
+                  <p className="font-bold">Acceso inmediato</p>
+                  <p className="text-sm text-purple-200">Empieza tu transformación hoy</p>
+                </div>
+              </div>
+            </div>
           </div>
-          <p className="text-purple-200 mt-6 text-sm">
-            ✓ Garantía de satisfacción 30 días ✓ Acceso inmediato ✓ Soporte personalizado
-          </p>
+
+          <div className="space-y-4">
+            <Button size="lg" className="bg-yellow-400 text-gray-900 hover:bg-yellow-300 font-bold text-xl px-12 py-6">
+              ASEGURAR MI PLAZA AHORA
+              <ArrowRight className="ml-3 h-6 w-6" />
+            </Button>
+            <p className="text-purple-200 text-sm">
+              ✓ Acceso inmediato a todos los módulos ✓ Garantía 30 días ✓ Soporte personalizado
+            </p>
+          </div>
+
+          <div className="mt-12 text-center">
+            <p className="text-purple-200 text-lg italic">
+              "El mejor momento para plantar un árbol fue hace 20 años. El segundo mejor momento es ahora."
+            </p>
+            <p className="text-purple-300 mt-2">
+              - Proverbio chino (aplicado a tu carrera con IA)
+            </p>
+          </div>
         </div>
       </section>
     </div>
