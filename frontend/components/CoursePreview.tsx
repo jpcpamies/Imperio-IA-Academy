@@ -35,16 +35,16 @@ export function CoursePreview() {
 
   if (loading) {
     return (
-      <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
         {[...Array(4)].map((_, i) => (
-          <Card key={i} className="animate-pulse border-0 shadow-lg">
+          <Card key={i} className="animate-pulse border-0 shadow-xl">
             <CardHeader>
-              <div className="h-4 bg-gray-200 rounded w-3/4 mb-2"></div>
-              <div className="h-3 bg-gray-200 rounded w-full"></div>
+              <div className="h-6 bg-gray-200 rounded w-3/4 mb-4"></div>
+              <div className="h-4 bg-gray-200 rounded w-full"></div>
             </CardHeader>
             <CardContent>
-              <div className="h-20 bg-gray-200 rounded mb-4"></div>
-              <div className="h-8 bg-gray-200 rounded"></div>
+              <div className="h-24 bg-gray-200 rounded mb-6"></div>
+              <div className="h-10 bg-gray-200 rounded"></div>
             </CardContent>
           </Card>
         ))}
@@ -55,49 +55,49 @@ export function CoursePreview() {
   const getDifficultyColor = (level: string) => {
     switch (level.toLowerCase()) {
       case "beginner":
-        return "bg-green-100 text-green-800";
+        return "bg-[#7ED321] text-white";
       case "intermediate":
-        return "bg-yellow-100 text-yellow-800";
+        return "bg-[#D95D39] text-white";
       case "advanced":
-        return "bg-red-100 text-red-800";
+        return "bg-[#0A2342] text-white";
       default:
-        return "bg-gray-100 text-gray-800";
+        return "bg-[#6C757D] text-white";
     }
   };
 
   return (
-    <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+    <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
       {courses.map((course) => (
-        <Card key={course.id} className="border-0 shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 bg-white">
-          <CardHeader className="pb-4">
-            <div className="flex justify-between items-start mb-4">
-              <Badge className={`${getDifficultyColor(course.difficultyLevel)} rounded-full px-3 py-1`}>
+        <Card key={course.id} className="border-0 shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 bg-white">
+          <CardHeader className="pb-6">
+            <div className="flex justify-between items-start mb-6">
+              <Badge className={`${getDifficultyColor(course.difficultyLevel)} rounded-lg px-4 py-2 font-medium`}>
                 {course.difficultyLevel}
               </Badge>
-              <div className="flex items-center text-yellow-500">
+              <div className="flex items-center text-[#D95D39]">
                 <Star className="h-4 w-4 fill-current" />
-                <span className="text-sm text-gray-600 ml-1">4.8</span>
+                <span className="text-sm text-[#6C757D] ml-1 font-medium">4.8</span>
               </div>
             </div>
-            <CardTitle className="text-xl font-bold leading-tight">{course.title}</CardTitle>
+            <CardTitle className="text-xl font-serif font-bold leading-tight text-[#212529]">{course.title}</CardTitle>
           </CardHeader>
           <CardContent>
-            <CardDescription className="mb-6 line-clamp-3 text-gray-600 leading-relaxed">
+            <CardDescription className="mb-8 line-clamp-3 text-[#6C757D] leading-relaxed text-lg font-light">
               {course.description}
             </CardDescription>
-            <div className="flex items-center justify-between text-sm text-gray-600 mb-6">
+            <div className="flex items-center justify-between text-sm text-[#6C757D] mb-8 font-medium">
               <div className="flex items-center">
-                <Clock className="h-4 w-4 mr-1" />
+                <Clock className="h-4 w-4 mr-2" />
                 {course.durationHours}h
               </div>
               <div className="flex items-center">
-                <BookOpen className="h-4 w-4 mr-1" />
-                Course
+                <BookOpen className="h-4 w-4 mr-2" />
+                Executive
               </div>
             </div>
             <Link to={`/courses/${course.id}`}>
-              <Button className="w-full bg-[#635BFF] hover:bg-[#5048E5] text-white py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300">
-                View Course
+              <Button className="w-full bg-[#0A2342] hover:bg-[#0F2A4A] text-white py-4 rounded-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-300">
+                View Program
               </Button>
             </Link>
           </CardContent>
