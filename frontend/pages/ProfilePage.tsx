@@ -10,7 +10,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { useAuth } from "../hooks/useAuth";
 
 export function ProfilePage() {
-  const { user } = useAuth();
+  const { user, updateProfile, changePassword } = useAuth();
   const { toast } = useToast();
   
   const [isEditing, setIsEditing] = useState(false);
@@ -37,8 +37,7 @@ export function ProfilePage() {
     
     setLoading(true);
     try {
-      // In a real app, this would call the backend to update user profile
-      // await backend.users.update({ id: user.id, name });
+      await updateProfile(name);
       
       toast({
         title: "Perfil actualizado",
@@ -78,8 +77,7 @@ export function ProfilePage() {
 
     setLoading(true);
     try {
-      // In a real app, this would call the backend to change password
-      // await backend.auth.changePassword({ currentPassword, newPassword });
+      await changePassword(currentPassword, newPassword);
       
       toast({
         title: "Contraseña actualizada",
@@ -89,11 +87,17 @@ export function ProfilePage() {
       setCurrentPassword("");
       setNewPassword("");
       setConfirmPassword("");
-    } catch (error) {
+    } catch (error: any) {
       console.error("Failed to change password:", error);
+      
+      let errorMessage = "No se pudo cambiar la contraseña. Intenta de nuevo.";
+      if (error?.message?.includes("current password is incorrect")) {
+        errorMessage = "La contraseña actual es incorrecta.";
+      }
+      
       toast({
         title: "Error",
-        description: "No se pudo cambiar la contraseña. Verifica tu contraseña actual.",
+        description: errorMessage,
         variant: "destructive",
       });
     } finally {
@@ -375,6 +379,15 @@ export function ProfilePage() {
                     <p className="text-sm text-gray-500 mt-1">
                       Última actualización: hace 3 meses
                     </p>
+                  </div>
+                  
+                  <div className="pt-4">
+                    <Link 
+                      to="/reset-password"
+                      className="text-[#6B7BFF] hover:text-[#5A6AEF] text-sm font-medium"
+                    >
+                      ¿Olvidaste tu contraseña? Restablécela aquí
+                    </Link>
                   </div>
                 </div>
               )}

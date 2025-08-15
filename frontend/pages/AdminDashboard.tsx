@@ -1,12 +1,20 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { Plus, BookOpen, Users, TrendingUp, Edit, Trash2, Eye } from "lucide-react";
+import { Plus, BookOpen, Users, TrendingUp, Edit, Trash2, Eye, RotateCcw, AlertCircle } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { useToast } from "@/components/ui/use-toast";
+import backend from "~backend/client";
 
 export function AdminDashboard() {
+  const [users, setUsers] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [resettingPassword, setResettingPassword] = useState<number | null>(null);
+  const { toast } = useToast();
+
   // Mock data - in a real app, this would come from the backend
   const [stats] = useState({
     totalCourses: 4,
@@ -50,12 +58,50 @@ export function AdminDashboard() {
     },
   ]);
 
-  const [recentStudents] = useState([
-    { id: 1, name: "Juan Pérez", email: "juan@example.com", enrolled: "2024-01-15", progress: 75 },
-    { id: 2, name: "María García", email: "maria@example.com", enrolled: "2024-01-14", progress: 45 },
-    { id: 3, name: "Carlos López", email: "carlos@example.com", enrolled: "2024-01-13", progress: 90 },
-    { id: 4, name: "Ana Martínez", email: "ana@example.com", enrolled: "2024-01-12", progress: 30 },
-  ]);
+  useEffect(() => {
+    fetchUsers();
+  }, []);
+
+  const fetchUsers = async () => {
+    try {
+      const response = await backend.users.list();
+      setUsers(response.users);
+    } catch (error) {
+      console.error("Failed to fetch users:", error);
+      toast({
+        title: "Error",
+        description: "No se pudieron cargar los usuarios.",
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleResetPassword = async (userId: number, userEmail: string) => {
+    setResettingPassword(userId);
+    try {
+      const response = await backend.auth.adminResetPassword({ userId });
+      
+      if (response.success) {
+        toast({
+          title: "Contraseña restablecida",
+          description: `Nueva contraseña temporal para ${userEmail}: ${response.temporaryPassword}`,
+        });
+        
+        console.log(`🔐 ADMIN RESET - User: ${userEmail}, New Password: ${response.temporaryPassword}`);
+      }
+    } catch (error: any) {
+      console.error("Failed to reset password:", error);
+      toast({
+        title: "Error",
+        description: "No se pudo restablecer la contraseña.",
+        variant: "destructive",
+      });
+    } finally {
+      setResettingPassword(null);
+    }
+  };
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -66,6 +112,14 @@ export function AdminDashboard() {
       default:
         return "bg-gray-100 text-gray-700";
     }
+  };
+
+  const formatDate = (dateString: string) => {
+    return new Date(dateString).toLocaleDateString('es-ES', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric'
+    });
   };
 
   return (
@@ -101,7 +155,7 @@ export function AdminDashboard() {
             <CardContent>
               <div className="flex items-center">
                 <Users className="h-5 w-5 text-[#6B7BFF] mr-2" />
-                <span className="text-2xl font-bold text-gray-900">{stats.totalStudents}</span>
+                <span className="text-2xl font-bold text-gray-900">{users.length}</span>
               </div>
             </CardContent>
           </Card>
@@ -127,6 +181,88 @@ export function AdminDashboard() {
                 <TrendingUp className="h-5 w-5 text-[#6B7BFF] mr-2" />
                 <span className="text-2xl font-bold text-gray-900">{stats.avgProgress}%</span>
               </div>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* User Management */}
+        <div className="mb-8">
+          <div className="flex justify-between items-center mb-6">
+            <h2 className="text-2xl font-bold text-gray-900">Gestión de Usuarios</h2>
+          </div>
+
+          <Alert className="mb-6 border-blue-200 bg-blue-50">
+            <AlertCircle className="h-4 w-4 text-blue-600" />
+            <AlertDescription className="text-blue-800">
+              <strong>Modo Desarrollo:</strong> Las contraseñas restablecidas se muestran en la consola del navegador y en las notificaciones.
+            </AlertDescription>
+          </Alert>
+
+          <Card className="border border-gray-200 bg-white shadow-sm">
+            <CardContent className="p-0">
+              {loading ? (
+                <div className="p-8 text-center">
+                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#6B7BFF] mx-auto"></div>
+                  <p className="mt-2 text-gray-600">Cargando usuarios...</p>
+                </div>
+              ) : (
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Usuario</TableHead>
+                      <TableHead>Email</TableHead>
+                      <TableHead>Rol</TableHead>
+                      <TableHead>Fecha de Registro</TableHead>
+                      <TableHead>Acciones</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {users.map((user) => (
+                      <TableRow key={user.id}>
+                        <TableCell className="font-medium text-gray-900">{user.name}</TableCell>
+                        <TableCell>{user.email}</TableCell>
+                        <TableCell>
+                          <Badge variant={user.role === 'admin' ? 'default' : 'secondary'}>
+                            {user.role === 'admin' ? 'Administrador' : 'Usuario'}
+                          </Badge>
+                        </TableCell>
+                        <TableCell>{formatDate(user.createdAt)}</TableCell>
+                        <TableCell>
+                          <div className="flex space-x-2">
+                            <Button 
+                              variant="outline" 
+                              size="sm" 
+                              className="text-gray-700 border-gray-300 hover:bg-gray-50 hover:text-gray-900"
+                            >
+                              <Eye className="h-4 w-4" />
+                            </Button>
+                            <Button 
+                              variant="outline" 
+                              size="sm" 
+                              className="text-gray-700 border-gray-300 hover:bg-gray-50 hover:text-gray-900"
+                            >
+                              <Edit className="h-4 w-4" />
+                            </Button>
+                            <Button 
+                              variant="outline" 
+                              size="sm" 
+                              onClick={() => handleResetPassword(user.id, user.email)}
+                              disabled={resettingPassword === user.id}
+                              className="text-orange-600 border-orange-300 hover:bg-orange-50 hover:text-orange-700"
+                            >
+                              {resettingPassword === user.id ? (
+                                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-orange-600"></div>
+                              ) : (
+                                <RotateCcw className="h-4 w-4" />
+                              )}
+                            </Button>
+                          </div>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              )}
             </CardContent>
           </Card>
         </div>
@@ -178,41 +314,6 @@ export function AdminDashboard() {
                             <Trash2 className="h-4 w-4" />
                           </Button>
                         </div>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </CardContent>
-          </Card>
-        </div>
-
-        {/* Recent Students */}
-        <div>
-          <h2 className="text-2xl font-bold text-gray-900 mb-6">Actividad Reciente de Estudiantes</h2>
-          <Card className="border border-gray-200 bg-white shadow-sm">
-            <CardContent className="p-0">
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Nombre del Estudiante</TableHead>
-                    <TableHead>Email</TableHead>
-                    <TableHead>Inscrito</TableHead>
-                    <TableHead>Progreso</TableHead>
-                    <TableHead>Acciones</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {recentStudents.map((student) => (
-                    <TableRow key={student.id}>
-                      <TableCell className="font-medium text-gray-900">{student.name}</TableCell>
-                      <TableCell>{student.email}</TableCell>
-                      <TableCell>{student.enrolled}</TableCell>
-                      <TableCell>{student.progress}%</TableCell>
-                      <TableCell>
-                        <Button variant="outline" size="sm" className="text-gray-700 border-gray-300 hover:bg-gray-50 hover:text-gray-900">
-                          Ver Detalles
-                        </Button>
                       </TableCell>
                     </TableRow>
                   ))}
