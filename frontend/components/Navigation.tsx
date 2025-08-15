@@ -1,13 +1,36 @@
 import { useState } from "react";
-import { Link, useLocation } from "react-router-dom";
-import { Menu, X, BookOpen } from "lucide-react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Menu, X, BookOpen, LogOut, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useAuth } from "../hooks/useAuth";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 export function Navigation() {
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
+  const { user, logout, isAuthenticated } = useAuth();
 
   const isActive = (path: string) => location.pathname === path;
+
+  const handleLogout = async () => {
+    await logout();
+    navigate("/");
+  };
+
+  const handleLoginClick = () => {
+    navigate("/login");
+  };
+
+  const handleRegisterClick = () => {
+    navigate("/register");
+  };
 
   return (
     <nav className="bg-white shadow-sm border-b border-gray-200">
@@ -34,52 +57,83 @@ export function Navigation() {
             >
               Home
             </Link>
-            <Link
-              to="/courses"
-              className={`font-medium transition-colors ${
-                isActive("/courses") ? "text-black" : "text-[#6c757d] hover:text-[#6B7BFF]"
-              }`}
-              style={{ 
-                fontFamily: 'var(--default-font-family, ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji")',
-                fontSize: '18px'
-              }}
-            >
-              Programas
-            </Link>
-            <Link
-              to="/dashboard"
-              className={`font-medium transition-colors ${
-                isActive("/dashboard") ? "text-black" : "text-[#6c757d] hover:text-[#6B7BFF]"
-              }`}
-              style={{ 
-                fontFamily: 'var(--default-font-family, ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji")',
-                fontSize: '18px'
-              }}
-            >
-              Portal Ejecutivo
-            </Link>
+            {isAuthenticated && (
+              <>
+                <Link
+                  to="/courses"
+                  className={`font-medium transition-colors ${
+                    isActive("/courses") ? "text-black" : "text-[#6c757d] hover:text-[#6B7BFF]"
+                  }`}
+                  style={{ 
+                    fontFamily: 'var(--default-font-family, ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji")',
+                    fontSize: '18px'
+                  }}
+                >
+                  Programas
+                </Link>
+                <Link
+                  to="/dashboard"
+                  className={`font-medium transition-colors ${
+                    isActive("/dashboard") ? "text-black" : "text-[#6c757d] hover:text-[#6B7BFF]"
+                  }`}
+                  style={{ 
+                    fontFamily: 'var(--default-font-family, ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji")',
+                    fontSize: '18px'
+                  }}
+                >
+                  Portal Ejecutivo
+                </Link>
+              </>
+            )}
+            
             <div className="flex items-center space-x-4">
-              <Button 
-                variant="outline" 
-                size="sm" 
-                className="text-gray-700 border-gray-300 hover:bg-[#6c757d] hover:text-white hover:border-[#6c757d] transition-colors"
-                style={{ 
-                  fontFamily: 'var(--default-font-family, ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji")',
-                  fontSize: '16px'
-                }}
-              >
-                Acceso Ejecutivo
-              </Button>
-              <Button 
-                size="sm" 
-                className="bg-[#D95D39] hover:bg-[#C54A2C] text-white"
-                style={{ 
-                  fontFamily: 'var(--default-font-family, ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji")',
-                  fontSize: '16px'
-                }}
-              >
-                Inscribirse Ahora
-              </Button>
+              {isAuthenticated ? (
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="outline" size="sm" className="text-gray-700 border-gray-300 hover:bg-gray-50">
+                      <User className="h-4 w-4 mr-2" />
+                      {user?.name}
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end">
+                    <DropdownMenuItem onClick={() => navigate("/profile")}>
+                      <User className="h-4 w-4 mr-2" />
+                      Perfil
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem onClick={handleLogout}>
+                      <LogOut className="h-4 w-4 mr-2" />
+                      Cerrar Sesión
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              ) : (
+                <>
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    className="text-gray-700 border-gray-300 hover:bg-[#6c757d] hover:text-white hover:border-[#6c757d] transition-colors"
+                    style={{ 
+                      fontFamily: 'var(--default-font-family, ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji")',
+                      fontSize: '16px'
+                    }}
+                    onClick={handleLoginClick}
+                  >
+                    Acceso Ejecutivo
+                  </Button>
+                  <Button 
+                    size="sm" 
+                    className="bg-[#D95D39] hover:bg-[#C54A2C] text-white"
+                    style={{ 
+                      fontFamily: 'var(--default-font-family, ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji")',
+                      fontSize: '16px'
+                    }}
+                    onClick={handleRegisterClick}
+                  >
+                    Inscribirse Ahora
+                  </Button>
+                </>
+              )}
             </div>
           </div>
 
@@ -111,54 +165,97 @@ export function Navigation() {
               >
                 Home
               </Link>
-              <Link
-                to="/courses"
-                className={`block px-3 py-2 font-medium transition-colors ${
-                  isActive("/courses") ? "text-black bg-blue-50" : "text-[#6c757d] hover:text-[#6B7BFF]"
-                }`}
-                style={{ 
-                  fontFamily: 'var(--default-font-family, ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji")',
-                  fontSize: '18px'
-                }}
-                onClick={() => setIsOpen(false)}
-              >
-                Programas
-              </Link>
-              <Link
-                to="/dashboard"
-                className={`block px-3 py-2 font-medium transition-colors ${
-                  isActive("/dashboard") ? "text-black bg-blue-50" : "text-[#6c757d] hover:text-[#6B7BFF]"
-                }`}
-                style={{ 
-                  fontFamily: 'var(--default-font-family, ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji")',
-                  fontSize: '18px'
-                }}
-                onClick={() => setIsOpen(false)}
-              >
-                Portal Ejecutivo
-              </Link>
+              {isAuthenticated && (
+                <>
+                  <Link
+                    to="/courses"
+                    className={`block px-3 py-2 font-medium transition-colors ${
+                      isActive("/courses") ? "text-black bg-blue-50" : "text-[#6c757d] hover:text-[#6B7BFF]"
+                    }`}
+                    style={{ 
+                      fontFamily: 'var(--default-font-family, ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji")',
+                      fontSize: '18px'
+                    }}
+                    onClick={() => setIsOpen(false)}
+                  >
+                    Programas
+                  </Link>
+                  <Link
+                    to="/dashboard"
+                    className={`block px-3 py-2 font-medium transition-colors ${
+                      isActive("/dashboard") ? "text-black bg-blue-50" : "text-[#6c757d] hover:text-[#6B7BFF]"
+                    }`}
+                    style={{ 
+                      fontFamily: 'var(--default-font-family, ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji")',
+                      fontSize: '18px'
+                    }}
+                    onClick={() => setIsOpen(false)}
+                  >
+                    Portal Ejecutivo
+                  </Link>
+                </>
+              )}
               <div className="px-3 py-2 space-y-2">
-                <Button 
-                  variant="outline" 
-                  size="sm" 
-                  className="w-full text-gray-700 border-gray-300 hover:bg-[#6c757d] hover:text-white hover:border-[#6c757d] transition-colors"
-                  style={{ 
-                    fontFamily: 'var(--default-font-family, ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji")',
-                    fontSize: '16px'
-                  }}
-                >
-                  Acceso Ejecutivo
-                </Button>
-                <Button 
-                  size="sm" 
-                  className="w-full bg-[#D95D39] hover:bg-[#C54A2C] text-white"
-                  style={{ 
-                    fontFamily: 'var(--default-font-family, ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji")',
-                    fontSize: '16px'
-                  }}
-                >
-                  Inscribirse Ahora
-                </Button>
+                {isAuthenticated ? (
+                  <>
+                    <div className="text-sm text-gray-600 mb-2">
+                      Conectado como: {user?.name}
+                    </div>
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      className="w-full text-gray-700 border-gray-300 hover:bg-gray-50"
+                      onClick={() => {
+                        navigate("/profile");
+                        setIsOpen(false);
+                      }}
+                    >
+                      Perfil
+                    </Button>
+                    <Button 
+                      size="sm" 
+                      className="w-full bg-red-600 hover:bg-red-700 text-white"
+                      onClick={() => {
+                        handleLogout();
+                        setIsOpen(false);
+                      }}
+                    >
+                      Cerrar Sesión
+                    </Button>
+                  </>
+                ) : (
+                  <>
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      className="w-full text-gray-700 border-gray-300 hover:bg-[#6c757d] hover:text-white hover:border-[#6c757d] transition-colors"
+                      style={{ 
+                        fontFamily: 'var(--default-font-family, ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji")',
+                        fontSize: '16px'
+                      }}
+                      onClick={() => {
+                        handleLoginClick();
+                        setIsOpen(false);
+                      }}
+                    >
+                      Acceso Ejecutivo
+                    </Button>
+                    <Button 
+                      size="sm" 
+                      className="w-full bg-[#D95D39] hover:bg-[#C54A2C] text-white"
+                      style={{ 
+                        fontFamily: 'var(--default-font-family, ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji")',
+                        fontSize: '16px'
+                      }}
+                      onClick={() => {
+                        handleRegisterClick();
+                        setIsOpen(false);
+                      }}
+                    >
+                      Inscribirse Ahora
+                    </Button>
+                  </>
+                )}
               </div>
             </div>
           </div>

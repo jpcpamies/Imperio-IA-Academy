@@ -33,6 +33,7 @@ const BROWSER = typeof globalThis === "object" && ("window" in globalThis);
  * Client is an API client for the  Encore application.
  */
 export class Client {
+    public readonly auth: auth.ServiceClient
     public readonly courses: courses.ServiceClient
     public readonly lessons: lessons.ServiceClient
     public readonly progress: progress.ServiceClient
@@ -51,6 +52,7 @@ export class Client {
         this.target = target
         this.options = options ?? {}
         const base = new BaseClient(this.target, this.options)
+        this.auth = new auth.ServiceClient(base)
         this.courses = new courses.ServiceClient(base)
         this.lessons = new lessons.ServiceClient(base)
         this.progress = new progress.ServiceClient(base)
@@ -88,7 +90,122 @@ export interface ClientOptions {
 /**
  * Import the endpoint handlers to derive the types for the client.
  */
+import { adminResetPassword as api_auth_admin_reset_password_adminResetPassword } from "~backend/auth/admin_reset_password";
+import { changePassword as api_auth_change_password_changePassword } from "~backend/auth/change_password";
+import { debugLogin as api_auth_debug_login_debugLogin } from "~backend/auth/debug_login";
+import { login as api_auth_login_login } from "~backend/auth/login";
+import { logout as api_auth_logout_logout } from "~backend/auth/logout";
+import { me as api_auth_me_me } from "~backend/auth/me";
+import { register as api_auth_register_register } from "~backend/auth/register";
+import { resetPassword as api_auth_reset_password_resetPassword } from "~backend/auth/reset_password";
+import { updateProfile as api_auth_update_profile_updateProfile } from "~backend/auth/update_profile";
+
+export namespace auth {
+
+    export class ServiceClient {
+        private baseClient: BaseClient
+
+        constructor(baseClient: BaseClient) {
+            this.baseClient = baseClient
+            this.adminResetPassword = this.adminResetPassword.bind(this)
+            this.changePassword = this.changePassword.bind(this)
+            this.debugLogin = this.debugLogin.bind(this)
+            this.login = this.login.bind(this)
+            this.logout = this.logout.bind(this)
+            this.me = this.me.bind(this)
+            this.register = this.register.bind(this)
+            this.resetPassword = this.resetPassword.bind(this)
+            this.updateProfile = this.updateProfile.bind(this)
+        }
+
+        /**
+         * Admin function to reset user password.
+         */
+        public async adminResetPassword(params: RequestType<typeof api_auth_admin_reset_password_adminResetPassword>): Promise<ResponseType<typeof api_auth_admin_reset_password_adminResetPassword>> {
+            // Now make the actual call to the API
+            const resp = await this.baseClient.callTypedAPI(`/auth/admin/reset-password`, {method: "POST", body: JSON.stringify(params)})
+            return JSON.parse(await resp.text(), dateReviver) as ResponseType<typeof api_auth_admin_reset_password_adminResetPassword>
+        }
+
+        /**
+         * Changes the current user's password.
+         */
+        public async changePassword(params: RequestType<typeof api_auth_change_password_changePassword>): Promise<ResponseType<typeof api_auth_change_password_changePassword>> {
+            // Now make the actual call to the API
+            const resp = await this.baseClient.callTypedAPI(`/auth/password`, {method: "PUT", body: JSON.stringify(params)})
+            return JSON.parse(await resp.text(), dateReviver) as ResponseType<typeof api_auth_change_password_changePassword>
+        }
+
+        /**
+         * Debug endpoint to check user login status (development only).
+         */
+        public async debugLogin(params: RequestType<typeof api_auth_debug_login_debugLogin>): Promise<ResponseType<typeof api_auth_debug_login_debugLogin>> {
+            // Now make the actual call to the API
+            const resp = await this.baseClient.callTypedAPI(`/auth/debug/login`, {method: "POST", body: JSON.stringify(params)})
+            return JSON.parse(await resp.text(), dateReviver) as ResponseType<typeof api_auth_debug_login_debugLogin>
+        }
+
+        /**
+         * Authenticates a user and returns a session token.
+         */
+        public async login(params: RequestType<typeof api_auth_login_login>): Promise<ResponseType<typeof api_auth_login_login>> {
+            // Now make the actual call to the API
+            const resp = await this.baseClient.callTypedAPI(`/auth/login`, {method: "POST", body: JSON.stringify(params)})
+            return JSON.parse(await resp.text(), dateReviver) as ResponseType<typeof api_auth_login_login>
+        }
+
+        /**
+         * Logs out the current user by clearing the session.
+         */
+        public async logout(): Promise<ResponseType<typeof api_auth_logout_logout>> {
+            // Now make the actual call to the API
+            const resp = await this.baseClient.callTypedAPI(`/auth/logout`, {method: "POST", body: undefined})
+            return JSON.parse(await resp.text(), dateReviver) as ResponseType<typeof api_auth_logout_logout>
+        }
+
+        /**
+         * Returns information about the currently authenticated user.
+         */
+        public async me(): Promise<ResponseType<typeof api_auth_me_me>> {
+            // Now make the actual call to the API
+            const resp = await this.baseClient.callTypedAPI(`/auth/me`, {method: "GET", body: undefined})
+            return JSON.parse(await resp.text(), dateReviver) as ResponseType<typeof api_auth_me_me>
+        }
+
+        /**
+         * Registers a new user account.
+         */
+        public async register(params: RequestType<typeof api_auth_register_register>): Promise<ResponseType<typeof api_auth_register_register>> {
+            // Now make the actual call to the API
+            const resp = await this.baseClient.callTypedAPI(`/auth/register`, {method: "POST", body: JSON.stringify(params)})
+            return JSON.parse(await resp.text(), dateReviver) as ResponseType<typeof api_auth_register_register>
+        }
+
+        /**
+         * Initiates password reset process for a user.
+         */
+        public async resetPassword(params: RequestType<typeof api_auth_reset_password_resetPassword>): Promise<ResponseType<typeof api_auth_reset_password_resetPassword>> {
+            // Now make the actual call to the API
+            const resp = await this.baseClient.callTypedAPI(`/auth/reset-password`, {method: "POST", body: JSON.stringify(params)})
+            return JSON.parse(await resp.text(), dateReviver) as ResponseType<typeof api_auth_reset_password_resetPassword>
+        }
+
+        /**
+         * Updates the current user's profile information.
+         */
+        public async updateProfile(params: RequestType<typeof api_auth_update_profile_updateProfile>): Promise<ResponseType<typeof api_auth_update_profile_updateProfile>> {
+            // Now make the actual call to the API
+            const resp = await this.baseClient.callTypedAPI(`/auth/profile`, {method: "PUT", body: JSON.stringify(params)})
+            return JSON.parse(await resp.text(), dateReviver) as ResponseType<typeof api_auth_update_profile_updateProfile>
+        }
+    }
+}
+
+/**
+ * Import the endpoint handlers to derive the types for the client.
+ */
 import { get as api_courses_get_get } from "~backend/courses/get";
+import { getBySlug as api_courses_get_by_slug_getBySlug } from "~backend/courses/get_by_slug";
 import { list as api_courses_list_list } from "~backend/courses/list";
 
 export namespace courses {
@@ -99,6 +216,7 @@ export namespace courses {
         constructor(baseClient: BaseClient) {
             this.baseClient = baseClient
             this.get = this.get.bind(this)
+            this.getBySlug = this.getBySlug.bind(this)
             this.list = this.list.bind(this)
         }
 
@@ -109,6 +227,15 @@ export namespace courses {
             // Now make the actual call to the API
             const resp = await this.baseClient.callTypedAPI(`/courses/${encodeURIComponent(params.id)}`, {method: "GET", body: undefined})
             return JSON.parse(await resp.text(), dateReviver) as ResponseType<typeof api_courses_get_get>
+        }
+
+        /**
+         * Retrieves a specific course by slug with its lessons.
+         */
+        public async getBySlug(params: { slug: string }): Promise<ResponseType<typeof api_courses_get_by_slug_getBySlug>> {
+            // Now make the actual call to the API
+            const resp = await this.baseClient.callTypedAPI(`/courses/slug/${encodeURIComponent(params.slug)}`, {method: "GET", body: undefined})
+            return JSON.parse(await resp.text(), dateReviver) as ResponseType<typeof api_courses_get_by_slug_getBySlug>
         }
 
         /**
