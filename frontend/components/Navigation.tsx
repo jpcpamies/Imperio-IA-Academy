@@ -15,11 +15,12 @@ export function Navigation() {
         <div className="flex justify-between h-16">
           <div className="flex items-center">
             <Link to="/" className="flex items-center">
-              <img 
-                src="/logo.png" 
-                alt="Imperio IA con jordipamies" 
-                className="h-10 w-auto"
-              />
+              <div className="flex items-center">
+                <div className="w-8 h-8 bg-[#635BFF] rounded-lg flex items-center justify-center mr-3">
+                  <span className="text-white font-bold text-sm">AI</span>
+                </div>
+                <span className="text-xl font-bold text-gray-900">Academia</span>
+              </div>
             </Link>
           </div>
 
@@ -28,7 +29,7 @@ export function Navigation() {
             <Link
               to="/"
               className={`text-sm font-medium transition-colors ${
-                isActive("/") ? "text-[#6B7BFF]" : "text-gray-700 hover:text-[#6B7BFF]"
+                isActive("/") ? "text-[#635BFF]" : "text-gray-700 hover:text-[#635BFF]"
               }`}
             >
               Inicio
@@ -36,33 +37,33 @@ export function Navigation() {
             <Link
               to="/courses"
               className={`text-sm font-medium transition-colors ${
-                isActive("/courses") ? "text-[#6B7BFF]" : "text-gray-700 hover:text-[#6B7BFF]"
+                isActive("/courses") ? "text-[#635BFF]" : "text-gray-700 hover:text-[#635BFF]"
               }`}
             >
-              Librerías
+              Cursos
             </Link>
             <Link
               to="/dashboard"
               className={`text-sm font-medium transition-colors ${
-                isActive("/dashboard") ? "text-[#6B7BFF]" : "text-gray-700 hover:text-[#6B7BFF]"
+                isActive("/dashboard") ? "text-[#635BFF]" : "text-gray-700 hover:text-[#635BFF]"
               }`}
             >
-              Mi Progreso
+              Dashboard
             </Link>
             <Link
               to="/admin"
               className={`text-sm font-medium transition-colors ${
-                isActive("/admin") ? "text-[#6B7BFF]" : "text-gray-700 hover:text-[#6B7BFF]"
+                isActive("/admin") ? "text-[#635BFF]" : "text-gray-700 hover:text-[#635BFF]"
               }`}
             >
               Admin
             </Link>
             <div className="flex items-center space-x-4">
               <Button variant="outline" size="sm" className="text-gray-700 border-gray-300 hover:bg-gray-50 hover:text-gray-900">
-                Acceder
+                Login
               </Button>
-              <Button size="sm" className="bg-[#6B7BFF] hover:bg-[#5A6AEF] text-white">
-                Comenzar
+              <Button size="sm" className="bg-[#635BFF] hover:bg-[#5048E5] text-white">
+                Sign Up
               </Button>
             </div>
           </div>
@@ -71,7 +72,7 @@ export function Navigation() {
           <div className="md:hidden flex items-center">
             <button
               onClick={() => setIsOpen(!isOpen)}
-              className="text-gray-700 hover:text-[#6B7BFF] focus:outline-none"
+              className="text-gray-700 hover:text-[#635BFF] focus:outline-none"
             >
               {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
             </button>
@@ -85,7 +86,7 @@ export function Navigation() {
               <Link
                 to="/"
                 className={`block px-3 py-2 text-base font-medium transition-colors ${
-                  isActive("/") ? "text-[#6B7BFF] bg-blue-50" : "text-gray-700 hover:text-[#6B7BFF]"
+                  isActive("/") ? "text-[#635BFF] bg-blue-50" : "text-gray-700 hover:text-[#635BFF]"
                 }`}
                 onClick={() => setIsOpen(false)}
               >
@@ -94,25 +95,25 @@ export function Navigation() {
               <Link
                 to="/courses"
                 className={`block px-3 py-2 text-base font-medium transition-colors ${
-                  isActive("/courses") ? "text-[#6B7BFF] bg-blue-50" : "text-gray-700 hover:text-[#6B7BFF]"
+                  isActive("/courses") ? "text-[#635BFF] bg-blue-50" : "text-gray-700 hover:text-[#635BFF]"
                 }`}
                 onClick={() => setIsOpen(false)}
               >
-                Librerías
+                Cursos
               </Link>
               <Link
                 to="/dashboard"
                 className={`block px-3 py-2 text-base font-medium transition-colors ${
-                  isActive("/dashboard") ? "text-[#6B7BFF] bg-blue-50" : "text-gray-700 hover:text-[#6B7BFF]"
+                  isActive("/dashboard") ? "text-[#635BFF] bg-blue-50" : "text-gray-700 hover:text-[#635BFF]"
                 }`}
                 onClick={() => setIsOpen(false)}
               >
-                Mi Progreso
+                Dashboard
               </Link>
               <Link
                 to="/admin"
                 className={`block px-3 py-2 text-base font-medium transition-colors ${
-                  isActive("/admin") ? "text-[#6B7BFF] bg-blue-50" : "text-gray-700 hover:text-[#6B7BFF]"
+                  isActive("/admin") ? "text-[#635BFF] bg-blue-50" : "text-gray-700 hover:text-[#635BFF]"
                 }`}
                 onClick={() => setIsOpen(false)}
               >
@@ -120,10 +121,10 @@ export function Navigation() {
               </Link>
               <div className="px-3 py-2 space-y-2">
                 <Button variant="outline" size="sm" className="w-full text-gray-700 border-gray-300 hover:bg-gray-50 hover:text-gray-900">
-                  Acceder
+                  Login
                 </Button>
-                <Button size="sm" className="w-full bg-[#6B7BFF] hover:bg-[#5A6AEF] text-white">
-                  Comenzar
+                <Button size="sm" className="w-full bg-[#635BFF] hover:bg-[#5048E5] text-white">
+                  Sign Up
                 </Button>
               </div>
             </div>
