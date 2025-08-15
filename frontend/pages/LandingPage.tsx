@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { ArrowRight, Brain, TrendingUp, Users, AlertTriangle, Clock, Target, CheckCircle, Award, Briefcase, Star, Quote, X, BookOpen, Shield, Zap, Crown, HelpCircle } from "lucide-react";
+import { ArrowRight, Brain, TrendingUp, Users, AlertTriangle, Clock, Target, CheckCircle, Award, Briefcase, Star, Quote, X, BookOpen, Shield, Zap, Crown, HelpCircle, Play } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -21,33 +21,61 @@ export function LandingPage() {
 
   return (
     <div className="min-h-screen">
-      {/* Enhanced Hero Section */}
-      <section className="bg-gradient-to-br from-[#635BFF] to-[#5048E5] text-white py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      {/* Enhanced Hero Section with Stripe-inspired design */}
+      <section className="relative overflow-hidden bg-gradient-to-br from-[#635BFF] via-[#7C3AED] to-[#EC4899] text-white py-32">
+        {/* Abstract background elements */}
+        <div className="absolute inset-0 overflow-hidden">
+          <div className="absolute -top-40 -right-40 w-80 h-80 bg-white/10 rounded-full blur-3xl"></div>
+          <div className="absolute top-1/2 -left-20 w-60 h-60 bg-white/5 rounded-full blur-2xl"></div>
+          <div className="absolute bottom-20 right-1/3 w-40 h-40 bg-white/10 rounded-full blur-xl"></div>
+          
+          {/* Geometric shapes */}
+          <svg className="absolute top-20 left-1/4 w-32 h-32 text-white/10" viewBox="0 0 100 100">
+            <polygon points="50,10 90,90 10,90" fill="currentColor" />
+          </svg>
+          <svg className="absolute bottom-40 right-1/4 w-24 h-24 text-white/5" viewBox="0 0 100 100">
+            <circle cx="50" cy="50" r="40" fill="currentColor" />
+          </svg>
+          
+          {/* Flowing lines */}
+          <div className="absolute inset-0">
+            <svg className="w-full h-full" viewBox="0 0 1200 800" preserveAspectRatio="none">
+              <path d="M0,400 Q300,200 600,400 T1200,400" stroke="rgba(255,255,255,0.1)" strokeWidth="2" fill="none" />
+              <path d="M0,500 Q400,300 800,500 T1200,500" stroke="rgba(255,255,255,0.05)" strokeWidth="1" fill="none" />
+            </svg>
+          </div>
+        </div>
+
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
-            <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight">
+            <h1 className="text-5xl md:text-7xl font-bold mb-8 leading-tight tracking-tight">
               ¿Te Preocupa Que Tu Experiencia de 15 Años
-              <span className="block text-yellow-300">Se Vuelva Irrelevante en 6 Meses?</span>
+              <span className="block text-yellow-300 mt-4">Se Vuelva Irrelevante en 6 Meses?</span>
             </h1>
-            <h2 className="text-2xl md:text-3xl mb-8 text-purple-100 font-semibold">
+            <h2 className="text-2xl md:text-4xl mb-8 text-purple-100 font-semibold leading-relaxed">
               De 'Víctima de la IA' a 'Líder con IA' en 8 Semanas
-              <span className="block text-xl md:text-2xl mt-2">(Sin Volverse Loco en el Proceso)</span>
+              <span className="block text-xl md:text-2xl mt-3 font-normal opacity-90">(Sin Volverse Loco en el Proceso)</span>
             </h2>
-            <p className="text-lg md:text-xl mb-8 text-purple-100 max-w-4xl mx-auto">
+            <p className="text-lg md:text-xl mb-12 text-purple-100 max-w-4xl mx-auto leading-relaxed">
               Si eres un profesional experimentado que siente que la IA está cambiando las reglas del juego más rápido 
               de lo que puedes adaptarte, no estás solo. Miles de profesionales como tú ya están transformando su 
               incertidumbre en ventaja competitiva.
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <div className="flex flex-col sm:flex-row gap-6 justify-center">
               <Button 
                 size="lg" 
-                className="bg-yellow-400 text-gray-900 hover:bg-yellow-300 font-bold text-lg px-8 py-4"
+                className="bg-yellow-400 text-gray-900 hover:bg-yellow-300 font-bold text-lg px-10 py-6 rounded-xl shadow-2xl hover:shadow-yellow-400/25 transition-all duration-300 transform hover:scale-105"
                 onClick={openVideoModal}
               >
+                <Play className="mr-3 h-6 w-6" />
                 Ver Cómo Funciona El Sistema
-                <ArrowRight className="ml-2 h-5 w-5" />
+                <ArrowRight className="ml-3 h-6 w-6" />
               </Button>
-              <Button size="lg" variant="outline" className="border-white text-white bg-transparent hover:bg-white hover:text-[#635BFF] font-semibold">
+              <Button 
+                size="lg" 
+                variant="outline" 
+                className="border-2 border-white/30 text-white bg-white/10 backdrop-blur-sm hover:bg-white hover:text-[#635BFF] font-semibold px-10 py-6 rounded-xl transition-all duration-300"
+              >
                 Ver Testimonios Reales
               </Button>
             </div>
@@ -55,80 +83,108 @@ export function LandingPage() {
         </div>
       </section>
 
-      {/* Pain Agitation Section */}
-      <section className="py-20 bg-red-50 border-t-4 border-red-500">
+      {/* Company Logos Section */}
+      <section className="py-16 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <div className="flex justify-center mb-6">
-              <AlertTriangle className="h-16 w-16 text-red-500" />
+          <p className="text-center text-gray-600 mb-12 text-lg">
+            Profesionales de estas empresas ya están liderando con IA
+          </p>
+          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-8 items-center justify-items-center opacity-60">
+            <div className="text-2xl font-bold text-gray-400">Microsoft</div>
+            <div className="text-2xl font-bold text-gray-400">Google</div>
+            <div className="text-2xl font-bold text-gray-400">Amazon</div>
+            <div className="text-2xl font-bold text-gray-400">IBM</div>
+            <div className="text-2xl font-bold text-gray-400">Deloitte</div>
+            <div className="text-2xl font-bold text-gray-400">McKinsey</div>
+          </div>
+        </div>
+      </section>
+
+      {/* Pain Agitation Section with enhanced design */}
+      <section className="py-24 bg-gradient-to-br from-red-50 to-orange-50 border-t-4 border-red-500 relative overflow-hidden">
+        {/* Background pattern */}
+        <div className="absolute inset-0 opacity-5">
+          <div className="absolute inset-0" style={{
+            backgroundImage: `radial-gradient(circle at 25% 25%, #ef4444 2px, transparent 2px),
+                             radial-gradient(circle at 75% 75%, #ef4444 1px, transparent 1px)`,
+            backgroundSize: '50px 50px'
+          }}></div>
+        </div>
+
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-20">
+            <div className="flex justify-center mb-8">
+              <div className="bg-red-100 rounded-full p-6">
+                <AlertTriangle className="h-16 w-16 text-red-500" />
+              </div>
             </div>
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
+            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-8 leading-tight">
               La Realidad Que Nadie Te Cuenta Sobre IA y Tu Futuro Profesional
             </h2>
-            <p className="text-xl text-gray-700 max-w-3xl mx-auto mb-12">
+            <p className="text-xl text-gray-700 max-w-4xl mx-auto mb-16 leading-relaxed">
               Mientras debatimos si la IA es buena o mala, otros profesionales ya están usando estas herramientas 
               para acelerar su carrera y aumentar sus ingresos.
             </p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-8 mb-12">
-            <Card className="border-red-200 bg-white">
-              <CardHeader className="text-center">
-                <div className="bg-red-100 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
-                  <AlertTriangle className="h-8 w-8 text-red-600" />
+          <div className="grid md:grid-cols-3 gap-8 mb-16">
+            <Card className="border-0 shadow-xl bg-white hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
+              <CardHeader className="text-center pb-4">
+                <div className="bg-red-100 rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-6">
+                  <AlertTriangle className="h-10 w-10 text-red-600" />
                 </div>
-                <CardTitle className="text-2xl font-bold text-red-600">82%</CardTitle>
+                <CardTitle className="text-4xl font-bold text-red-600 mb-2">82%</CardTitle>
               </CardHeader>
               <CardContent className="text-center">
-                <p className="text-gray-700 font-medium">
+                <p className="text-gray-700 font-medium text-lg mb-4">
                   de los empleados creen que su empresa NO los ha capacitado en IA
                 </p>
-                <p className="text-sm text-gray-600 mt-2">
+                <p className="text-sm text-gray-600">
                   Fuente: Microsoft Work Trend Index 2024
                 </p>
               </CardContent>
             </Card>
 
-            <Card className="border-red-200 bg-white">
-              <CardHeader className="text-center">
-                <div className="bg-red-100 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
-                  <TrendingUp className="h-8 w-8 text-red-600" />
+            <Card className="border-0 shadow-xl bg-white hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
+              <CardHeader className="text-center pb-4">
+                <div className="bg-red-100 rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-6">
+                  <TrendingUp className="h-10 w-10 text-red-600" />
                 </div>
-                <CardTitle className="text-2xl font-bold text-red-600">25%</CardTitle>
+                <CardTitle className="text-4xl font-bold text-red-600 mb-2">25%</CardTitle>
               </CardHeader>
               <CardContent className="text-center">
-                <p className="text-gray-700 font-medium">
+                <p className="text-gray-700 font-medium text-lg mb-4">
                   menos ganan los profesionales SIN habilidades de IA vs sus pares
                 </p>
-                <p className="text-sm text-gray-600 mt-2">
+                <p className="text-sm text-gray-600">
                   Fuente: LinkedIn Economic Graph 2024
                 </p>
               </CardContent>
             </Card>
 
-            <Card className="border-red-200 bg-white">
-              <CardHeader className="text-center">
-                <div className="bg-red-100 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
-                  <Clock className="h-8 w-8 text-red-600" />
+            <Card className="border-0 shadow-xl bg-white hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
+              <CardHeader className="text-center pb-4">
+                <div className="bg-red-100 rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-6">
+                  <Clock className="h-10 w-10 text-red-600" />
                 </div>
-                <CardTitle className="text-2xl font-bold text-red-600">16%</CardTitle>
+                <CardTitle className="text-4xl font-bold text-red-600 mb-2">16%</CardTitle>
               </CardHeader>
               <CardContent className="text-center">
-                <p className="text-gray-700 font-medium">
+                <p className="text-gray-700 font-medium text-lg mb-4">
                   de profesionales 30+ usan IA regularmente en su trabajo
                 </p>
-                <p className="text-sm text-gray-600 mt-2">
+                <p className="text-sm text-gray-600">
                   Fuente: Pew Research Center 2024
                 </p>
               </CardContent>
             </Card>
           </div>
 
-          <div className="bg-red-600 text-white p-8 rounded-lg text-center">
-            <h3 className="text-2xl font-bold mb-4">
+          <div className="bg-gradient-to-r from-red-600 to-red-700 text-white p-12 rounded-2xl text-center shadow-2xl">
+            <h3 className="text-3xl font-bold mb-6">
               Cada día sin dominar IA debilita tu posición competitiva
             </h3>
-            <p className="text-lg">
+            <p className="text-xl leading-relaxed">
               Mientras lees esto, otros profesionales están aprendiendo a usar IA para trabajar más rápido, 
               tomar mejores decisiones y posicionarse como líderes en sus industrias.
             </p>
@@ -136,76 +192,98 @@ export function LandingPage() {
         </div>
       </section>
 
-      {/* Solution Presentation Section */}
-      <section className="py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <Badge className="bg-green-100 text-green-800 text-lg px-4 py-2 mb-6">
+      {/* Solution Presentation Section with enhanced design */}
+      <section className="py-24 bg-white relative overflow-hidden">
+        {/* Background elements */}
+        <div className="absolute inset-0">
+          <div className="absolute top-20 right-20 w-64 h-64 bg-green-100 rounded-full blur-3xl opacity-30"></div>
+          <div className="absolute bottom-20 left-20 w-48 h-48 bg-blue-100 rounded-full blur-2xl opacity-40"></div>
+        </div>
+
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-20">
+            <Badge className="bg-green-100 text-green-800 text-lg px-6 py-3 mb-8 rounded-full">
               SOLUCIÓN COMPROBADA
             </Badge>
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
+            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-8 leading-tight">
               Cómo 3,247 Profesionales Experimentados Ya Están Liderando Con IA
             </h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-12">
+            <p className="text-xl text-gray-600 max-w-4xl mx-auto mb-16 leading-relaxed">
               No necesitas ser un genio de la tecnología. Necesitas un sistema diseñado específicamente 
               para profesionales experimentados que valoran su tiempo y buscan resultados prácticos.
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-12 items-center mb-16">
+          <div className="grid md:grid-cols-2 gap-16 items-center mb-20">
             <div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-6">
+              <h3 className="text-3xl font-bold text-gray-900 mb-8">
                 ¿Por Qué Nuestro Enfoque Es Diferente?
               </h3>
-              <div className="space-y-4">
+              <div className="space-y-6">
                 <div className="flex items-start">
-                  <CheckCircle className="h-6 w-6 text-green-500 mr-3 mt-1 flex-shrink-0" />
+                  <div className="bg-green-100 rounded-full p-2 mr-4 mt-1">
+                    <CheckCircle className="h-6 w-6 text-green-600" />
+                  </div>
                   <div>
-                    <h4 className="font-semibold text-gray-900">Sin Jerga Técnica</h4>
-                    <p className="text-gray-600">Explicaciones claras en lenguaje de negocios, no de programadores</p>
+                    <h4 className="font-bold text-gray-900 text-lg mb-2">Sin Jerga Técnica</h4>
+                    <p className="text-gray-600 leading-relaxed">Explicaciones claras en lenguaje de negocios, no de programadores</p>
                   </div>
                 </div>
                 <div className="flex items-start">
-                  <CheckCircle className="h-6 w-6 text-green-500 mr-3 mt-1 flex-shrink-0" />
+                  <div className="bg-green-100 rounded-full p-2 mr-4 mt-1">
+                    <CheckCircle className="h-6 w-6 text-green-600" />
+                  </div>
                   <div>
-                    <h4 className="font-semibold text-gray-900">Aplicación Inmediata</h4>
-                    <p className="text-gray-600">Cada lección se puede aplicar en tu trabajo desde el día 1</p>
+                    <h4 className="font-bold text-gray-900 text-lg mb-2">Aplicación Inmediata</h4>
+                    <p className="text-gray-600 leading-relaxed">Cada lección se puede aplicar en tu trabajo desde el día 1</p>
                   </div>
                 </div>
                 <div className="flex items-start">
-                  <CheckCircle className="h-6 w-6 text-green-500 mr-3 mt-1 flex-shrink-0" />
+                  <div className="bg-green-100 rounded-full p-2 mr-4 mt-1">
+                    <CheckCircle className="h-6 w-6 text-green-600" />
+                  </div>
                   <div>
-                    <h4 className="font-semibold text-gray-900">Enfoque 80/20</h4>
-                    <p className="text-gray-600">Solo el 20% de IA que genera el 80% de los resultados</p>
+                    <h4 className="font-bold text-gray-900 text-lg mb-2">Enfoque 80/20</h4>
+                    <p className="text-gray-600 leading-relaxed">Solo el 20% de IA que genera el 80% de los resultados</p>
                   </div>
                 </div>
                 <div className="flex items-start">
-                  <CheckCircle className="h-6 w-6 text-green-500 mr-3 mt-1 flex-shrink-0" />
+                  <div className="bg-green-100 rounded-full p-2 mr-4 mt-1">
+                    <CheckCircle className="h-6 w-6 text-green-600" />
+                  </div>
                   <div>
-                    <h4 className="font-semibold text-gray-900">Para Profesionales Ocupados</h4>
-                    <p className="text-gray-600">Lecciones de 15-30 minutos que respetan tu agenda</p>
+                    <h4 className="font-bold text-gray-900 text-lg mb-2">Para Profesionales Ocupados</h4>
+                    <p className="text-gray-600 leading-relaxed">Lecciones de 15-30 minutos que respetan tu agenda</p>
                   </div>
                 </div>
               </div>
             </div>
-            <div className="bg-gradient-to-br from-[#635BFF] to-[#5048E5] p-8 rounded-lg text-white">
-              <h3 className="text-2xl font-bold mb-6">Metodología 80/20 para IA</h3>
-              <div className="space-y-4">
+            <div className="bg-gradient-to-br from-[#635BFF] to-[#5048E5] p-10 rounded-2xl text-white shadow-2xl">
+              <h3 className="text-3xl font-bold mb-8">Metodología 80/20 para IA</h3>
+              <div className="space-y-6">
                 <div className="flex items-center">
-                  <Target className="h-6 w-6 mr-3" />
-                  <span>Identificar las 3 herramientas de IA más impactantes para tu rol</span>
+                  <div className="bg-white/20 rounded-full p-2 mr-4">
+                    <Target className="h-6 w-6" />
+                  </div>
+                  <span className="text-lg">Identificar las 3 herramientas de IA más impactantes para tu rol</span>
                 </div>
                 <div className="flex items-center">
-                  <Brain className="h-6 w-6 mr-3" />
-                  <span>Dominar los prompts que multiplican tu productividad</span>
+                  <div className="bg-white/20 rounded-full p-2 mr-4">
+                    <Brain className="h-6 w-6" />
+                  </div>
+                  <span className="text-lg">Dominar los prompts que multiplican tu productividad</span>
                 </div>
                 <div className="flex items-center">
-                  <TrendingUp className="h-6 w-6 mr-3" />
-                  <span>Implementar IA en tus procesos actuales sin disrupciones</span>
+                  <div className="bg-white/20 rounded-full p-2 mr-4">
+                    <TrendingUp className="h-6 w-6" />
+                  </div>
+                  <span className="text-lg">Implementar IA en tus procesos actuales sin disrupciones</span>
                 </div>
                 <div className="flex items-center">
-                  <Users className="h-6 w-6 mr-3" />
-                  <span>Liderar la transformación IA en tu equipo u organización</span>
+                  <div className="bg-white/20 rounded-full p-2 mr-4">
+                    <Users className="h-6 w-6" />
+                  </div>
+                  <span className="text-lg">Liderar la transformación IA en tu equipo u organización</span>
                 </div>
               </div>
             </div>
@@ -213,48 +291,108 @@ export function LandingPage() {
         </div>
       </section>
 
-      {/* Instructor Credibility Section */}
-      <section className="py-20 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      {/* Statistics Section with dark background */}
+      <section className="py-24 bg-gradient-to-br from-gray-900 via-blue-900 to-purple-900 text-white relative overflow-hidden">
+        {/* Abstract background pattern */}
+        <div className="absolute inset-0">
+          <div className="absolute inset-0 opacity-10">
+            <svg className="w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
+              <defs>
+                <pattern id="dots" x="0" y="0" width="10" height="10" patternUnits="userSpaceOnUse">
+                  <circle cx="5" cy="5" r="1" fill="currentColor" />
+                </pattern>
+              </defs>
+              <rect width="100" height="100" fill="url(#dots)" />
+            </svg>
+          </div>
+          <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl"></div>
+          <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-purple-500/10 rounded-full blur-3xl"></div>
+        </div>
+
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
+            <h2 className="text-4xl md:text-5xl font-bold mb-8">
+              El Pilar del Liderazgo Profesional con IA
+            </h2>
+            <p className="text-xl text-gray-300 max-w-4xl mx-auto">
+              Con nuestra academia, transformar tu carrera profesional es tan sencillo y 
+              programable como transformar datos. Desde profesionales repartidos por todo el mundo, 
+              nuestros equipos trabajan para que profesionales ambiciosos de todos los sectores 
+              puedan procesar conocimiento de miles de millones de casos de éxito cada año.
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-4 gap-8">
+            <div className="text-center">
+              <div className="text-5xl md:text-6xl font-bold text-white mb-4">3,247+</div>
+              <div className="text-gray-300 text-lg">
+                Profesionales capacitados exitosamente
+              </div>
+            </div>
+            <div className="text-center">
+              <div className="text-5xl md:text-6xl font-bold text-white mb-4">94%</div>
+              <div className="text-gray-300 text-lg">
+                Tasa de satisfacción histórica
+              </div>
+            </div>
+            <div className="text-center">
+              <div className="text-5xl md:text-6xl font-bold text-white mb-4">156%</div>
+              <div className="text-gray-300 text-lg">
+                Aumento salarial promedio
+              </div>
+            </div>
+            <div className="text-center">
+              <div className="text-5xl md:text-6xl font-bold text-white mb-4">8</div>
+              <div className="text-gray-300 text-lg">
+                Semanas para transformación completa
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Instructor Credibility Section */}
+      <section className="py-24 bg-gray-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-20">
+            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-8">
               Por Qué 3,247 Profesionales Confiaron Su Futuro a Este Sistema
             </h2>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-12 items-center">
+          <div className="grid md:grid-cols-2 gap-16 items-center">
             <div className="order-2 md:order-1">
-              <div className="bg-white p-8 rounded-lg shadow-lg">
-                <div className="flex items-center mb-6">
-                  <div className="w-20 h-20 bg-[#635BFF] rounded-full flex items-center justify-center mr-6">
-                    <Briefcase className="h-10 w-10 text-white" />
+              <div className="bg-white p-10 rounded-2xl shadow-2xl">
+                <div className="flex items-center mb-8">
+                  <div className="w-24 h-24 bg-gradient-to-br from-[#635BFF] to-[#5048E5] rounded-full flex items-center justify-center mr-6">
+                    <Briefcase className="h-12 w-12 text-white" />
                   </div>
                   <div>
-                    <h3 className="text-2xl font-bold text-gray-900">Dr. María González</h3>
-                    <p className="text-gray-600">Fundadora & Instructora Principal</p>
+                    <h3 className="text-3xl font-bold text-gray-900">Dr. María González</h3>
+                    <p className="text-gray-600 text-lg">Fundadora & Instructora Principal</p>
                   </div>
                 </div>
                 
-                <div className="space-y-4 mb-6">
+                <div className="space-y-6 mb-8">
                   <div className="flex items-start">
-                    <Award className="h-5 w-5 text-[#635BFF] mr-3 mt-1" />
-                    <span className="text-gray-700">15+ años liderando transformación digital en Fortune 500</span>
+                    <Award className="h-6 w-6 text-[#635BFF] mr-4 mt-1" />
+                    <span className="text-gray-700 text-lg">15+ años liderando transformación digital en Fortune 500</span>
                   </div>
                   <div className="flex items-start">
-                    <Award className="h-5 w-5 text-[#635BFF] mr-3 mt-1" />
-                    <span className="text-gray-700">Ex-Directora de Innovación en Microsoft y Google</span>
+                    <Award className="h-6 w-6 text-[#635BFF] mr-4 mt-1" />
+                    <span className="text-gray-700 text-lg">Ex-Directora de Innovación en Microsoft y Google</span>
                   </div>
                   <div className="flex items-start">
-                    <Award className="h-5 w-5 text-[#635BFF] mr-3 mt-1" />
-                    <span className="text-gray-700">MBA Stanford + PhD en Inteligencia Artificial</span>
+                    <Award className="h-6 w-6 text-[#635BFF] mr-4 mt-1" />
+                    <span className="text-gray-700 text-lg">MBA Stanford + PhD en Inteligencia Artificial</span>
                   </div>
                   <div className="flex items-start">
-                    <Award className="h-5 w-5 text-[#635BFF] mr-3 mt-1" />
-                    <span className="text-gray-700">Consultora para +200 empresas en adopción de IA</span>
+                    <Award className="h-6 w-6 text-[#635BFF] mr-4 mt-1" />
+                    <span className="text-gray-700 text-lg">Consultora para +200 empresas en adopción de IA</span>
                   </div>
                 </div>
 
-                <blockquote className="border-l-4 border-[#635BFF] pl-4 italic text-gray-700">
+                <blockquote className="border-l-4 border-[#635BFF] pl-6 italic text-gray-700 text-lg leading-relaxed">
                   "Después de ayudar a cientos de empresas a adoptar IA, me di cuenta de que el verdadero 
                   problema no era la tecnología, sino cómo enseñarla a profesionales experimentados sin 
                   abrumarlos. Este sistema es el resultado de 5 años perfeccionando esa metodología."
@@ -264,46 +402,46 @@ export function LandingPage() {
 
             <div className="order-1 md:order-2">
               <div className="grid grid-cols-2 gap-6">
-                <Card className="text-center">
+                <Card className="text-center border-0 shadow-xl hover:shadow-2xl transition-all duration-300">
                   <CardHeader>
-                    <CardTitle className="text-3xl font-bold text-[#635BFF]">3,247</CardTitle>
+                    <CardTitle className="text-4xl font-bold text-[#635BFF]">3,247</CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <p className="text-gray-700 font-medium">Profesionales Capacitados</p>
+                    <p className="text-gray-700 font-medium text-lg">Profesionales Capacitados</p>
                   </CardContent>
                 </Card>
 
-                <Card className="text-center">
+                <Card className="text-center border-0 shadow-xl hover:shadow-2xl transition-all duration-300">
                   <CardHeader>
-                    <CardTitle className="text-3xl font-bold text-[#635BFF]">94%</CardTitle>
+                    <CardTitle className="text-4xl font-bold text-[#635BFF]">94%</CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <p className="text-gray-700 font-medium">Tasa de Satisfacción</p>
+                    <p className="text-gray-700 font-medium text-lg">Tasa de Satisfacción</p>
                   </CardContent>
                 </Card>
 
-                <Card className="text-center">
+                <Card className="text-center border-0 shadow-xl hover:shadow-2xl transition-all duration-300">
                   <CardHeader>
-                    <CardTitle className="text-3xl font-bold text-[#635BFF]">200+</CardTitle>
+                    <CardTitle className="text-4xl font-bold text-[#635BFF]">200+</CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <p className="text-gray-700 font-medium">Empresas Asesoradas</p>
+                    <p className="text-gray-700 font-medium text-lg">Empresas Asesoradas</p>
                   </CardContent>
                 </Card>
 
-                <Card className="text-center">
+                <Card className="text-center border-0 shadow-xl hover:shadow-2xl transition-all duration-300">
                   <CardHeader>
-                    <CardTitle className="text-3xl font-bold text-[#635BFF]">15+</CardTitle>
+                    <CardTitle className="text-4xl font-bold text-[#635BFF]">15+</CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <p className="text-gray-700 font-medium">Años de Experiencia</p>
+                    <p className="text-gray-700 font-medium text-lg">Años de Experiencia</p>
                   </CardContent>
                 </Card>
               </div>
 
-              <div className="mt-8 bg-yellow-50 border border-yellow-200 p-6 rounded-lg">
-                <h4 className="font-bold text-gray-900 mb-2">Reconocimientos Recientes:</h4>
-                <ul className="text-sm text-gray-700 space-y-1">
+              <div className="mt-10 bg-gradient-to-r from-yellow-50 to-orange-50 border border-yellow-200 p-8 rounded-2xl">
+                <h4 className="font-bold text-gray-900 mb-4 text-xl">Reconocimientos Recientes:</h4>
+                <ul className="text-gray-700 space-y-2 text-lg">
                   <li>• "Top 10 AI Educators" - Harvard Business Review 2024</li>
                   <li>• "Innovation Leader Award" - MIT Technology Review</li>
                   <li>• Speaker Principal en AI Summit 2024</li>
@@ -316,13 +454,13 @@ export function LandingPage() {
       </section>
 
       {/* Testimonials Section */}
-      <section className="py-20 bg-white">
+      <section className="py-24 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
+          <div className="text-center mb-20">
+            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-8">
               Resultados Reales de Profesionales Reales Como Tú
             </h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+            <p className="text-xl text-gray-600 max-w-4xl mx-auto leading-relaxed">
               Estos profesionales experimentados transformaron su incertidumbre sobre IA en ventaja competitiva. 
               Sus resultados hablan por sí solos.
             </p>
@@ -330,106 +468,106 @@ export function LandingPage() {
 
           <div className="grid md:grid-cols-3 gap-8">
             {/* Testimonial 1 */}
-            <Card className="relative overflow-hidden border-2 border-gray-100 hover:border-[#635BFF] transition-colors">
+            <Card className="relative overflow-hidden border-0 shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
               <CardHeader className="pb-4">
-                <div className="flex items-center mb-4">
-                  <div className="w-16 h-16 bg-gradient-to-br from-pink-400 to-pink-600 rounded-full flex items-center justify-center mr-4">
-                    <span className="text-white font-bold text-xl">MG</span>
+                <div className="flex items-center mb-6">
+                  <div className="w-20 h-20 bg-gradient-to-br from-pink-400 to-pink-600 rounded-full flex items-center justify-center mr-6">
+                    <span className="text-white font-bold text-2xl">MG</span>
                   </div>
                   <div>
-                    <h3 className="font-bold text-gray-900">María González</h3>
+                    <h3 className="font-bold text-gray-900 text-lg">María González</h3>
                     <p className="text-sm text-gray-600">Marketing Director | 42 años</p>
                     <p className="text-sm text-[#635BFF] font-medium">Banco Santander</p>
                   </div>
                 </div>
-                <div className="flex text-yellow-400 mb-2">
+                <div className="flex text-yellow-400 mb-4">
                   {[...Array(5)].map((_, i) => (
-                    <Star key={i} className="h-4 w-4 fill-current" />
+                    <Star key={i} className="h-5 w-5 fill-current" />
                   ))}
                 </div>
               </CardHeader>
               <CardContent>
-                <Quote className="h-8 w-8 text-[#635BFF] mb-4 opacity-20" />
-                <blockquote className="text-gray-700 mb-6 leading-relaxed">
+                <Quote className="h-10 w-10 text-[#635BFF] mb-6 opacity-20" />
+                <blockquote className="text-gray-700 mb-8 leading-relaxed text-lg">
                   "Tenía 20 años de experiencia en marketing, pero me sentía como una novata frente a la IA. 
                   En 6 semanas pasé de evitar el tema en reuniones a liderar la estrategia de marketing con IA 
                   de todo el banco. Mi equipo aumentó productividad 340% y obtuve el ascenso que llevaba 3 años esperando."
                 </blockquote>
-                <div className="bg-green-50 border border-green-200 p-4 rounded-lg">
-                  <p className="text-sm font-bold text-green-800 mb-1">RESULTADO MEDIBLE:</p>
+                <div className="bg-green-50 border border-green-200 p-6 rounded-xl">
+                  <p className="text-sm font-bold text-green-800 mb-2">RESULTADO MEDIBLE:</p>
                   <p className="text-sm text-green-700">Ascenso a Marketing Director + aumento salarial 45%</p>
                 </div>
               </CardContent>
             </Card>
 
             {/* Testimonial 2 */}
-            <Card className="relative overflow-hidden border-2 border-gray-100 hover:border-[#635BFF] transition-colors">
+            <Card className="relative overflow-hidden border-0 shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
               <CardHeader className="pb-4">
-                <div className="flex items-center mb-4">
-                  <div className="w-16 h-16 bg-gradient-to-br from-blue-400 to-blue-600 rounded-full flex items-center justify-center mr-4">
-                    <span className="text-white font-bold text-xl">CR</span>
+                <div className="flex items-center mb-6">
+                  <div className="w-20 h-20 bg-gradient-to-br from-blue-400 to-blue-600 rounded-full flex items-center justify-center mr-6">
+                    <span className="text-white font-bold text-2xl">CR</span>
                   </div>
                   <div>
-                    <h3 className="font-bold text-gray-900">Carlos Ruiz</h3>
+                    <h3 className="font-bold text-gray-900 text-lg">Carlos Ruiz</h3>
                     <p className="text-sm text-gray-600">Fundador & CEO | 38 años</p>
                     <p className="text-sm text-[#635BFF] font-medium">Consultoría Legal Tech</p>
                   </div>
                 </div>
-                <div className="flex text-yellow-400 mb-2">
+                <div className="flex text-yellow-400 mb-4">
                   {[...Array(5)].map((_, i) => (
-                    <Star key={i} className="h-4 w-4 fill-current" />
+                    <Star key={i} className="h-5 w-5 fill-current" />
                   ))}
                 </div>
               </CardHeader>
               <CardContent>
-                <Quote className="h-8 w-8 text-[#635BFF] mb-4 opacity-20" />
-                <blockquote className="text-gray-700 mb-6 leading-relaxed">
+                <Quote className="h-10 w-10 text-[#635BFF] mb-6 opacity-20" />
+                <blockquote className="text-gray-700 mb-8 leading-relaxed text-lg">
                   "Mi competencia estaba automatizando servicios que yo tardaba semanas en entregar. 
                   En lugar de contratar desarrolladores, aprendí a estructurar servicios con IA que me 
                   posicionaron 2 años por delante. Facturación creció 280% sin aumentar plantilla."
                 </blockquote>
-                <div className="bg-green-50 border border-green-200 p-4 rounded-lg">
-                  <p className="text-sm font-bold text-green-800 mb-1">RESULTADO MEDIBLE:</p>
+                <div className="bg-green-50 border border-green-200 p-6 rounded-xl">
+                  <p className="text-sm font-bold text-green-800 mb-2">RESULTADO MEDIBLE:</p>
                   <p className="text-sm text-green-700">Facturación €180K → €684K anual</p>
                 </div>
               </CardContent>
             </Card>
 
             {/* Testimonial 3 */}
-            <Card className="relative overflow-hidden border-2 border-gray-100 hover:border-[#635BFF] transition-colors">
+            <Card className="relative overflow-hidden border-0 shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
               <CardHeader className="pb-4">
-                <div className="flex items-center mb-4">
-                  <div className="w-16 h-16 bg-gradient-to-br from-purple-400 to-purple-600 rounded-full flex items-center justify-center mr-4">
-                    <span className="text-white font-bold text-xl">AM</span>
+                <div className="flex items-center mb-6">
+                  <div className="w-20 h-20 bg-gradient-to-br from-purple-400 to-purple-600 rounded-full flex items-center justify-center mr-6">
+                    <span className="text-white font-bold text-2xl">AM</span>
                   </div>
                   <div>
-                    <h3 className="font-bold text-gray-900">Ana Martín</h3>
+                    <h3 className="font-bold text-gray-900 text-lg">Ana Martín</h3>
                     <p className="text-sm text-gray-600">Consultora RRHH | 44 años</p>
                     <p className="text-sm text-[#635BFF] font-medium">Freelance</p>
                   </div>
                 </div>
-                <div className="flex text-yellow-400 mb-2">
+                <div className="flex text-yellow-400 mb-4">
                   {[...Array(5)].map((_, i) => (
-                    <Star key={i} className="h-4 w-4 fill-current" />
+                    <Star key={i} className="h-5 w-5 fill-current" />
                   ))}
                 </div>
               </CardHeader>
               <CardContent>
-                <Quote className="h-8 w-8 text-[#635BFF] mb-4 opacity-20" />
-                <blockquote className="text-gray-700 mb-6 leading-relaxed">
+                <Quote className="h-10 w-10 text-[#635BFF] mb-6 opacity-20" />
+                <blockquote className="text-gray-700 mb-8 leading-relaxed text-lg">
                   "A los 44 años pensé que era tarde para reinventarme. Ahora soy la consultora de referencia 
                   en 'Gestión de Talento con IA' y mis tarifas aumentaron 200%. Tengo lista de espera de 3 meses."
                 </blockquote>
-                <div className="bg-green-50 border border-green-200 p-4 rounded-lg">
-                  <p className="text-sm font-bold text-green-800 mb-1">RESULTADO MEDIBLE:</p>
+                <div className="bg-green-50 border border-green-200 p-6 rounded-xl">
+                  <p className="text-sm font-bold text-green-800 mb-2">RESULTADO MEDIBLE:</p>
                   <p className="text-sm text-green-700">€45/hora → €150/hora + retainers mensuales</p>
                 </div>
               </CardContent>
             </Card>
           </div>
 
-          <div className="text-center mt-12">
-            <Badge className="bg-[#635BFF] text-white text-lg px-6 py-3">
+          <div className="text-center mt-16">
+            <Badge className="bg-[#635BFF] text-white text-xl px-8 py-4 rounded-full">
               Promedio de aumento salarial: 156% en 6 meses
             </Badge>
           </div>
@@ -437,152 +575,152 @@ export function LandingPage() {
       </section>
 
       {/* Traditional Comparison Table Section */}
-      <section className="py-20 bg-gray-50">
+      <section className="py-24 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
+          <div className="text-center mb-20">
+            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-8">
               Por Qué Somos Diferentes de Otras Academias IA
             </h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+            <p className="text-xl text-gray-600 max-w-4xl mx-auto leading-relaxed">
               No todas las academias de IA son iguales. Nosotros entendemos las necesidades específicas 
               de profesionales experimentados que buscan resultados, no solo conocimiento.
             </p>
           </div>
 
-          <div className="bg-white rounded-lg shadow-lg overflow-hidden">
+          <div className="bg-white rounded-2xl shadow-2xl overflow-hidden">
             <div className="overflow-x-auto">
               <table className="w-full border-collapse">
                 <thead>
-                  <tr className="bg-gray-100">
-                    <th className="border border-black px-6 py-4 text-left font-bold text-gray-900 text-lg">
+                  <tr className="bg-gradient-to-r from-gray-100 to-gray-200">
+                    <th className="border border-gray-300 px-8 py-6 text-left font-bold text-gray-900 text-xl">
                       Aspecto
                     </th>
-                    <th className="border border-black px-6 py-4 text-center font-bold text-[#635BFF] text-lg">
+                    <th className="border border-gray-300 px-8 py-6 text-center font-bold text-[#635BFF] text-xl">
                       Nuestra Academia
                     </th>
-                    <th className="border border-black px-6 py-4 text-center font-bold text-gray-500 text-lg">
+                    <th className="border border-gray-300 px-8 py-6 text-center font-bold text-gray-500 text-xl">
                       Otras Academias
                     </th>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr className="bg-white">
-                    <td className="border border-black px-6 py-4 font-semibold text-gray-900">
+                  <tr className="bg-white hover:bg-gray-50 transition-colors">
+                    <td className="border border-gray-300 px-8 py-6 font-semibold text-gray-900 text-lg">
                       <strong>Enfoque</strong>
                     </td>
-                    <td className="border border-black px-6 py-4 text-center">
-                      <div className="flex items-center justify-center mb-2">
-                        <span className="text-2xl">✅</span>
+                    <td className="border border-gray-300 px-8 py-6 text-center">
+                      <div className="flex items-center justify-center mb-3">
+                        <span className="text-3xl">✅</span>
                       </div>
-                      <p className="font-medium text-gray-900">Profesionales 30+ con experiencia</p>
+                      <p className="font-medium text-gray-900 text-lg">Profesionales 30+ con experiencia</p>
                     </td>
-                    <td className="border border-black px-6 py-4 text-center">
-                      <div className="flex items-center justify-center mb-2">
-                        <span className="text-2xl">❌</span>
+                    <td className="border border-gray-300 px-8 py-6 text-center">
+                      <div className="flex items-center justify-center mb-3">
+                        <span className="text-3xl">❌</span>
                       </div>
-                      <p className="font-medium text-gray-900">Programadores jóvenes/audiencia general</p>
+                      <p className="font-medium text-gray-900 text-lg">Programadores jóvenes/audiencia general</p>
                     </td>
                   </tr>
-                  <tr className="bg-gray-50">
-                    <td className="border border-black px-6 py-4 font-semibold text-gray-900">
+                  <tr className="bg-gray-50 hover:bg-gray-100 transition-colors">
+                    <td className="border border-gray-300 px-8 py-6 font-semibold text-gray-900 text-lg">
                       <strong>Contenido</strong>
                     </td>
-                    <td className="border border-black px-6 py-4 text-center">
-                      <div className="flex items-center justify-center mb-2">
-                        <span className="text-2xl">✅</span>
+                    <td className="border border-gray-300 px-8 py-6 text-center">
+                      <div className="flex items-center justify-center mb-3">
+                        <span className="text-3xl">✅</span>
                       </div>
-                      <p className="font-medium text-gray-900">Casos reales que inspiran aplicación inmediata</p>
+                      <p className="font-medium text-gray-900 text-lg">Casos reales que inspiran aplicación inmediata</p>
                     </td>
-                    <td className="border border-black px-6 py-4 text-center">
-                      <div className="flex items-center justify-center mb-2">
-                        <span className="text-2xl">❌</span>
+                    <td className="border border-gray-300 px-8 py-6 text-center">
+                      <div className="flex items-center justify-center mb-3">
+                        <span className="text-3xl">❌</span>
                       </div>
-                      <p className="font-medium text-gray-900">Teoría profunda, contenido obsoleto</p>
+                      <p className="font-medium text-gray-900 text-lg">Teoría profunda, contenido obsoleto</p>
                     </td>
                   </tr>
-                  <tr className="bg-white">
-                    <td className="border border-black px-6 py-4 font-semibold text-gray-900">
+                  <tr className="bg-white hover:bg-gray-50 transition-colors">
+                    <td className="border border-gray-300 px-8 py-6 font-semibold text-gray-900 text-lg">
                       <strong>Metodología</strong>
                     </td>
-                    <td className="border border-black px-6 py-4 text-center">
-                      <div className="flex items-center justify-center mb-2">
-                        <span className="text-2xl">✅</span>
+                    <td className="border border-gray-300 px-8 py-6 text-center">
+                      <div className="flex items-center justify-center mb-3">
+                        <span className="text-3xl">✅</span>
                       </div>
-                      <p className="font-medium text-gray-900">80/20, aplicación inmediata</p>
+                      <p className="font-medium text-gray-900 text-lg">80/20, aplicación inmediata</p>
                     </td>
-                    <td className="border border-black px-6 py-4 text-center">
-                      <div className="flex items-center justify-center mb-2">
-                        <span className="text-2xl">❌</span>
+                    <td className="border border-gray-300 px-8 py-6 text-center">
+                      <div className="flex items-center justify-center mb-3">
+                        <span className="text-3xl">❌</span>
                       </div>
-                      <p className="font-medium text-gray-900">Cursos técnicos complejos</p>
+                      <p className="font-medium text-gray-900 text-lg">Cursos técnicos complejos</p>
                     </td>
                   </tr>
-                  <tr className="bg-gray-50">
-                    <td className="border border-black px-6 py-4 font-semibold text-gray-900">
+                  <tr className="bg-gray-50 hover:bg-gray-100 transition-colors">
+                    <td className="border border-gray-300 px-8 py-6 font-semibold text-gray-900 text-lg">
                       <strong>Comunidad</strong>
                     </td>
-                    <td className="border border-black px-6 py-4 text-center">
-                      <div className="flex items-center justify-center mb-2">
-                        <span className="text-2xl">✅</span>
+                    <td className="border border-gray-300 px-8 py-6 text-center">
+                      <div className="flex items-center justify-center mb-3">
+                        <span className="text-3xl">✅</span>
                       </div>
-                      <p className="font-medium text-gray-900">Profesionales de tu nivel</p>
+                      <p className="font-medium text-gray-900 text-lg">Profesionales de tu nivel</p>
                     </td>
-                    <td className="border border-black px-6 py-4 text-center">
-                      <div className="flex items-center justify-center mb-2">
-                        <span className="text-2xl">❌</span>
+                    <td className="border border-gray-300 px-8 py-6 text-center">
+                      <div className="flex items-center justify-center mb-3">
+                        <span className="text-3xl">❌</span>
                       </div>
-                      <p className="font-medium text-gray-900">Edades mixtas, estudiantes</p>
+                      <p className="font-medium text-gray-900 text-lg">Edades mixtas, estudiantes</p>
                     </td>
                   </tr>
-                  <tr className="bg-white">
-                    <td className="border border-black px-6 py-4 font-semibold text-gray-900">
+                  <tr className="bg-white hover:bg-gray-50 transition-colors">
+                    <td className="border border-gray-300 px-8 py-6 font-semibold text-gray-900 text-lg">
                       <strong>Soporte</strong>
                     </td>
-                    <td className="border border-black px-6 py-4 text-center">
-                      <div className="flex items-center justify-center mb-2">
-                        <span className="text-2xl">✅</span>
+                    <td className="border border-gray-300 px-8 py-6 text-center">
+                      <div className="flex items-center justify-center mb-3">
+                        <span className="text-3xl">✅</span>
                       </div>
-                      <p className="font-medium text-gray-900">Mentoría personalizada 1:1</p>
+                      <p className="font-medium text-gray-900 text-lg">Mentoría personalizada 1:1</p>
                     </td>
-                    <td className="border border-black px-6 py-4 text-center">
-                      <div className="flex items-center justify-center mb-2">
-                        <span className="text-2xl">❌</span>
+                    <td className="border border-gray-300 px-8 py-6 text-center">
+                      <div className="flex items-center justify-center mb-3">
+                        <span className="text-3xl">❌</span>
                       </div>
-                      <p className="font-medium text-gray-900">Foros genéricos sin contexto</p>
+                      <p className="font-medium text-gray-900 text-lg">Foros genéricos sin contexto</p>
                     </td>
                   </tr>
-                  <tr className="bg-gray-50">
-                    <td className="border border-black px-6 py-4 font-semibold text-gray-900">
+                  <tr className="bg-gray-50 hover:bg-gray-100 transition-colors">
+                    <td className="border border-gray-300 px-8 py-6 font-semibold text-gray-900 text-lg">
                       <strong>Resultado</strong>
                     </td>
-                    <td className="border border-black px-6 py-4 text-center">
-                      <div className="flex items-center justify-center mb-2">
-                        <span className="text-2xl">✅</span>
+                    <td className="border border-gray-300 px-8 py-6 text-center">
+                      <div className="flex items-center justify-center mb-3">
+                        <span className="text-3xl">✅</span>
                       </div>
-                      <p className="font-medium text-gray-900">Pensamiento estratégico + liderazgo</p>
+                      <p className="font-medium text-gray-900 text-lg">Pensamiento estratégico + liderazgo</p>
                     </td>
-                    <td className="border border-black px-6 py-4 text-center">
-                      <div className="flex items-center justify-center mb-2">
-                        <span className="text-2xl">❌</span>
+                    <td className="border border-gray-300 px-8 py-6 text-center">
+                      <div className="flex items-center justify-center mb-3">
+                        <span className="text-3xl">❌</span>
                       </div>
-                      <p className="font-medium text-gray-900">Solo uso de herramientas</p>
+                      <p className="font-medium text-gray-900 text-lg">Solo uso de herramientas</p>
                     </td>
                   </tr>
-                  <tr className="bg-white">
-                    <td className="border border-black px-6 py-4 font-semibold text-gray-900">
+                  <tr className="bg-white hover:bg-gray-50 transition-colors">
+                    <td className="border border-gray-300 px-8 py-6 font-semibold text-gray-900 text-lg">
                       <strong>Actualización</strong>
                     </td>
-                    <td className="border border-black px-6 py-4 text-center">
-                      <div className="flex items-center justify-center mb-2">
-                        <span className="text-2xl">✅</span>
+                    <td className="border border-gray-300 px-8 py-6 text-center">
+                      <div className="flex items-center justify-center mb-3">
+                        <span className="text-3xl">✅</span>
                       </div>
-                      <p className="font-medium text-gray-900">Contenido que evoluciona con el mercado</p>
+                      <p className="font-medium text-gray-900 text-lg">Contenido que evoluciona con el mercado</p>
                     </td>
-                    <td className="border border-black px-6 py-4 text-center">
-                      <div className="flex items-center justify-center mb-2">
-                        <span className="text-2xl">❌</span>
+                    <td className="border border-gray-300 px-8 py-6 text-center">
+                      <div className="flex items-center justify-center mb-3">
+                        <span className="text-3xl">❌</span>
                       </div>
-                      <p className="font-medium text-gray-900">Información que se vuelve obsoleta</p>
+                      <p className="font-medium text-gray-900 text-lg">Información que se vuelve obsoleta</p>
                     </td>
                   </tr>
                 </tbody>
@@ -590,22 +728,22 @@ export function LandingPage() {
             </div>
           </div>
 
-          <div className="text-center mt-12">
-            <div className="bg-[#635BFF] text-white p-8 rounded-lg">
-              <h3 className="text-2xl font-bold mb-4">
+          <div className="text-center mt-16">
+            <div className="bg-gradient-to-r from-[#635BFF] to-[#5048E5] text-white p-10 rounded-2xl shadow-2xl">
+              <h3 className="text-3xl font-bold mb-6">
                 La Diferencia Está en los Resultados
               </h3>
-              <p className="text-lg text-purple-100 mb-6">
+              <p className="text-xl text-purple-100 mb-8 leading-relaxed">
                 Mientras otras academias te enseñan herramientas, nosotros te enseñamos a liderar 
                 la transformación IA en tu industria.
               </p>
               <Button 
                 size="lg" 
-                className="bg-yellow-400 text-gray-900 hover:bg-yellow-300 font-bold"
+                className="bg-yellow-400 text-gray-900 hover:bg-yellow-300 font-bold px-10 py-6 rounded-xl"
                 onClick={openVideoModal}
               >
                 Ver Cómo Funciona Nuestro Sistema
-                <ArrowRight className="ml-2 h-5 w-5" />
+                <ArrowRight className="ml-3 h-6 w-6" />
               </Button>
             </div>
           </div>
@@ -613,24 +751,24 @@ export function LandingPage() {
       </section>
 
       {/* Course Preview Section */}
-      <section className="py-20 bg-white">
+      <section className="py-24 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+          <div className="text-center mb-20">
+            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-8">
               Cursos Diseñados Para Profesionales Como Tú
             </h2>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
               Cada curso está estructurado para maximizar tu tiempo y acelerar tu dominio de IA práctica.
             </p>
           </div>
 
           <CoursePreview />
 
-          <div className="text-center mt-12">
+          <div className="text-center mt-16">
             <Link to="/courses">
-              <Button size="lg" className="bg-[#635BFF] hover:bg-[#5048E5]">
+              <Button size="lg" className="bg-[#635BFF] hover:bg-[#5048E5] px-10 py-6 text-lg rounded-xl shadow-xl hover:shadow-2xl transition-all duration-300">
                 Ver Todos Los Cursos
-                <ArrowRight className="ml-2 h-5 w-5" />
+                <ArrowRight className="ml-3 h-6 w-6" />
               </Button>
             </Link>
           </div>
@@ -638,13 +776,13 @@ export function LandingPage() {
       </section>
 
       {/* Pricing Section */}
-      <section className="py-20 bg-gray-50">
+      <section className="py-24 bg-gradient-to-br from-gray-50 to-blue-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
+          <div className="text-center mb-20">
+            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-8">
               Elige Tu Ruta de Transformación: 3 Formas de Convertirte en Líder con IA
             </h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+            <p className="text-xl text-gray-600 max-w-4xl mx-auto leading-relaxed">
               Cada plan está diseñado para diferentes niveles de ambición profesional. 
               Todos incluyen acceso inmediato y garantía de satisfacción.
             </p>
@@ -652,149 +790,155 @@ export function LandingPage() {
 
           <div className="grid md:grid-cols-3 gap-8">
             {/* Plan Fundamentos */}
-            <Card className="relative border-2 border-gray-200 hover:border-[#635BFF] transition-colors">
-              <CardHeader className="text-center pb-4">
-                <div className="flex items-center justify-center mb-4">
-                  <Shield className="h-8 w-8 text-[#635BFF]" />
+            <Card className="relative border-0 shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
+              <CardHeader className="text-center pb-6">
+                <div className="flex items-center justify-center mb-6">
+                  <div className="bg-gray-100 rounded-full p-4">
+                    <Shield className="h-10 w-10 text-gray-600" />
+                  </div>
                 </div>
-                <CardTitle className="text-2xl font-bold text-gray-900">Plan Fundamentos</CardTitle>
-                <div className="mt-4">
-                  <span className="text-4xl font-bold text-gray-900">€297</span>
+                <CardTitle className="text-3xl font-bold text-gray-900">Plan Fundamentos</CardTitle>
+                <div className="mt-6">
+                  <span className="text-5xl font-bold text-gray-900">€297</span>
                 </div>
-                <CardDescription className="mt-2">
+                <CardDescription className="mt-4 text-lg">
                   Perfecto para empezar tu transformación con IA
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <ul className="space-y-3 mb-8">
+                <ul className="space-y-4 mb-10">
                   <li className="flex items-start">
-                    <CheckCircle className="h-5 w-5 text-green-500 mr-3 mt-0.5 flex-shrink-0" />
-                    <span className="text-gray-700">Acceso completo a los 8 módulos de formación</span>
+                    <CheckCircle className="h-6 w-6 text-green-500 mr-4 mt-1 flex-shrink-0" />
+                    <span className="text-gray-700 text-lg">Acceso completo a los 8 módulos de formación</span>
                   </li>
                   <li className="flex items-start">
-                    <CheckCircle className="h-5 w-5 text-green-500 mr-3 mt-0.5 flex-shrink-0" />
-                    <span className="text-gray-700">Librería básica de 150 prompts esenciales</span>
+                    <CheckCircle className="h-6 w-6 text-green-500 mr-4 mt-1 flex-shrink-0" />
+                    <span className="text-gray-700 text-lg">Librería básica de 150 prompts esenciales</span>
                   </li>
                   <li className="flex items-start">
-                    <CheckCircle className="h-5 w-5 text-green-500 mr-3 mt-0.5 flex-shrink-0" />
-                    <span className="text-gray-700">Acceso a comunidad privada de profesionales</span>
+                    <CheckCircle className="h-6 w-6 text-green-500 mr-4 mt-1 flex-shrink-0" />
+                    <span className="text-gray-700 text-lg">Acceso a comunidad privada de profesionales</span>
                   </li>
                   <li className="flex items-start">
-                    <CheckCircle className="h-5 w-5 text-green-500 mr-3 mt-0.5 flex-shrink-0" />
-                    <span className="text-gray-700">Soporte por email durante 3 meses</span>
+                    <CheckCircle className="h-6 w-6 text-green-500 mr-4 mt-1 flex-shrink-0" />
+                    <span className="text-gray-700 text-lg">Soporte por email durante 3 meses</span>
                   </li>
                   <li className="flex items-start">
-                    <CheckCircle className="h-5 w-5 text-green-500 mr-3 mt-0.5 flex-shrink-0" />
-                    <span className="text-gray-700">Certificado de finalización</span>
+                    <CheckCircle className="h-6 w-6 text-green-500 mr-4 mt-1 flex-shrink-0" />
+                    <span className="text-gray-700 text-lg">Certificado de finalización</span>
                   </li>
                 </ul>
-                <Button className="w-full bg-gray-900 hover:bg-gray-800 text-white">
+                <Button className="w-full bg-gray-900 hover:bg-gray-800 text-white py-4 text-lg rounded-xl">
                   Seleccionar Fundamentos
                 </Button>
               </CardContent>
             </Card>
 
             {/* Plan Profesional - Most Popular */}
-            <Card className="relative border-2 border-[#635BFF] hover:border-[#5048E5] transition-colors transform scale-105">
-              <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
-                <Badge className="bg-[#635BFF] text-white px-6 py-2 text-sm font-bold">
+            <Card className="relative border-0 shadow-2xl hover:shadow-3xl transition-all duration-300 transform scale-105 hover:scale-110">
+              <div className="absolute -top-6 left-1/2 transform -translate-x-1/2">
+                <Badge className="bg-[#635BFF] text-white px-8 py-3 text-lg font-bold rounded-full shadow-lg">
                   ⭐ MÁS POPULAR
                 </Badge>
               </div>
-              <CardHeader className="text-center pb-4 pt-8">
-                <div className="flex items-center justify-center mb-4">
-                  <Zap className="h-8 w-8 text-[#635BFF]" />
+              <CardHeader className="text-center pb-6 pt-10">
+                <div className="flex items-center justify-center mb-6">
+                  <div className="bg-[#635BFF] rounded-full p-4">
+                    <Zap className="h-10 w-10 text-white" />
+                  </div>
                 </div>
-                <CardTitle className="text-2xl font-bold text-gray-900">Plan Profesional</CardTitle>
-                <div className="mt-4">
-                  <span className="text-4xl font-bold text-[#635BFF]">€597</span>
+                <CardTitle className="text-3xl font-bold text-gray-900">Plan Profesional</CardTitle>
+                <div className="mt-6">
+                  <span className="text-5xl font-bold text-[#635BFF]">€597</span>
                 </div>
-                <CardDescription className="mt-2">
+                <CardDescription className="mt-4 text-lg">
                   La opción más completa para profesionales ambiciosos
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="bg-[#635BFF] text-white p-3 rounded-lg mb-6 text-center">
-                  <p className="font-bold">AHORRO: €285 vs comprar por separado</p>
+                <div className="bg-[#635BFF] text-white p-4 rounded-xl mb-8 text-center">
+                  <p className="font-bold text-lg">AHORRO: €285 vs comprar por separado</p>
                 </div>
-                <ul className="space-y-3 mb-8">
+                <ul className="space-y-4 mb-10">
                   <li className="flex items-start">
-                    <CheckCircle className="h-5 w-5 text-green-500 mr-3 mt-0.5 flex-shrink-0" />
-                    <span className="text-gray-700 font-medium">TODO lo del Plan Fundamentos +</span>
+                    <CheckCircle className="h-6 w-6 text-green-500 mr-4 mt-1 flex-shrink-0" />
+                    <span className="text-gray-700 font-medium text-lg">TODO lo del Plan Fundamentos +</span>
                   </li>
                   <li className="flex items-start">
-                    <CheckCircle className="h-5 w-5 text-green-500 mr-3 mt-0.5 flex-shrink-0" />
-                    <span className="text-gray-700">Librería completa de 450+ prompts profesionales</span>
+                    <CheckCircle className="h-6 w-6 text-green-500 mr-4 mt-1 flex-shrink-0" />
+                    <span className="text-gray-700 text-lg">Librería completa de 450+ prompts profesionales</span>
                   </li>
                   <li className="flex items-start">
-                    <CheckCircle className="h-5 w-5 text-green-500 mr-3 mt-0.5 flex-shrink-0" />
-                    <span className="text-gray-700">Base de datos de 200+ herramientas evaluadas</span>
+                    <CheckCircle className="h-6 w-6 text-green-500 mr-4 mt-1 flex-shrink-0" />
+                    <span className="text-gray-700 text-lg">Base de datos de 200+ herramientas evaluadas</span>
                   </li>
                   <li className="flex items-start">
-                    <CheckCircle className="h-5 w-5 text-green-500 mr-3 mt-0.5 flex-shrink-0" />
-                    <span className="text-gray-700">25+ Templates y frameworks de implementación</span>
+                    <CheckCircle className="h-6 w-6 text-green-500 mr-4 mt-1 flex-shrink-0" />
+                    <span className="text-gray-700 text-lg">25+ Templates y frameworks de implementación</span>
                   </li>
                   <li className="flex items-start">
-                    <CheckCircle className="h-5 w-5 text-green-500 mr-3 mt-0.5 flex-shrink-0" />
-                    <span className="text-gray-700">2 sesiones de mentoría 1:1 personalizada</span>
+                    <CheckCircle className="h-6 w-6 text-green-500 mr-4 mt-1 flex-shrink-0" />
+                    <span className="text-gray-700 text-lg">2 sesiones de mentoría 1:1 personalizada</span>
                   </li>
                   <li className="flex items-start">
-                    <CheckCircle className="h-5 w-5 text-green-500 mr-3 mt-0.5 flex-shrink-0" />
-                    <span className="text-gray-700">Actualizaciones de por vida</span>
+                    <CheckCircle className="h-6 w-6 text-green-500 mr-4 mt-1 flex-shrink-0" />
+                    <span className="text-gray-700 text-lg">Actualizaciones de por vida</span>
                   </li>
                 </ul>
-                <Button className="w-full bg-[#635BFF] hover:bg-[#5048E5] text-white font-bold">
+                <Button className="w-full bg-[#635BFF] hover:bg-[#5048E5] text-white font-bold py-4 text-lg rounded-xl shadow-xl">
                   Seleccionar Profesional ⭐
                 </Button>
               </CardContent>
             </Card>
 
             {/* Plan Elite */}
-            <Card className="relative border-2 border-gray-200 hover:border-[#635BFF] transition-colors">
-              <CardHeader className="text-center pb-4">
-                <div className="flex items-center justify-center mb-4">
-                  <Crown className="h-8 w-8 text-[#635BFF]" />
+            <Card className="relative border-0 shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
+              <CardHeader className="text-center pb-6">
+                <div className="flex items-center justify-center mb-6">
+                  <div className="bg-yellow-100 rounded-full p-4">
+                    <Crown className="h-10 w-10 text-yellow-600" />
+                  </div>
                 </div>
-                <CardTitle className="text-2xl font-bold text-gray-900">Plan Elite</CardTitle>
-                <div className="mt-4">
-                  <span className="text-4xl font-bold text-gray-900">€1,197</span>
+                <CardTitle className="text-3xl font-bold text-gray-900">Plan Elite</CardTitle>
+                <div className="mt-6">
+                  <span className="text-5xl font-bold text-gray-900">€1,197</span>
                 </div>
-                <CardDescription className="mt-2">
+                <CardDescription className="mt-4 text-lg">
                   Para líderes que quieren transformar organizaciones
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="bg-green-50 border border-green-200 p-3 rounded-lg mb-6 text-center">
-                  <p className="font-bold text-green-800">AHORRO: €497 vs comprar por separado</p>
+                <div className="bg-green-50 border border-green-200 p-4 rounded-xl mb-8 text-center">
+                  <p className="font-bold text-green-800 text-lg">AHORRO: €497 vs comprar por separado</p>
                 </div>
-                <ul className="space-y-3 mb-8">
+                <ul className="space-y-4 mb-10">
                   <li className="flex items-start">
-                    <CheckCircle className="h-5 w-5 text-green-500 mr-3 mt-0.5 flex-shrink-0" />
-                    <span className="text-gray-700 font-medium">TODO lo del Plan Profesional +</span>
+                    <CheckCircle className="h-6 w-6 text-green-500 mr-4 mt-1 flex-shrink-0" />
+                    <span className="text-gray-700 font-medium text-lg">TODO lo del Plan Profesional +</span>
                   </li>
                   <li className="flex items-start">
-                    <CheckCircle className="h-5 w-5 text-green-500 mr-3 mt-0.5 flex-shrink-0" />
-                    <span className="text-gray-700">6 sesiones de mentoría 1:1 con especialistas</span>
+                    <CheckCircle className="h-6 w-6 text-green-500 mr-4 mt-1 flex-shrink-0" />
+                    <span className="text-gray-700 text-lg">6 sesiones de mentoría 1:1 con especialistas</span>
                   </li>
                   <li className="flex items-start">
-                    <CheckCircle className="h-5 w-5 text-green-500 mr-3 mt-0.5 flex-shrink-0" />
-                    <span className="text-gray-700">Certificación avanzada con badge LinkedIn</span>
+                    <CheckCircle className="h-6 w-6 text-green-500 mr-4 mt-1 flex-shrink-0" />
+                    <span className="text-gray-700 text-lg">Certificación avanzada con badge LinkedIn</span>
                   </li>
                   <li className="flex items-start">
-                    <CheckCircle className="h-5 w-5 text-green-500 mr-3 mt-0.5 flex-shrink-0" />
-                    <span className="text-gray-700">Consulta estratégica para implementación organizacional</span>
+                    <CheckCircle className="h-6 w-6 text-green-500 mr-4 mt-1 flex-shrink-0" />
+                    <span className="text-gray-700 text-lg">Consulta estratégica para implementación organizacional</span>
                   </li>
                 </ul>
-                <Button className="w-full bg-gray-900 hover:bg-gray-800 text-white">
+                <Button className="w-full bg-gray-900 hover:bg-gray-800 text-white py-4 text-lg rounded-xl">
                   Seleccionar Elite
                 </Button>
               </CardContent>
             </Card>
           </div>
 
-          <div className="text-center mt-12">
-            <div className="bg-yellow-50 border border-yellow-200 p-6 rounded-lg max-w-2xl mx-auto">
-              <p className="text-gray-700">
+          <div className="text-center mt-16">
+            <div className="bg-yellow-50 border border-yellow-200 p-8 rounded-2xl max-w-3xl mx-auto">
+              <p className="text-gray-700 text-lg leading-relaxed">
                 <strong>Garantía de satisfacción:</strong> 30 días para probar sin riesgo. 
                 Si no ves valor, reembolso completo sin preguntas.
               </p>
@@ -804,26 +948,28 @@ export function LandingPage() {
       </section>
 
       {/* FAQ Section */}
-      <section className="py-20 bg-white">
+      <section className="py-24 bg-white">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <div className="flex justify-center mb-6">
-              <HelpCircle className="h-16 w-16 text-[#635BFF]" />
+          <div className="text-center mb-20">
+            <div className="flex justify-center mb-8">
+              <div className="bg-[#635BFF] rounded-full p-6">
+                <HelpCircle className="h-16 w-16 text-white" />
+              </div>
             </div>
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
+            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-8">
               Las 5 Preguntas Que Hacen TODOS los Profesionales Antes de Transformar Su Carrera
             </h2>
-            <p className="text-xl text-gray-600">
+            <p className="text-xl text-gray-600 leading-relaxed">
               Resolvemos las dudas más comunes para que puedas tomar la mejor decisión para tu futuro.
             </p>
           </div>
 
-          <Accordion type="single" collapsible className="space-y-4">
-            <AccordionItem value="item-1" className="border border-gray-200 rounded-lg px-6">
-              <AccordionTrigger className="text-left font-semibold text-gray-900 hover:text-[#635BFF]">
+          <Accordion type="single" collapsible className="space-y-6">
+            <AccordionItem value="item-1" className="border border-gray-200 rounded-2xl px-8 shadow-lg hover:shadow-xl transition-shadow">
+              <AccordionTrigger className="text-left font-semibold text-gray-900 hover:text-[#635BFF] text-lg py-6">
                 "No tengo tiempo para esto ahora, trabajo 50+ horas semanales"
               </AccordionTrigger>
-              <AccordionContent className="text-gray-700 leading-relaxed">
+              <AccordionContent className="text-gray-700 leading-relaxed text-lg pb-6">
                 Por eso cada módulo está diseñado para 15-30 minutos máximo. La primera semana ya estarás 
                 aplicando IA para AHORRAR tiempo en tus tareas diarias. Nuestros estudiantes reportan 
                 recuperar 5-8 horas semanales después del primer mes. El tiempo que inviertes se multiplica 
@@ -831,22 +977,22 @@ export function LandingPage() {
               </AccordionContent>
             </AccordionItem>
 
-            <AccordionItem value="item-2" className="border border-gray-200 rounded-lg px-6">
-              <AccordionTrigger className="text-left font-semibold text-gray-900 hover:text-[#635BFF]">
+            <AccordionItem value="item-2" className="border border-gray-200 rounded-2xl px-8 shadow-lg hover:shadow-xl transition-shadow">
+              <AccordionTrigger className="text-left font-semibold text-gray-900 hover:text-[#635BFF] text-lg py-6">
                 "Esto parece muy técnico, no soy programador ni nativo digital"
               </AccordionTrigger>
-              <AccordionContent className="text-gray-700 leading-relaxed">
+              <AccordionContent className="text-gray-700 leading-relaxed text-lg pb-6">
                 CERO código requerido. El 78% de nuestros estudiantes tiene más de 35 años y muchos se 
                 consideraban "no técnicos" antes de empezar. Todo está explicado en lenguaje empresarial, 
                 con ejemplos de tu industria. Si sabes usar email y navegador web, puedes dominar estas herramientas.
               </AccordionContent>
             </AccordionItem>
 
-            <AccordionItem value="item-3" className="border border-gray-200 rounded-lg px-6">
-              <AccordionTrigger className="text-left font-semibold text-gray-900 hover:text-[#635BFF]">
+            <AccordionItem value="item-3" className="border border-gray-200 rounded-2xl px-8 shadow-lg hover:shadow-xl transition-shadow">
+              <AccordionTrigger className="text-left font-semibold text-gray-900 hover:text-[#635BFF] text-lg py-6">
                 "¿Realmente merece la pena invertir €597?"
               </AccordionTrigger>
-              <AccordionContent className="text-gray-700 leading-relaxed">
+              <AccordionContent className="text-gray-700 leading-relaxed text-lg pb-6">
                 Profesionales con habilidades IA ganan 25% más según LinkedIn. Este programa se paga solo 
                 con el primer proyecto que implementes. Nuestros graduados reportan aumentos salariales 
                 promedio de €8,400 anuales. Además, incluye garantía de 30 días - si no ves valor, 
@@ -854,11 +1000,11 @@ export function LandingPage() {
               </AccordionContent>
             </AccordionItem>
 
-            <AccordionItem value="item-4" className="border border-gray-200 rounded-lg px-6">
-              <AccordionTrigger className="text-left font-semibold text-gray-900 hover:text-[#635BFF]">
+            <AccordionItem value="item-4" className="border border-gray-200 rounded-2xl px-8 shadow-lg hover:shadow-xl transition-shadow">
+              <AccordionTrigger className="text-left font-semibold text-gray-900 hover:text-[#635BFF] text-lg py-6">
                 "¿Y si para cuando lo aprenda ya ha cambiado todo?"
               </AccordionTrigger>
-              <AccordionContent className="text-gray-700 leading-relaxed">
+              <AccordionContent className="text-gray-700 leading-relaxed text-lg pb-6">
                 Te enseñamos PRINCIPIOS atemporales, no herramientas específicas. Los fundamentos de 
                 prompting, automatización y pensamiento estratégico con IA no cambian. Además, las 
                 actualizaciones de por vida están incluidas en el Plan Profesional y Elite. Siempre 
@@ -866,11 +1012,11 @@ export function LandingPage() {
               </AccordionContent>
             </AccordionItem>
 
-            <AccordionItem value="item-5" className="border border-gray-200 rounded-lg px-6">
-              <AccordionTrigger className="text-left font-semibold text-gray-900 hover:text-[#635BFF]">
+            <AccordionItem value="item-5" className="border border-gray-200 rounded-2xl px-8 shadow-lg hover:shadow-xl transition-shadow">
+              <AccordionTrigger className="text-left font-semibold text-gray-900 hover:text-[#635BFF] text-lg py-6">
                 "A mi edad (45+) ¿no es demasiado tarde?"
               </AccordionTrigger>
-              <AccordionContent className="text-gray-700 leading-relaxed">
+              <AccordionContent className="text-gray-700 leading-relaxed text-lg pb-6">
                 Tu edad es tu VENTAJA. El 43% de nuestros mejores casos de éxito son profesionales de 45+ años. 
                 Tu experiencia + IA = combinación imparable. Los jóvenes saben tecnología, pero tú sabes 
                 negocios. Esa perspectiva estratégica es lo que las empresas más valoran en la era IA.
@@ -881,57 +1027,72 @@ export function LandingPage() {
       </section>
 
       {/* Final CTA Section */}
-      <section className="py-20 bg-gradient-to-br from-[#635BFF] to-[#5048E5]">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
+      <section className="py-24 bg-gradient-to-br from-[#635BFF] via-[#7C3AED] to-[#EC4899] relative overflow-hidden">
+        {/* Background elements */}
+        <div className="absolute inset-0">
+          <div className="absolute top-20 right-20 w-80 h-80 bg-white/10 rounded-full blur-3xl"></div>
+          <div className="absolute bottom-20 left-20 w-64 h-64 bg-white/5 rounded-full blur-2xl"></div>
+          <svg className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 text-white/5" viewBox="0 0 100 100">
+            <circle cx="50" cy="50" r="40" fill="currentColor" />
+          </svg>
+        </div>
+
+        <div className="relative max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h2 className="text-4xl md:text-5xl font-bold text-white mb-8 leading-tight">
             Tu Momento de Decisión: Liderar o Ser Liderado
           </h2>
-          <p className="text-xl text-purple-100 mb-8">
+          <p className="text-xl text-purple-100 mb-12 leading-relaxed">
             En 6 meses, habrá dos tipos de profesionales: los que dominan IA y los que fueron reemplazados por ella. 
             ¿De qué lado quieres estar?
           </p>
 
-          <div className="bg-white/10 backdrop-blur-sm rounded-lg p-8 mb-8">
-            <div className="grid md:grid-cols-3 gap-6 text-white">
+          <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-10 mb-12">
+            <div className="grid md:grid-cols-3 gap-8 text-white">
               <div className="flex items-center justify-center">
-                <Shield className="h-8 w-8 mr-3" />
+                <div className="bg-white/20 rounded-full p-3 mr-4">
+                  <Shield className="h-8 w-8" />
+                </div>
                 <div className="text-left">
-                  <p className="font-bold">30 días de garantía total</p>
+                  <p className="font-bold text-lg">30 días de garantía total</p>
                   <p className="text-sm text-purple-200">Si no ves valor, reembolso completo</p>
                 </div>
               </div>
               <div className="flex items-center justify-center">
-                <Clock className="h-8 w-8 mr-3" />
+                <div className="bg-white/20 rounded-full p-3 mr-4">
+                  <Clock className="h-8 w-8" />
+                </div>
                 <div className="text-left">
-                  <p className="font-bold">Solo 27 plazas restantes</p>
+                  <p className="font-bold text-lg">Solo 27 plazas restantes</p>
                   <p className="text-sm text-purple-200">Para la cohorte de Marzo 2025</p>
                 </div>
               </div>
               <div className="flex items-center justify-center">
-                <Zap className="h-8 w-8 mr-3" />
+                <div className="bg-white/20 rounded-full p-3 mr-4">
+                  <Zap className="h-8 w-8" />
+                </div>
                 <div className="text-left">
-                  <p className="font-bold">Acceso inmediato</p>
+                  <p className="font-bold text-lg">Acceso inmediato</p>
                   <p className="text-sm text-purple-200">Empieza tu transformación hoy</p>
                 </div>
               </div>
             </div>
           </div>
 
-          <div className="space-y-4">
-            <Button size="lg" className="bg-yellow-400 text-gray-900 hover:bg-yellow-300 font-bold text-xl px-12 py-6">
+          <div className="space-y-6">
+            <Button size="lg" className="bg-yellow-400 text-gray-900 hover:bg-yellow-300 font-bold text-2xl px-16 py-8 rounded-2xl shadow-2xl hover:shadow-yellow-400/25 transition-all duration-300 transform hover:scale-105">
               ASEGURAR MI PLAZA AHORA
-              <ArrowRight className="ml-3 h-6 w-6" />
+              <ArrowRight className="ml-4 h-8 w-8" />
             </Button>
-            <p className="text-purple-200 text-sm">
+            <p className="text-purple-200 text-lg">
               ✓ Acceso inmediato a todos los módulos ✓ Garantía 30 días ✓ Soporte personalizado
             </p>
           </div>
 
-          <div className="mt-12 text-center">
-            <p className="text-purple-200 text-lg italic">
+          <div className="mt-16 text-center">
+            <p className="text-purple-200 text-xl italic leading-relaxed">
               "El mejor momento para plantar un árbol fue hace 20 años. El segundo mejor momento es ahora."
             </p>
-            <p className="text-purple-300 mt-2">
+            <p className="text-purple-300 mt-4 text-lg">
               - Proverbio chino (aplicado a tu carrera con IA)
             </p>
           </div>
