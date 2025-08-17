@@ -16,6 +16,7 @@ import { AcademyDashboard } from "./pages/AcademyDashboard";
 import { AcademyCoursesPage } from "./pages/AcademyCoursesPage";
 import { AcademyCourseDetailPage } from "./pages/AcademyCourseDetailPage";
 import { AcademyLessonPage } from "./pages/AcademyLessonPage";
+import { AcademyProfilePage } from "./pages/AcademyProfilePage";
 
 export default function App() {
   return (
@@ -57,6 +58,11 @@ export default function App() {
               <Route path="/academy/lessons/:id" element={
                 <ProtectedRoute>
                   <AcademyLessonPage />
+                </ProtectedRoute>
+              } />
+              <Route path="/academy/profile" element={
+                <ProtectedRoute>
+                  <AcademyProfilePage />
                 </ProtectedRoute>
               } />
               

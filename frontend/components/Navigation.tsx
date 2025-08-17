@@ -1,8 +1,9 @@
 import { useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Menu, X, BookOpen, LogOut, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "../contexts/AuthContext";
+import { useToast } from "@/components/ui/use-toast";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -14,13 +15,24 @@ import {
 export function Navigation() {
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
   const { isAuthenticated, user, logout, isAdmin } = useAuth();
+  const { toast } = useToast();
 
   const isActive = (path: string) => location.pathname === path;
 
   const handleLogout = () => {
     logout();
     setIsOpen(false);
+    navigate("/login");
+    toast({
+      title: "Sesión cerrada",
+      description: "Has cerrado sesión exitosamente.",
+    });
+  };
+
+  const handleProfileClick = () => {
+    navigate("/academy/profile");
   };
 
   return (
@@ -76,18 +88,18 @@ export function Navigation() {
                 
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
-                    <Button variant="ghost" className="flex items-center space-x-2">
+                    <Button variant="ghost" className="flex items-center space-x-2 hover:bg-gray-100 transition-colors">
                       <User className="h-4 w-4" />
                       <span>{user?.name}</span>
                     </Button>
                   </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end">
-                    <DropdownMenuItem>
+                  <DropdownMenuContent align="end" className="w-56 animate-in slide-in-from-top-2 duration-200">
+                    <DropdownMenuItem onClick={handleProfileClick} className="cursor-pointer">
                       <User className="mr-2 h-4 w-4" />
                       <span>Perfil</span>
                     </DropdownMenuItem>
                     <DropdownMenuSeparator />
-                    <DropdownMenuItem onClick={handleLogout}>
+                    <DropdownMenuItem onClick={handleLogout} className="cursor-pointer text-red-600 focus:text-red-600">
                       <LogOut className="mr-2 h-4 w-4" />
                       <span>Cerrar Sesión</span>
                     </DropdownMenuItem>
@@ -140,7 +152,7 @@ export function Navigation() {
           <div className="md:hidden flex items-center">
             <button
               onClick={() => setIsOpen(!isOpen)}
-              className="text-gray-700 hover:text-[#6B7BFF] focus:outline-none"
+              className="text-gray-700 hover:text-[#6B7BFF] focus:outline-none transition-colors"
             >
               {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
             </button>
@@ -181,6 +193,15 @@ export function Navigation() {
                   >
                     Programas
                   </Link>
+                  <Link
+                    to="/academy/profile"
+                    className={`block px-3 py-2 font-medium transition-colors ${
+                      isActive("/academy/profile") ? "text-black bg-blue-50" : "text-[#6c757d] hover:text-[#6B7BFF]"
+                    }`}
+                    onClick={() => setIsOpen(false)}
+                  >
+                    Perfil
+                  </Link>
                   {isAdmin && (
                     <Link
                       to="/admin"
@@ -197,7 +218,7 @@ export function Navigation() {
                     <Button 
                       variant="outline" 
                       size="sm" 
-                      className="w-full"
+                      className="w-full text-red-600 border-red-300 hover:bg-red-50 hover:text-red-700"
                       onClick={handleLogout}
                     >
                       <LogOut className="h-4 w-4 mr-2" />
