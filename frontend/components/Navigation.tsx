@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
 import { LoginModal } from "./auth/LoginModal";
 import { RegisterModal } from "./auth/RegisterModal";
+import { RequestPasswordResetModal } from "./auth/RequestPasswordResetModal";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -18,6 +19,7 @@ export function Navigation() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);
+  const [isResetModalOpen, setIsResetModalOpen] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
   const { isAuthenticated, user, logout } = useAuth();
@@ -31,12 +33,20 @@ export function Navigation() {
 
   const openLoginModal = () => {
     setIsRegisterModalOpen(false);
+    setIsResetModalOpen(false);
     setIsLoginModalOpen(true);
   };
 
   const openRegisterModal = () => {
     setIsLoginModalOpen(false);
+    setIsResetModalOpen(false);
     setIsRegisterModalOpen(true);
+  };
+
+  const openResetModal = () => {
+    setIsLoginModalOpen(false);
+    setIsRegisterModalOpen(false);
+    setIsResetModalOpen(true);
   };
 
   const authButtons = (
@@ -217,10 +227,16 @@ export function Navigation() {
         isOpen={isLoginModalOpen} 
         onClose={() => setIsLoginModalOpen(false)} 
         onSwitchToRegister={openRegisterModal}
+        onSwitchToReset={openResetModal}
       />
       <RegisterModal 
         isOpen={isRegisterModalOpen} 
         onClose={() => setIsRegisterModalOpen(false)} 
+        onSwitchToLogin={openLoginModal}
+      />
+      <RequestPasswordResetModal
+        isOpen={isResetModalOpen}
+        onClose={() => setIsResetModalOpen(false)}
         onSwitchToLogin={openLoginModal}
       />
     </>

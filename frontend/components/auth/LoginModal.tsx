@@ -11,9 +11,10 @@ interface LoginModalProps {
   isOpen: boolean;
   onClose: () => void;
   onSwitchToRegister: () => void;
+  onSwitchToReset: () => void;
 }
 
-export function LoginModal({ isOpen, onClose, onSwitchToRegister }: LoginModalProps) {
+export function LoginModal({ isOpen, onClose, onSwitchToRegister, onSwitchToReset }: LoginModalProps) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
@@ -68,7 +69,16 @@ export function LoginModal({ isOpen, onClose, onSwitchToRegister }: LoginModalPr
               />
             </div>
             <div>
-              <Label htmlFor="password">Contraseña</Label>
+              <div className="flex justify-between items-center">
+                <Label htmlFor="password">Contraseña</Label>
+                <button 
+                  type="button"
+                  onClick={onSwitchToReset} 
+                  className="text-sm font-medium text-blue-600 hover:underline"
+                >
+                  ¿Olvidaste tu contraseña?
+                </button>
+              </div>
               <Input
                 id="password"
                 type="password"

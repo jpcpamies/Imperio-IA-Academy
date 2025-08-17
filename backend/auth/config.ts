@@ -48,16 +48,29 @@ export function validateProductionConfig(): { isValid: boolean; errors: string[]
 
   if (NODE_ENV === "production") {
     // Critical production checks
-    if (!jwtSecret()) {
-      errors.push("JWT_SECRET must be set in production");
+    try {
+      const secretValue = jwtSecret();
+      if (!secretValue) {
+        errors.push("JWT_SECRET must be set in production and cannot be empty");
+      }
+      if (secretValue.length < 32) {
+        errors.push("JWT_SECRET should be at least 32 characters long");
+      }
+    } catch (error) {
+      errors.push("JWT_SECRET is not accessible");
+    }
+
+    try {
+      const key = emailApiKey();
+      if (!key) {
+        errors.push("EMAIL_API_KEY must be set in production and cannot be empty");
+      }
+    } catch (error) {
+      errors.push("EMAIL_API_KEY is not accessible");
     }
 
     if (!process.env.DATABASE_URL) {
       errors.push("DATABASE_URL must be set in production");
-    }
-
-    if (!emailApiKey()) {
-      errors.push("EMAIL_API_KEY must be set in production");
     }
 
     if (CORS_ORIGIN.includes("localhost")) {
@@ -71,16 +84,6 @@ export function validateProductionConfig(): { isValid: boolean; errors: string[]
     // Security checks
     if (BCRYPT_ROUNDS < 12) {
       errors.push("BCRYPT_ROUNDS should be at least 12 in production");
-    }
-
-    // JWT secret strength check
-    try {
-      const secret = jwtSecret();
-      if (secret.length < 32) {
-        errors.push("JWT_SECRET should be at least 32 characters long");
-      }
-    } catch (error) {
-      errors.push("JWT_SECRET is not accessible");
     }
   }
 

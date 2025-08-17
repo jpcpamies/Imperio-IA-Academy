@@ -11,6 +11,7 @@ import { StudentDashboard } from "./pages/StudentDashboard";
 import { AuthProvider } from "./contexts/AuthContext";
 import { useAuth } from "./hooks/useAuth";
 import { ReactNode } from "react";
+import { ResetPasswordPage } from "./pages/ResetPasswordPage";
 
 function ProtectedRoute({ children }: { children: ReactNode }) {
   const { isAuthenticated, isLoading } = useAuth();
@@ -42,6 +43,7 @@ function AppRoutes() {
           <Route path="/home" element={<HomePage />} />
           <Route path="/courses" element={<CoursesPage />} />
           <Route path="/courses/:id" element={<CourseDetailPage />} />
+          <Route path="/reset-password" element={<ResetPasswordPage />} />
           
           {/* Protected Routes */}
           <Route path="/lessons/:id" element={

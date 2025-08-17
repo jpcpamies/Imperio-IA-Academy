@@ -241,18 +241,18 @@ Contact us immediately at ${EMAIL_REPLY_TO} if you need assistance.
 
 // Email service implementations
 class SendGridEmailService {
-  private apiKey: string;
-
-  constructor(apiKey: string) {
-    this.apiKey = apiKey;
-  }
-
   async sendEmail(options: SendEmailOptions): Promise<boolean> {
+    const apiKey = emailApiKey();
+    if (!apiKey) {
+      console.error("SendGrid API Key is not configured.");
+      return false;
+    }
+
     try {
       const response = await fetch("https://api.sendgrid.com/v3/mail/send", {
         method: "POST",
         headers: {
-          "Authorization": `Bearer ${this.apiKey}`,
+          "Authorization": `Bearer ${apiKey}`,
           "Content-Type": "application/json"
         },
         body: JSON.stringify({
@@ -312,12 +312,10 @@ class MockEmailService {
 }
 
 // Email service factory
-function createEmailService() {
-  const apiKey = emailApiKey();
-  
+function getEmailService() {
   switch (EMAIL_SERVICE_PROVIDER.toLowerCase()) {
     case "sendgrid":
-      return new SendGridEmailService(apiKey);
+      return new SendGridEmailService();
     case "smtp":
       return new SMTPEmailService();
     default:
@@ -326,10 +324,9 @@ function createEmailService() {
   }
 }
 
-const emailService = createEmailService();
-
 // Public email functions
 export async function sendPasswordResetEmail(email: string, resetToken: string): Promise<boolean> {
+  const emailService = getEmailService();
   try {
     const template = EMAIL_TEMPLATES.PASSWORD_RESET(resetToken, email);
     
@@ -369,6 +366,7 @@ export async function sendPasswordResetEmail(email: string, resetToken: string):
 }
 
 export async function sendWelcomeEmail(email: string, name: string): Promise<boolean> {
+  const emailService = getEmailService();
   try {
     const template = EMAIL_TEMPLATES.WELCOME(name, email);
     
@@ -397,6 +395,7 @@ export async function sendWelcomeEmail(email: string, name: string): Promise<boo
 }
 
 export async function sendSecurityAlertEmail(email: string, eventType: string, ipAddress: string): Promise<boolean> {
+  const emailService = getEmailService();
   try {
     const template = EMAIL_TEMPLATES.SECURITY_ALERT(email, eventType, ipAddress);
     
@@ -428,22 +427,13 @@ export async function sendSecurityAlertEmail(email: string, eventType: string, i
 // Email service health check
 export async function testEmailService(): Promise<{ success: boolean; error?: string }> {
   try {
-    // Test with a simple email
-    const testEmail = "test@example.com";
-    const template = EMAIL_TEMPLATES.WELCOME("Test User", testEmail);
-    
-    // Don't actually send in test mode, just validate configuration
     if (EMAIL_SERVICE_PROVIDER === "mock") {
       return { success: true };
     }
-
-    // For real providers, you might want to send to a test email
-    // const success = await emailService.sendEmail({
-    //   to: testEmail,
-    //   subject: "Email Service Test",
-    //   html: "<p>Test email</p>",
-    //   text: "Test email"
-    // });
+    
+    if (!emailApiKey()) {
+      return { success: false, error: "Email API Key is not configured." };
+    }
 
     return { success: true };
   } catch (error) {
