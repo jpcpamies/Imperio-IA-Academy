@@ -33,6 +33,7 @@ const BROWSER = typeof globalThis === "object" && ("window" in globalThis);
  * Client is an API client for the  Encore application.
  */
 export class Client {
+    public readonly auth: auth.ServiceClient
     public readonly courses: courses.ServiceClient
     public readonly lessons: lessons.ServiceClient
     public readonly progress: progress.ServiceClient
@@ -50,6 +51,7 @@ export class Client {
         this.target = target
         this.options = options ?? {}
         const base = new BaseClient(this.target, this.options)
+        this.auth = new auth.ServiceClient(base)
         this.courses = new courses.ServiceClient(base)
         this.lessons = new lessons.ServiceClient(base)
         this.progress = new progress.ServiceClient(base)
@@ -81,6 +83,70 @@ export interface ClientOptions {
 
     /** Default RequestInit to be used for the client */
     requestInit?: Omit<RequestInit, "headers"> & { headers?: Record<string, string> }
+}
+
+/**
+ * Import the endpoint handlers to derive the types for the client.
+ */
+import { getProfile as api_auth_get_profile_getProfile } from "~backend/auth/get-profile";
+import { login as api_auth_login_login } from "~backend/auth/login";
+import { register as api_auth_register_register } from "~backend/auth/register";
+import { verifyToken as api_auth_verify_token_verifyToken } from "~backend/auth/verify-token";
+
+export namespace auth {
+
+    export class ServiceClient {
+        private baseClient: BaseClient
+
+        constructor(baseClient: BaseClient) {
+            this.baseClient = baseClient
+            this.getProfile = this.getProfile.bind(this)
+            this.login = this.login.bind(this)
+            this.register = this.register.bind(this)
+            this.verifyToken = this.verifyToken.bind(this)
+        }
+
+        /**
+         * Gets the current user's profile information.
+         */
+        public async getProfile(params: RequestType<typeof api_auth_get_profile_getProfile>): Promise<ResponseType<typeof api_auth_get_profile_getProfile>> {
+            // Convert our params into the objects we need for the request
+            const headers = makeRecord<string, string>({
+                authorization: params.authorization,
+            })
+
+            // Now make the actual call to the API
+            const resp = await this.baseClient.callTypedAPI(`/auth/profile`, {headers, method: "GET", body: undefined})
+            return JSON.parse(await resp.text(), dateReviver) as ResponseType<typeof api_auth_get_profile_getProfile>
+        }
+
+        /**
+         * Authenticates a user with email and password.
+         */
+        public async login(params: RequestType<typeof api_auth_login_login>): Promise<ResponseType<typeof api_auth_login_login>> {
+            // Now make the actual call to the API
+            const resp = await this.baseClient.callTypedAPI(`/auth/login`, {method: "POST", body: JSON.stringify(params)})
+            return JSON.parse(await resp.text(), dateReviver) as ResponseType<typeof api_auth_login_login>
+        }
+
+        /**
+         * Registers a new user account.
+         */
+        public async register(params: RequestType<typeof api_auth_register_register>): Promise<ResponseType<typeof api_auth_register_register>> {
+            // Now make the actual call to the API
+            const resp = await this.baseClient.callTypedAPI(`/auth/register`, {method: "POST", body: JSON.stringify(params)})
+            return JSON.parse(await resp.text(), dateReviver) as ResponseType<typeof api_auth_register_register>
+        }
+
+        /**
+         * Verifies a JWT token and returns user information.
+         */
+        public async verifyToken(params: RequestType<typeof api_auth_verify_token_verifyToken>): Promise<ResponseType<typeof api_auth_verify_token_verifyToken>> {
+            // Now make the actual call to the API
+            const resp = await this.baseClient.callTypedAPI(`/auth/verify-token`, {method: "POST", body: JSON.stringify(params)})
+            return JSON.parse(await resp.text(), dateReviver) as ResponseType<typeof api_auth_verify_token_verifyToken>
+        }
+    }
 }
 
 /**
