@@ -3,7 +3,7 @@ import { authDB } from "./db";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import crypto from "crypto";
-import { jwtSecret, JWT_EXPIRATION, JWT_ISSUER, JWT_AUDIENCE } from "./config";
+import { getJWTSecret, JWT_EXPIRATION, JWT_ISSUER, JWT_AUDIENCE } from "./config";
 import { sanitizeEmail, sanitizePassword, isValidEmail } from "./utils";
 import { checkMultiLayerRateLimit } from "./enhanced-rate-limiter";
 import { logSecurityEvent } from "./security-logger";
@@ -168,7 +168,7 @@ export const login = api<LoginRequest, LoginResponse>(
             sessionId: crypto.randomUUID(),
             loginTime: new Date().toISOString()
           },
-          jwtSecret(),
+          getJWTSecret(),
           { 
             expiresIn: JWT_EXPIRATION,
             issuer: JWT_ISSUER,

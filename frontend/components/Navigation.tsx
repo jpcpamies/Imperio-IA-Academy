@@ -1,105 +1,13 @@
 import { useState } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
-import { Menu, X, BookOpen, User, LogOut } from "lucide-react";
+import { Link, useLocation } from "react-router-dom";
+import { Menu, X, BookOpen } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useAuth } from "@/hooks/useAuth";
-import { LoginModal } from "./auth/LoginModal";
-import { RegisterModal } from "./auth/RegisterModal";
-import { RequestPasswordResetModal } from "./auth/RequestPasswordResetModal";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 
 export function Navigation() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
-  const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);
-  const [isResetModalOpen, setIsResetModalOpen] = useState(false);
   const location = useLocation();
-  const navigate = useNavigate();
-  const { isAuthenticated, user, logout } = useAuth();
 
   const isActive = (path: string) => location.pathname === path;
-
-  const handleLogout = () => {
-    logout();
-    navigate('/');
-  };
-
-  const openLoginModal = () => {
-    setIsRegisterModalOpen(false);
-    setIsResetModalOpen(false);
-    setIsLoginModalOpen(true);
-  };
-
-  const openRegisterModal = () => {
-    setIsLoginModalOpen(false);
-    setIsResetModalOpen(false);
-    setIsRegisterModalOpen(true);
-  };
-
-  const openResetModal = () => {
-    setIsLoginModalOpen(false);
-    setIsRegisterModalOpen(false);
-    setIsResetModalOpen(true);
-  };
-
-  const authButtons = (
-    <div className="flex items-center space-x-4">
-      <Button 
-        variant="outline" 
-        size="sm" 
-        className="text-gray-700 border-gray-300 hover:bg-[#6c757d] hover:text-white hover:border-[#6c757d] transition-colors"
-        onClick={openLoginModal}
-      >
-        Iniciar Sesión
-      </Button>
-      <Button 
-        size="sm" 
-        className="bg-[#D95D39] hover:bg-[#C54A2C] text-white"
-        onClick={openRegisterModal}
-      >
-        Inscribirse Ahora
-      </Button>
-    </div>
-  );
-
-  const userMenu = (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button variant="ghost" className="relative h-8 w-8 rounded-full">
-          <User className="h-5 w-5" />
-        </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-56" align="end" forceMount>
-        <DropdownMenuLabel className="font-normal">
-          <div className="flex flex-col space-y-1">
-            <p className="text-sm font-medium leading-none">{user?.name}</p>
-            <p className="text-xs leading-none text-muted-foreground">
-              {user?.email}
-            </p>
-          </div>
-        </DropdownMenuLabel>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem onClick={() => navigate('/student')}>
-          Mi Panel
-        </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => navigate('/courses')}>
-          Mis Programas
-        </DropdownMenuItem>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem onClick={handleLogout}>
-          <LogOut className="mr-2 h-4 w-4" />
-          <span>Cerrar Sesión</span>
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
-  );
 
   return (
     <>
@@ -141,7 +49,21 @@ export function Navigation() {
                 Portal Ejecutivo
               </Link>
               
-              {isAuthenticated ? userMenu : authButtons}
+              <div className="flex items-center space-x-4">
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  className="text-gray-700 border-gray-300 hover:bg-[#6c757d] hover:text-white hover:border-[#6c757d] transition-colors"
+                >
+                  Iniciar Sesión
+                </Button>
+                <Button 
+                  size="sm" 
+                  className="bg-[#D95D39] hover:bg-[#C54A2C] text-white"
+                >
+                  Inscribirse Ahora
+                </Button>
+              </div>
             </div>
 
             {/* Mobile menu button */}
@@ -189,56 +111,27 @@ export function Navigation() {
                 </Link>
                 
                 <div className="px-3 py-2 space-y-2">
-                  {isAuthenticated ? (
-                    <Button 
-                      variant="outline" 
-                      size="sm" 
-                      className="w-full"
-                      onClick={() => { handleLogout(); setIsMobileMenuOpen(false); }}
-                    >
-                      Cerrar Sesión
-                    </Button>
-                  ) : (
-                    <>
-                      <Button 
-                        variant="outline" 
-                        size="sm" 
-                        className="w-full text-gray-700 border-gray-300 hover:bg-[#6c757d] hover:text-white hover:border-[#6c757d] transition-colors"
-                        onClick={() => { openLoginModal(); setIsMobileMenuOpen(false); }}
-                      >
-                        Iniciar Sesión
-                      </Button>
-                      <Button 
-                        size="sm" 
-                        className="w-full bg-[#D95D39] hover:bg-[#C54A2C] text-white"
-                        onClick={() => { openRegisterModal(); setIsMobileMenuOpen(false); }}
-                      >
-                        Inscribirse Ahora
-                      </Button>
-                    </>
-                  )}
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    className="w-full text-gray-700 border-gray-300 hover:bg-[#6c757d] hover:text-white hover:border-[#6c757d] transition-colors"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    Iniciar Sesión
+                  </Button>
+                  <Button 
+                    size="sm" 
+                    className="w-full bg-[#D95D39] hover:bg-[#C54A2C] text-white"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    Inscribirse Ahora
+                  </Button>
                 </div>
               </div>
             </div>
           )}
         </div>
       </nav>
-      <LoginModal 
-        isOpen={isLoginModalOpen} 
-        onClose={() => setIsLoginModalOpen(false)} 
-        onSwitchToRegister={openRegisterModal}
-        onSwitchToReset={openResetModal}
-      />
-      <RegisterModal 
-        isOpen={isRegisterModalOpen} 
-        onClose={() => setIsRegisterModalOpen(false)} 
-        onSwitchToLogin={openLoginModal}
-      />
-      <RequestPasswordResetModal
-        isOpen={isResetModalOpen}
-        onClose={() => setIsResetModalOpen(false)}
-        onSwitchToLogin={openLoginModal}
-      />
     </>
   );
 }

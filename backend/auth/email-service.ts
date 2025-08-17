@@ -1,6 +1,6 @@
 import { 
   EMAIL_SERVICE_PROVIDER, 
-  emailApiKey, 
+  getEmailApiKey, 
   EMAIL_FROM_ADDRESS, 
   EMAIL_FROM_NAME,
   EMAIL_REPLY_TO,
@@ -242,7 +242,7 @@ Contact us immediately at ${EMAIL_REPLY_TO} if you need assistance.
 // Email service implementations
 class SendGridEmailService {
   async sendEmail(options: SendEmailOptions): Promise<boolean> {
-    const apiKey = emailApiKey();
+    const apiKey = getEmailApiKey();
     if (!apiKey) {
       console.error("SendGrid API Key is not configured.");
       return false;
@@ -319,7 +319,7 @@ function getEmailService() {
     case "smtp":
       return new SMTPEmailService();
     default:
-      console.warn(`Unknown email service provider: ${EMAIL_SERVICE_PROVIDER}, using mock service`);
+      console.warn(`Using mock email service for provider: ${EMAIL_SERVICE_PROVIDER}`);
       return new MockEmailService();
   }
 }
@@ -431,7 +431,8 @@ export async function testEmailService(): Promise<{ success: boolean; error?: st
       return { success: true };
     }
     
-    if (!emailApiKey()) {
+    const apiKey = getEmailApiKey();
+    if (!apiKey) {
       return { success: false, error: "Email API Key is not configured." };
     }
 

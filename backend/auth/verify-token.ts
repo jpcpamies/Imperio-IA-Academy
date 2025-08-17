@@ -1,9 +1,7 @@
 import { api, APIError } from "encore.dev/api";
 import { authDB } from "./db";
 import jwt from "jsonwebtoken";
-import { secret } from "encore.dev/config";
-
-const jwtSecret = secret("JWTSecret");
+import { getJWTSecret } from "./config";
 
 export interface VerifyTokenRequest {
   token: string;
@@ -54,7 +52,7 @@ export const verifyToken = api<VerifyTokenRequest, VerifyTokenResponse>(
     let decoded;
     try {
       // Verify JWT token with enhanced validation
-      decoded = jwt.verify(sanitizedToken, jwtSecret(), {
+      decoded = jwt.verify(sanitizedToken, getJWTSecret(), {
         issuer: 'ai-academia',
         audience: 'ai-academia-users',
         algorithms: ['HS256']
