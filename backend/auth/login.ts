@@ -6,6 +6,7 @@ import { secret } from "encore.dev/config";
 import { sanitizeEmail, sanitizePassword, isValidEmail } from "./utils";
 import { checkRateLimit, loginRateLimiter } from "./rate-limiter";
 import { logSecurityEvent } from "./security-logger";
+import crypto from "crypto";
 
 const jwtSecret = secret("JWTSecret");
 

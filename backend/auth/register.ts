@@ -3,8 +3,10 @@ import { authDB } from "./db";
 import bcrypt from "bcrypt";
 import crypto from "crypto";
 import { sanitizeEmail, sanitizeName, sanitizePassword, isValidEmail, validatePassword } from "./utils";
-import { checkRateLimit, registerRateLimiter } from "./rate-limiter";
+import { checkMultiLayerRateLimit } from "./enhanced-rate-limiter";
 import { logSecurityEvent } from "./security-logger";
+import { sendWelcomeEmail } from "./email-service";
+import { BCRYPT_ROUNDS } from "./config";
 
 export interface RegisterRequest {
   name: string;
@@ -27,6 +29,7 @@ export const register = api<RegisterRequest, RegisterResponse>(
     // Input validation and sanitization
     const sanitizedName = sanitizeName(req.name);
     const sanitizedEmail = sanitizeEmail(req.email);
+    const ipAddress = "unknown"; // In production, extract from request headers
     
     console.log("Sanitized name:", sanitizedName);
     console.log("Sanitized email:", sanitizedEmail);
@@ -48,16 +51,15 @@ export const register = api<RegisterRequest, RegisterResponse>(
       throw APIError.invalidArgument("Please provide a valid email address");
     }
 
-    // Check rate limiting
+    // Check multi-layer rate limiting
     try {
-      checkRateLimit(registerRateLimiter, sanitizedEmail, "registration");
+      await checkMultiLayerRateLimit(sanitizedEmail, ipAddress, "register", false);
     } catch (rateLimitError) {
       // Log security event for rate limit exceeded
       await logSecurityEvent({
         event: "RATE_LIMIT_EXCEEDED",
         email: sanitizedEmail,
-        ipAddress: "unknown",
-        userAgent: "unknown",
+        ipAddress: ipAddress,
         details: { action: "registration" }
       });
       throw rateLimitError;
@@ -72,8 +74,7 @@ export const register = api<RegisterRequest, RegisterResponse>(
       await logSecurityEvent({
         event: "WEAK_PASSWORD_ATTEMPT",
         email: sanitizedEmail,
-        ipAddress: "unknown",
-        userAgent: "unknown",
+        ipAddress: ipAddress,
         details: { reason: passwordValidation.message }
       });
       
@@ -88,8 +89,8 @@ export const register = api<RegisterRequest, RegisterResponse>(
     try {
       console.log("Checking for existing user with email:", sanitizedEmail);
       
-      existingUser = await authDB.queryRow<{ id: string }>`
-        SELECT id FROM users WHERE LOWER(email) = ${sanitizedEmail}
+      existingUser = await authDB.queryRow<{ id: string; email: string }>`
+        SELECT id, email FROM users WHERE LOWER(email) = ${sanitizedEmail}
       `;
       
       console.log("Existing user check completed, found:", !!existingUser);
@@ -100,8 +101,7 @@ export const register = api<RegisterRequest, RegisterResponse>(
       await logSecurityEvent({
         event: "DATABASE_ERROR",
         email: sanitizedEmail,
-        ipAddress: "unknown",
-        userAgent: "unknown",
+        ipAddress: ipAddress,
         details: { error: "Database connection failed during registration" }
       });
       
@@ -115,20 +115,18 @@ export const register = api<RegisterRequest, RegisterResponse>(
       await logSecurityEvent({
         event: "DUPLICATE_REGISTRATION_ATTEMPT",
         email: sanitizedEmail,
-        ipAddress: "unknown",
-        userAgent: "unknown",
+        ipAddress: ipAddress,
         details: { existingUserId: existingUser.id }
       });
       
-      throw APIError.alreadyExists("An account with this email already exists");
+      throw APIError.alreadyExists("An account with this email already exists. Please try logging in instead.");
     }
 
-    // Hash password
+    // Hash password with production-grade settings
     let passwordHash;
     try {
-      console.log("Hashing password with bcrypt");
-      const saltRounds = 12;
-      passwordHash = await bcrypt.hash(sanitizedPassword, saltRounds);
+      console.log("Hashing password with bcrypt, rounds:", BCRYPT_ROUNDS);
+      passwordHash = await bcrypt.hash(sanitizedPassword, BCRYPT_ROUNDS);
       console.log("Password hashed successfully");
     } catch (hashError) {
       console.error("Password hashing error:", hashError);
@@ -137,8 +135,7 @@ export const register = api<RegisterRequest, RegisterResponse>(
       await logSecurityEvent({
         event: "PASSWORD_HASHING_ERROR",
         email: sanitizedEmail,
-        ipAddress: "unknown",
-        userAgent: "unknown",
+        ipAddress: ipAddress,
         details: { error: "bcrypt hashing failed" }
       });
       
@@ -153,10 +150,10 @@ export const register = api<RegisterRequest, RegisterResponse>(
     try {
       console.log("Creating new user in database");
       
-      // Create user
+      // Create user with transaction-like behavior
       newUser = await authDB.queryRow<{ id: string }>`
-        INSERT INTO users (name, email, password_hash, verification_token)
-        VALUES (${sanitizedName}, ${sanitizedEmail}, ${passwordHash}, ${verificationToken})
+        INSERT INTO users (name, email, password_hash, verification_token, created_at, updated_at)
+        VALUES (${sanitizedName}, ${sanitizedEmail}, ${passwordHash}, ${verificationToken}, NOW(), NOW())
         RETURNING id
       `;
 
@@ -172,8 +169,7 @@ export const register = api<RegisterRequest, RegisterResponse>(
       await logSecurityEvent({
         event: "USER_CREATION_ERROR",
         email: sanitizedEmail,
-        ipAddress: "unknown",
-        userAgent: "unknown",
+        ipAddress: ipAddress,
         details: { error: createError instanceof Error ? createError.message : "Unknown error" }
       });
       
@@ -190,7 +186,7 @@ export const register = api<RegisterRequest, RegisterResponse>(
       console.log("Auto-verifying user email");
       
       await authDB.exec`
-        UPDATE users SET email_verified = true, verification_token = null
+        UPDATE users SET email_verified = true, verification_token = null, updated_at = NOW()
         WHERE id = ${newUser.id}
       `;
       
@@ -203,8 +199,7 @@ export const register = api<RegisterRequest, RegisterResponse>(
         event: "EMAIL_VERIFICATION_ERROR",
         email: sanitizedEmail,
         userId: newUser.id,
-        ipAddress: "unknown",
-        userAgent: "unknown",
+        ipAddress: ipAddress,
         details: { error: "Auto-verification failed" }
       });
       
@@ -212,21 +207,40 @@ export const register = api<RegisterRequest, RegisterResponse>(
       console.log("Registration completed but email verification failed");
     }
 
+    // Send welcome email (non-blocking)
+    try {
+      const emailSent = await sendWelcomeEmail(sanitizedEmail, sanitizedName);
+      console.log("Welcome email sent:", emailSent);
+    } catch (emailError) {
+      console.warn("Failed to send welcome email:", emailError);
+      // Don't fail registration if email fails
+    }
+
     // Log successful registration
     await logSecurityEvent({
       event: "REGISTRATION_SUCCESS",
       email: sanitizedEmail,
       userId: newUser.id,
-      ipAddress: "unknown",
-      userAgent: "unknown",
-      details: { name: sanitizedName }
+      ipAddress: ipAddress,
+      details: { 
+        name: sanitizedName,
+        emailVerified: true // Since we auto-verify
+      }
     });
+
+    // Check rate limiting for successful registration (this will reset failure counters)
+    try {
+      await checkMultiLayerRateLimit(sanitizedEmail, ipAddress, "register", true);
+    } catch (rateLimitError) {
+      // Don't fail registration if rate limit check fails
+      console.warn("Rate limit check failed after successful registration:", rateLimitError);
+    }
 
     console.log("Registration completed successfully for user:", newUser.id);
 
     return {
       success: true,
-      message: "Account created successfully! You can now log in.",
+      message: "Account created successfully! You can now log in with your credentials.",
       userId: newUser.id,
     };
   }
