@@ -90,6 +90,15 @@ export interface ClientOptions {
  */
 import { getProfile as api_auth_get_profile_getProfile } from "~backend/auth/get-profile";
 import { login as api_auth_login_login } from "~backend/auth/login";
+import {
+    healthCheck as api_auth_monitoring_healthCheck,
+    securityMetrics as api_auth_monitoring_securityMetrics
+} from "~backend/auth/monitoring";
+import {
+    requestPasswordReset as api_auth_password_reset_requestPasswordReset,
+    resetPassword as api_auth_password_reset_resetPassword,
+    validateResetToken as api_auth_password_reset_validateResetToken
+} from "~backend/auth/password-reset";
 import { register as api_auth_register_register } from "~backend/auth/register";
 import { verifyToken as api_auth_verify_token_verifyToken } from "~backend/auth/verify-token";
 
@@ -101,8 +110,13 @@ export namespace auth {
         constructor(baseClient: BaseClient) {
             this.baseClient = baseClient
             this.getProfile = this.getProfile.bind(this)
+            this.healthCheck = this.healthCheck.bind(this)
             this.login = this.login.bind(this)
             this.register = this.register.bind(this)
+            this.requestPasswordReset = this.requestPasswordReset.bind(this)
+            this.resetPassword = this.resetPassword.bind(this)
+            this.securityMetrics = this.securityMetrics.bind(this)
+            this.validateResetToken = this.validateResetToken.bind(this)
             this.verifyToken = this.verifyToken.bind(this)
         }
 
@@ -121,6 +135,15 @@ export namespace auth {
         }
 
         /**
+         * Enhanced health check with comprehensive monitoring
+         */
+        public async healthCheck(): Promise<ResponseType<typeof api_auth_monitoring_healthCheck>> {
+            // Now make the actual call to the API
+            const resp = await this.baseClient.callTypedAPI(`/auth/health`, {method: "GET", body: undefined})
+            return JSON.parse(await resp.text(), dateReviver) as ResponseType<typeof api_auth_monitoring_healthCheck>
+        }
+
+        /**
          * Authenticates a user with email and password.
          */
         public async login(params: RequestType<typeof api_auth_login_login>): Promise<ResponseType<typeof api_auth_login_login>> {
@@ -136,6 +159,42 @@ export namespace auth {
             // Now make the actual call to the API
             const resp = await this.baseClient.callTypedAPI(`/auth/register`, {method: "POST", body: JSON.stringify(params)})
             return JSON.parse(await resp.text(), dateReviver) as ResponseType<typeof api_auth_register_register>
+        }
+
+        /**
+         * Request password reset (sends reset token via email)
+         */
+        public async requestPasswordReset(params: RequestType<typeof api_auth_password_reset_requestPasswordReset>): Promise<ResponseType<typeof api_auth_password_reset_requestPasswordReset>> {
+            // Now make the actual call to the API
+            const resp = await this.baseClient.callTypedAPI(`/auth/request-password-reset`, {method: "POST", body: JSON.stringify(params)})
+            return JSON.parse(await resp.text(), dateReviver) as ResponseType<typeof api_auth_password_reset_requestPasswordReset>
+        }
+
+        /**
+         * Reset password with token
+         */
+        public async resetPassword(params: RequestType<typeof api_auth_password_reset_resetPassword>): Promise<ResponseType<typeof api_auth_password_reset_resetPassword>> {
+            // Now make the actual call to the API
+            const resp = await this.baseClient.callTypedAPI(`/auth/reset-password`, {method: "POST", body: JSON.stringify(params)})
+            return JSON.parse(await resp.text(), dateReviver) as ResponseType<typeof api_auth_password_reset_resetPassword>
+        }
+
+        /**
+         * Security metrics endpoint for monitoring
+         */
+        public async securityMetrics(): Promise<ResponseType<typeof api_auth_monitoring_securityMetrics>> {
+            // Now make the actual call to the API
+            const resp = await this.baseClient.callTypedAPI(`/auth/security-metrics`, {method: "GET", body: undefined})
+            return JSON.parse(await resp.text(), dateReviver) as ResponseType<typeof api_auth_monitoring_securityMetrics>
+        }
+
+        /**
+         * Validate reset token (for frontend to check if token is valid before showing form)
+         */
+        public async validateResetToken(params: RequestType<typeof api_auth_password_reset_validateResetToken>): Promise<ResponseType<typeof api_auth_password_reset_validateResetToken>> {
+            // Now make the actual call to the API
+            const resp = await this.baseClient.callTypedAPI(`/auth/validate-reset-token`, {method: "POST", body: JSON.stringify(params)})
+            return JSON.parse(await resp.text(), dateReviver) as ResponseType<typeof api_auth_password_reset_validateResetToken>
         }
 
         /**

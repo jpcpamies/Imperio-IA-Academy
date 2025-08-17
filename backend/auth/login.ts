@@ -4,6 +4,8 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { secret } from "encore.dev/config";
 import { sanitizeEmail, sanitizePassword, isValidEmail } from "./utils";
+import { checkRateLimit, loginRateLimiter } from "./rate-limiter";
+import { logSecurityEvent } from "./security-logger";
 
 const jwtSecret = secret("JWTSecret");
 
@@ -27,8 +29,6 @@ export interface LoginResponse {
   token: string;
 }
 
-// All helper functions moved to utils.ts for consistency
-
 // Authenticates a user with email and password.
 export const login = api<LoginRequest, LoginResponse>(
   { expose: true, method: "POST", path: "/auth/login" },
@@ -45,8 +45,6 @@ export const login = api<LoginRequest, LoginResponse>(
     const sanitizedPassword = sanitizePassword(req.password);
 
     console.log("Sanitized email:", sanitizedEmail);
-    console.log("Sanitized password length:", sanitizedPassword.length);
-    console.log("Sanitized password (first 5 chars):", sanitizedPassword.substring(0, 5) + "...");
 
     // Validate email format
     if (!isValidEmail(sanitizedEmail)) {
@@ -60,9 +58,24 @@ export const login = api<LoginRequest, LoginResponse>(
       throw APIError.invalidArgument("Password cannot be empty");
     }
 
+    // Check rate limiting
+    try {
+      checkRateLimit(loginRateLimiter, sanitizedEmail, "login");
+    } catch (rateLimitError) {
+      // Log security event for rate limit exceeded
+      await logSecurityEvent({
+        event: "RATE_LIMIT_EXCEEDED",
+        email: sanitizedEmail,
+        ipAddress: "unknown", // In production, extract from request headers
+        userAgent: "unknown", // In production, extract from request headers
+        details: { action: "login" }
+      });
+      throw rateLimitError;
+    }
+
     let user;
     try {
-      // Case-insensitive email lookup with retry logic
+      // Case-insensitive email lookup
       console.log("Querying database for user with email:", sanitizedEmail);
       
       user = await authDB.queryRow<{
@@ -82,54 +95,94 @@ export const login = api<LoginRequest, LoginResponse>(
       console.log("Database query completed, user found:", !!user);
     } catch (dbError) {
       console.error("Database error during user lookup:", dbError);
+      
+      // Log security event for database error
+      await logSecurityEvent({
+        event: "DATABASE_ERROR",
+        email: sanitizedEmail,
+        ipAddress: "unknown",
+        userAgent: "unknown",
+        details: { error: "Database connection failed during login" }
+      });
+      
       throw APIError.internal("Authentication service temporarily unavailable. Please try again.");
     }
 
     if (!user) {
       console.log("User not found for email:", sanitizedEmail);
+      
+      // Log security event for failed login attempt
+      await logSecurityEvent({
+        event: "LOGIN_FAILED",
+        email: sanitizedEmail,
+        ipAddress: "unknown",
+        userAgent: "unknown",
+        details: { reason: "User not found" }
+      });
+      
       // Use generic message to prevent email enumeration
       throw APIError.unauthenticated("Invalid email or password");
     }
 
     console.log("User found, verifying password");
-    console.log("User email verified:", user.email_verified);
 
-    // Verify password with enhanced error handling and detailed logging
+    // Verify password
     let isValidPassword = false;
     try {
-      console.log("CRITICAL DEBUG - About to compare passwords:");
-      console.log("  - Sanitized password length:", sanitizedPassword.length);
-      console.log("  - Sanitized password hex:", Buffer.from(sanitizedPassword, 'utf8').toString('hex'));
-      console.log("  - Stored hash length:", user.password_hash.length);
-      console.log("  - Hash starts with:", user.password_hash.substring(0, 10) + "...");
-      
       isValidPassword = await bcrypt.compare(sanitizedPassword, user.password_hash);
       console.log("Password verification completed, valid:", isValidPassword);
-      
-      if (!isValidPassword) {
-        console.log("❌ PASSWORD MISMATCH DETECTED:");
-        console.log("  - This suggests the password was hashed with different input");
-        console.log("  - Check registration vs login sanitization consistency");
-      }
     } catch (bcryptError) {
       console.error("Password verification error:", bcryptError);
+      
+      // Log security event for bcrypt error
+      await logSecurityEvent({
+        event: "PASSWORD_VERIFICATION_ERROR",
+        email: sanitizedEmail,
+        userId: user.id,
+        ipAddress: "unknown",
+        userAgent: "unknown",
+        details: { error: "bcrypt verification failed" }
+      });
+      
       throw APIError.internal("Authentication service error. Please try again.");
     }
 
     if (!isValidPassword) {
       console.log("Invalid password for user:", user.id);
+      
+      // Log security event for invalid password
+      await logSecurityEvent({
+        event: "LOGIN_FAILED",
+        email: sanitizedEmail,
+        userId: user.id,
+        ipAddress: "unknown",
+        userAgent: "unknown",
+        details: { reason: "Invalid password" }
+      });
+      
       throw APIError.unauthenticated("Invalid email or password");
     }
 
     // Check if email is verified
     if (!user.email_verified) {
       console.log("Email not verified for user:", user.id);
+      
+      // Log security event for unverified email login attempt
+      await logSecurityEvent({
+        event: "LOGIN_FAILED",
+        email: sanitizedEmail,
+        userId: user.id,
+        ipAddress: "unknown",
+        userAgent: "unknown",
+        details: { reason: "Email not verified" }
+      });
+      
       throw APIError.permissionDenied("Please verify your email address before logging in");
     }
 
     console.log("Authentication successful, generating token");
 
-    // Generate JWT token with enhanced error handling
+    // Generate JWT token
     let token;
     try {
       token = jwt.sign(
@@ -149,8 +202,29 @@ export const login = api<LoginRequest, LoginResponse>(
       console.log("Token generated successfully");
     } catch (jwtError) {
       console.error("JWT generation error:", jwtError);
+      
+      // Log security event for JWT generation error
+      await logSecurityEvent({
+        event: "TOKEN_GENERATION_ERROR",
+        email: sanitizedEmail,
+        userId: user.id,
+        ipAddress: "unknown",
+        userAgent: "unknown",
+        details: { error: "JWT generation failed" }
+      });
+      
       throw APIError.internal("Authentication token generation failed. Please try again.");
     }
+
+    // Log successful login
+    await logSecurityEvent({
+      event: "LOGIN_SUCCESS",
+      email: sanitizedEmail,
+      userId: user.id,
+      ipAddress: "unknown",
+      userAgent: "unknown",
+      details: { role: user.role }
+    });
 
     console.log("Login successful for user:", user.id);
 
