@@ -1,6 +1,36 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
-import backend from "~backend/client";
-import type { User } from "~backend/auth/login";
+import axios from 'axios';
+
+// Detectar si estamos en desarrollo local o en un entorno remoto
+const getApiUrl = () => {
+  // Si hay una variable de entorno configurada, usarla
+  if (import.meta.env.VITE_CLIENT_TARGET) {
+    return import.meta.env.VITE_CLIENT_TARGET;
+  }
+  
+  // Si estamos en localhost, usar localhost
+  if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+    return 'http://localhost:4000';
+  }
+  
+  // Si estamos en un entorno remoto, construir la URL basada en el hostname
+  const hostname = window.location.hostname;
+  // Reemplazar el puerto del frontend (5174) con el puerto del backend (4000)
+  const backendHost = hostname.replace('5174', '4000');
+  return `https://${backendHost}`;
+};
+
+const API_URL = getApiUrl();
+console.log('API URL configurada:', API_URL);
+
+interface User {
+  id: string;
+  email: string;
+  name: string;
+  avatarUrl: string | null;
+  role: string;
+  emailVerified: boolean;
+}
 
 interface AuthContextType {
   user: User | null;
@@ -54,11 +84,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
         console.log("Verifying stored authentication token");
         
-        const response = await backend.auth.verifyToken({ token: sanitizedToken });
+        const response = await axios.post(`${API_URL}/auth/verify-token`, { 
+          token: sanitizedToken 
+        });
         
-        if (response.valid && response.user) {
+        if (response.data.valid && response.data.user) {
           console.log("Token verification successful, user authenticated");
-          setUser(response.user);
+          setUser(response.data.user);
         } else {
           console.log("Token verification failed, removing from storage");
           localStorage.removeItem("auth_token");
@@ -78,32 +110,42 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     try {
       console.log("Attempting login through auth context");
       
-      const response = await backend.auth.login({ email, password });
+      const response = await axios.post(`${API_URL}/auth/login`, { 
+        email, 
+        password 
+      });
       
-      if (!response.success || !response.user || !response.token) {
+      if (!response.data.success || !response.data.user || !response.data.token) {
         throw new Error("Invalid login response from server");
       }
 
       // Sanitize the token before storing
-      const sanitizedToken = sanitizeToken(response.token);
+      const sanitizedToken = sanitizeToken(response.data.token);
       if (!sanitizedToken) {
         throw new Error("Invalid authentication token received");
       }
 
       console.log("Login successful, storing user data and token");
       
-      setUser(response.user);
+      setUser(response.data.user);
       localStorage.setItem("auth_token", sanitizedToken);
       
-      console.log("User authenticated successfully:", response.user.email);
-    } catch (error) {
+      console.log("User authenticated successfully:", response.data.user.email);
+    } catch (error: any) {
       console.error("Login failed in auth context:", error);
       
       // Clear any potentially corrupted data
       setUser(null);
       localStorage.removeItem("auth_token");
       
-      throw error;
+      // Re-throw with a user-friendly message
+      if (error.response?.data?.error) {
+        throw new Error(error.response.data.error);
+      } else if (error.message) {
+        throw error;
+      } else {
+        throw new Error("Login failed. Please try again.");
+      }
     }
   };
 
@@ -111,7 +153,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     try {
       console.log("Attempting registration through auth context");
       
-      await backend.auth.register({ name, email, password });
+      const response = await axios.post(`${API_URL}/auth/register`, { 
+        name, 
+        email, 
+        password 
+      });
+      
+      if (!response.data.success) {
+        throw new Error(response.data.error || "Registration failed");
+      }
       
       console.log("Registration successful, attempting automatic login");
       
@@ -119,14 +169,21 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       await login(email, password);
       
       console.log("Auto-login after registration successful");
-    } catch (error) {
+    } catch (error: any) {
       console.error("Registration failed in auth context:", error);
       
       // Clear any potentially corrupted data
       setUser(null);
       localStorage.removeItem("auth_token");
       
-      throw error;
+      // Re-throw with a user-friendly message
+      if (error.response?.data?.error) {
+        throw new Error(error.response.data.error);
+      } else if (error.message) {
+        throw error;
+      } else {
+        throw new Error("Registration failed. Please try again.");
+      }
     }
   };
 
