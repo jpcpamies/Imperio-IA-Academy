@@ -1,5 +1,6 @@
 import { api } from "encore.dev/api";
 import { authDB } from "./db";
+import { getRateLimiterStats } from "./enhanced-rate-limiter";
 import { testEmailService } from "./email-service";
 import { 
   NODE_ENV, 
@@ -24,11 +25,13 @@ export interface HealthCheckResponse {
     database: ServiceStatus;
     authentication: ServiceStatus;
     email: ServiceStatus;
+    rateLimiting: ServiceStatus;
     configuration: ServiceStatus;
   };
   metrics: {
     uptime: number;
     memoryUsage: MemoryUsage;
+    rateLimiterStats: Record<string, any>;
     databaseConnections: number;
   };
   details?: Record<string, any>;
@@ -65,11 +68,13 @@ export const healthCheck = api<void, HealthCheckResponse>(
       databaseStatus,
       authStatus,
       emailStatus,
+      rateLimitingStatus,
       configStatus
     ] = await Promise.all([
       checkDatabaseHealth(),
       checkAuthenticationHealth(),
       checkEmailHealth(),
+      checkRateLimitingHealth(),
       checkConfigurationHealth()
     ]);
 
@@ -78,6 +83,7 @@ export const healthCheck = api<void, HealthCheckResponse>(
       database: databaseStatus,
       authentication: authStatus,
       email: emailStatus,
+      rateLimiting: rateLimitingStatus,
       configuration: configStatus
     };
 
@@ -262,6 +268,34 @@ async function checkEmailHealth(): Promise<ServiceStatus> {
   }
 }
 
+async function checkRateLimitingHealth(): Promise<ServiceStatus> {
+  const start = Date.now();
+  try {
+    const stats = getRateLimiterStats();
+    const totalActiveKeys = Object.values(stats).reduce((sum: number, stat: any) => sum + stat.activeKeys, 0);
+    
+    // Consider degraded if too many active rate limits (might indicate attack)
+    const status = totalActiveKeys > 1000 ? "degraded" : "healthy";
+    
+    return {
+      status,
+      responseTime: Date.now() - start,
+      lastCheck: new Date().toISOString(),
+      details: {
+        totalActiveKeys,
+        stats
+      }
+    };
+  } catch (error) {
+    return {
+      status: "unhealthy",
+      responseTime: Date.now() - start,
+      lastCheck: new Date().toISOString(),
+      error: error instanceof Error ? error.message : "Rate limiting check failed"
+    };
+  }
+}
+
 async function checkConfigurationHealth(): Promise<ServiceStatus> {
   const start = Date.now();
   try {
@@ -322,6 +356,7 @@ function gatherErrorDetails(services: Record<string, ServiceStatus>): Record<str
 
 async function gatherMetrics(): Promise<HealthCheckResponse["metrics"]> {
   try {
+    // Get database connection count (this is a simplified version)
     const dbConnections = await authDB.queryRow<{ count: number }>`
       SELECT COUNT(*) as count FROM pg_stat_activity WHERE state = 'active'
     `;
@@ -329,6 +364,7 @@ async function gatherMetrics(): Promise<HealthCheckResponse["metrics"]> {
     return {
       uptime: Date.now() - startTime,
       memoryUsage: process.memoryUsage(),
+      rateLimiterStats: getRateLimiterStats(),
       databaseConnections: dbConnections?.count || 0
     };
   } catch (error) {
@@ -336,6 +372,7 @@ async function gatherMetrics(): Promise<HealthCheckResponse["metrics"]> {
     return {
       uptime: Date.now() - startTime,
       memoryUsage: process.memoryUsage(),
+      rateLimiterStats: {},
       databaseConnections: 0
     };
   }

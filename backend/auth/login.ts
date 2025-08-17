@@ -2,13 +2,11 @@ import { api, APIError } from "encore.dev/api";
 import { authDB } from "./db";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import { secret } from "encore.dev/config";
-import { sanitizeEmail, sanitizePassword, isValidEmail } from "./utils";
-import { checkRateLimit, loginRateLimiter } from "./rate-limiter";
-import { logSecurityEvent } from "./security-logger";
 import crypto from "crypto";
-
-const jwtSecret = secret("JWTSecret");
+import { jwtSecret, JWT_EXPIRATION, JWT_ISSUER, JWT_AUDIENCE } from "./config";
+import { sanitizeEmail, sanitizePassword, isValidEmail } from "./utils";
+import { checkMultiLayerRateLimit } from "./enhanced-rate-limiter";
+import { logSecurityEvent } from "./security-logger";
 
 export interface LoginRequest {
   email: string;
@@ -44,6 +42,7 @@ export const login = api<LoginRequest, LoginResponse>(
 
     const sanitizedEmail = sanitizeEmail(req.email);
     const sanitizedPassword = sanitizePassword(req.password);
+    const ipAddress = "unknown"; // In production, extract from request headers
 
     console.log("Sanitized email:", sanitizedEmail);
 
@@ -59,23 +58,13 @@ export const login = api<LoginRequest, LoginResponse>(
       throw APIError.invalidArgument("Password cannot be empty");
     }
 
-    // Check rate limiting
-    try {
-      checkRateLimit(loginRateLimiter, sanitizedEmail, "login");
-    } catch (rateLimitError) {
-      // Log security event for rate limit exceeded
-      await logSecurityEvent({
-        event: "RATE_LIMIT_EXCEEDED",
-        email: sanitizedEmail,
-        ipAddress: "unknown", // In production, extract from request headers
-        userAgent: "unknown", // In production, extract from request headers
-        details: { action: "login" }
-      });
-      throw rateLimitError;
-    }
-
     let user;
+    let loginSuccess = false;
+
     try {
+      // Check multi-layer rate limiting before attempting login
+      await checkMultiLayerRateLimit(sanitizedEmail, ipAddress, "login", false);
+
       // Case-insensitive email lookup
       console.log("Querying database for user with email:", sanitizedEmail);
       
@@ -94,152 +83,178 @@ export const login = api<LoginRequest, LoginResponse>(
       `;
       
       console.log("Database query completed, user found:", !!user);
-    } catch (dbError) {
-      console.error("Database error during user lookup:", dbError);
-      
-      // Log security event for database error
+
+      if (!user) {
+        console.log("User not found for email:", sanitizedEmail);
+        
+        // Log security event for failed login attempt
+        await logSecurityEvent({
+          event: "LOGIN_FAILED",
+          email: sanitizedEmail,
+          ipAddress: ipAddress,
+          details: { reason: "User not found" }
+        });
+        
+        // Use generic message to prevent email enumeration
+        throw APIError.unauthenticated("Invalid email or password");
+      }
+
+      console.log("User found, verifying password");
+
+      // Verify password
+      let isValidPassword = false;
+      try {
+        isValidPassword = await bcrypt.compare(sanitizedPassword, user.password_hash);
+        console.log("Password verification completed, valid:", isValidPassword);
+      } catch (bcryptError) {
+        console.error("Password verification error:", bcryptError);
+        
+        // Log security event for bcrypt error
+        await logSecurityEvent({
+          event: "PASSWORD_VERIFICATION_ERROR",
+          email: sanitizedEmail,
+          userId: user.id,
+          ipAddress: ipAddress,
+          details: { error: "bcrypt verification failed" }
+        });
+        
+        throw APIError.internal("Authentication service error. Please try again.");
+      }
+
+      if (!isValidPassword) {
+        console.log("Invalid password for user:", user.id);
+        
+        // Log security event for invalid password
+        await logSecurityEvent({
+          event: "LOGIN_FAILED",
+          email: sanitizedEmail,
+          userId: user.id,
+          ipAddress: ipAddress,
+          details: { reason: "Invalid password" }
+        });
+        
+        throw APIError.unauthenticated("Invalid email or password");
+      }
+
+      // Check if email is verified
+      if (!user.email_verified) {
+        console.log("Email not verified for user:", user.id);
+        
+        // Log security event for unverified email login attempt
+        await logSecurityEvent({
+          event: "LOGIN_FAILED",
+          email: sanitizedEmail,
+          userId: user.id,
+          ipAddress: ipAddress,
+          details: { reason: "Email not verified" }
+        });
+        
+        throw APIError.permissionDenied("Please verify your email address before logging in. Check your email for a verification link.");
+      }
+
+      console.log("Authentication successful, generating token");
+      loginSuccess = true;
+
+      // Generate JWT token with enhanced security
+      let token;
+      try {
+        token = jwt.sign(
+          { 
+            userId: user.id, 
+            email: user.email, 
+            role: user.role,
+            iat: Math.floor(Date.now() / 1000),
+            // Add additional claims for security
+            sessionId: crypto.randomUUID(),
+            loginTime: new Date().toISOString()
+          },
+          jwtSecret(),
+          { 
+            expiresIn: JWT_EXPIRATION,
+            issuer: JWT_ISSUER,
+            audience: JWT_AUDIENCE,
+            algorithm: 'HS256'
+          }
+        );
+        console.log("Token generated successfully");
+      } catch (jwtError) {
+        console.error("JWT generation error:", jwtError);
+        
+        // Log security event for JWT generation error
+        await logSecurityEvent({
+          event: "TOKEN_GENERATION_ERROR",
+          email: sanitizedEmail,
+          userId: user.id,
+          ipAddress: ipAddress,
+          details: { error: "JWT generation failed" }
+        });
+        
+        throw APIError.internal("Authentication token generation failed. Please try again.");
+      }
+
+      // Update last login timestamp
+      try {
+        await authDB.exec`
+          UPDATE users 
+          SET updated_at = NOW()
+          WHERE id = ${user.id}
+        `;
+      } catch (updateError) {
+        // Don't fail login if timestamp update fails
+        console.warn("Failed to update last login timestamp:", updateError);
+      }
+
+      // Log successful login
       await logSecurityEvent({
-        event: "DATABASE_ERROR",
+        event: "LOGIN_SUCCESS",
         email: sanitizedEmail,
-        ipAddress: "unknown",
-        userAgent: "unknown",
-        details: { error: "Database connection failed during login" }
+        userId: user.id,
+        ipAddress: ipAddress,
+        details: { 
+          role: user.role,
+          sessionId: token ? (jwt.decode(token) as any)?.sessionId : undefined
+        }
+      });
+
+      // Check rate limiting for successful login (this will reset failure counters)
+      await checkMultiLayerRateLimit(sanitizedEmail, ipAddress, "login", true);
+
+      console.log("Login successful for user:", user.id);
+
+      return {
+        success: true,
+        user: {
+          id: user.id,
+          email: user.email,
+          name: user.name,
+          avatarUrl: user.avatar_url,
+          role: user.role,
+          emailVerified: user.email_verified,
+        },
+        token,
+      };
+
+    } catch (error) {
+      // If this is already an APIError, just re-throw it
+      if (error instanceof APIError) {
+        throw error;
+      }
+
+      console.error("Unexpected login error:", error);
+      
+      // Log unexpected error
+      await logSecurityEvent({
+        event: "LOGIN_ERROR",
+        email: sanitizedEmail,
+        userId: user?.id,
+        ipAddress: ipAddress,
+        details: { 
+          error: error instanceof Error ? error.message : "Unknown error",
+          stack: error instanceof Error ? error.stack : undefined
+        }
       });
       
       throw APIError.internal("Authentication service temporarily unavailable. Please try again.");
     }
-
-    if (!user) {
-      console.log("User not found for email:", sanitizedEmail);
-      
-      // Log security event for failed login attempt
-      await logSecurityEvent({
-        event: "LOGIN_FAILED",
-        email: sanitizedEmail,
-        ipAddress: "unknown",
-        userAgent: "unknown",
-        details: { reason: "User not found" }
-      });
-      
-      // Use generic message to prevent email enumeration
-      throw APIError.unauthenticated("Invalid email or password");
-    }
-
-    console.log("User found, verifying password");
-
-    // Verify password
-    let isValidPassword = false;
-    try {
-      isValidPassword = await bcrypt.compare(sanitizedPassword, user.password_hash);
-      console.log("Password verification completed, valid:", isValidPassword);
-    } catch (bcryptError) {
-      console.error("Password verification error:", bcryptError);
-      
-      // Log security event for bcrypt error
-      await logSecurityEvent({
-        event: "PASSWORD_VERIFICATION_ERROR",
-        email: sanitizedEmail,
-        userId: user.id,
-        ipAddress: "unknown",
-        userAgent: "unknown",
-        details: { error: "bcrypt verification failed" }
-      });
-      
-      throw APIError.internal("Authentication service error. Please try again.");
-    }
-
-    if (!isValidPassword) {
-      console.log("Invalid password for user:", user.id);
-      
-      // Log security event for invalid password
-      await logSecurityEvent({
-        event: "LOGIN_FAILED",
-        email: sanitizedEmail,
-        userId: user.id,
-        ipAddress: "unknown",
-        userAgent: "unknown",
-        details: { reason: "Invalid password" }
-      });
-      
-      throw APIError.unauthenticated("Invalid email or password");
-    }
-
-    // Check if email is verified
-    if (!user.email_verified) {
-      console.log("Email not verified for user:", user.id);
-      
-      // Log security event for unverified email login attempt
-      await logSecurityEvent({
-        event: "LOGIN_FAILED",
-        email: sanitizedEmail,
-        userId: user.id,
-        ipAddress: "unknown",
-        userAgent: "unknown",
-        details: { reason: "Email not verified" }
-      });
-      
-      throw APIError.permissionDenied("Please verify your email address before logging in");
-    }
-
-    console.log("Authentication successful, generating token");
-
-    // Generate JWT token
-    let token;
-    try {
-      token = jwt.sign(
-        { 
-          userId: user.id, 
-          email: user.email, 
-          role: user.role,
-          iat: Math.floor(Date.now() / 1000)
-        },
-        jwtSecret(),
-        { 
-          expiresIn: '7d',
-          issuer: 'ai-academia',
-          audience: 'ai-academia-users'
-        }
-      );
-      console.log("Token generated successfully");
-    } catch (jwtError) {
-      console.error("JWT generation error:", jwtError);
-      
-      // Log security event for JWT generation error
-      await logSecurityEvent({
-        event: "TOKEN_GENERATION_ERROR",
-        email: sanitizedEmail,
-        userId: user.id,
-        ipAddress: "unknown",
-        userAgent: "unknown",
-        details: { error: "JWT generation failed" }
-      });
-      
-      throw APIError.internal("Authentication token generation failed. Please try again.");
-    }
-
-    // Log successful login
-    await logSecurityEvent({
-      event: "LOGIN_SUCCESS",
-      email: sanitizedEmail,
-      userId: user.id,
-      ipAddress: "unknown",
-      userAgent: "unknown",
-      details: { role: user.role }
-    });
-
-    console.log("Login successful for user:", user.id);
-
-    return {
-      success: true,
-      user: {
-        id: user.id,
-        email: user.email,
-        name: user.name,
-        avatarUrl: user.avatar_url,
-        role: user.role,
-        emailVerified: user.email_verified,
-      },
-      token,
-    };
   }
 );

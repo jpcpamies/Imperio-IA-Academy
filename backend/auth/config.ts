@@ -48,7 +48,7 @@ export function validateProductionConfig(): { isValid: boolean; errors: string[]
 
   if (NODE_ENV === "production") {
     // Critical production checks
-    if (!process.env.JWT_SECRET) {
+    if (!jwtSecret()) {
       errors.push("JWT_SECRET must be set in production");
     }
 
@@ -56,7 +56,7 @@ export function validateProductionConfig(): { isValid: boolean; errors: string[]
       errors.push("DATABASE_URL must be set in production");
     }
 
-    if (!process.env.EMAIL_API_KEY) {
+    if (!emailApiKey()) {
       errors.push("EMAIL_API_KEY must be set in production");
     }
 
