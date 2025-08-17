@@ -1,13 +1,21 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Menu, X, BookOpen } from "lucide-react";
+import { Menu, X, BookOpen, User, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { useAuth } from "../contexts/AuthContext";
 
 export function Navigation() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const location = useLocation();
+  const { isAuthenticated, user, logout } = useAuth();
 
   const isActive = (path: string) => location.pathname === path;
+
+  const handleLogout = () => {
+    logout();
+    setIsMobileMenuOpen(false);
+  };
 
   return (
     <>
@@ -40,29 +48,70 @@ export function Navigation() {
               >
                 Programas
               </Link>
-              <Link
-                to="/dashboard"
-                className={`font-medium transition-colors ${
-                  isActive("/dashboard") ? "text-black" : "text-[#6c757d] hover:text-[#6B7BFF]"
-                }`}
-              >
-                Portal Ejecutivo
-              </Link>
+
+              {isAuthenticated && (
+                <Link
+                  to="/dashboard"
+                  className={`font-medium transition-colors ${
+                    isActive("/dashboard") ? "text-black" : "text-[#6c757d] hover:text-[#6B7BFF]"
+                  }`}
+                >
+                  Dashboard
+                </Link>
+              )}
               
               <div className="flex items-center space-x-4">
-                <Button 
-                  variant="outline" 
-                  size="sm" 
-                  className="text-gray-700 border-gray-300 hover:bg-[#6c757d] hover:text-white hover:border-[#6c757d] transition-colors"
-                >
-                  Iniciar Sesión
-                </Button>
-                <Button 
-                  size="sm" 
-                  className="bg-[#D95D39] hover:bg-[#C54A2C] text-white"
-                >
-                  Inscribirse Ahora
-                </Button>
+                {isAuthenticated ? (
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="ghost" className="flex items-center space-x-2">
+                        <User className="h-4 w-4" />
+                        <span>{user?.name}</span>
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end">
+                      <DropdownMenuItem asChild>
+                        <Link to="/profile" className="flex items-center">
+                          <User className="h-4 w-4 mr-2" />
+                          Profile
+                        </Link>
+                      </DropdownMenuItem>
+                      {user?.role === 'admin' && (
+                        <DropdownMenuItem asChild>
+                          <Link to="/admin" className="flex items-center">
+                            <BookOpen className="h-4 w-4 mr-2" />
+                            Admin Panel
+                          </Link>
+                        </DropdownMenuItem>
+                      )}
+                      <DropdownMenuSeparator />
+                      <DropdownMenuItem onClick={handleLogout} className="flex items-center">
+                        <LogOut className="h-4 w-4 mr-2" />
+                        Sign Out
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                ) : (
+                  <>
+                    <Link to="/login">
+                      <Button 
+                        variant="outline" 
+                        size="sm" 
+                        className="text-gray-700 border-gray-300 hover:bg-[#6c757d] hover:text-white hover:border-[#6c757d] transition-colors"
+                      >
+                        Sign In
+                      </Button>
+                    </Link>
+                    <Link to="/register">
+                      <Button 
+                        size="sm" 
+                        className="bg-[#D95D39] hover:bg-[#C54A2C] text-white"
+                      >
+                        Sign Up
+                      </Button>
+                    </Link>
+                  </>
+                )}
               </div>
             </div>
 
@@ -100,32 +149,67 @@ export function Navigation() {
                 >
                   Programas
                 </Link>
-                <Link
-                  to="/dashboard"
-                  className={`block px-3 py-2 font-medium transition-colors ${
-                    isActive("/dashboard") ? "text-black bg-blue-50" : "text-[#6c757d] hover:text-[#6B7BFF]"
-                  }`}
-                  onClick={() => setIsMobileMenuOpen(false)}
-                >
-                  Portal Ejecutivo
-                </Link>
+
+                {isAuthenticated && (
+                  <Link
+                    to="/dashboard"
+                    className={`block px-3 py-2 font-medium transition-colors ${
+                      isActive("/dashboard") ? "text-black bg-blue-50" : "text-[#6c757d] hover:text-[#6B7BFF]"
+                    }`}
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    Dashboard
+                  </Link>
+                )}
                 
                 <div className="px-3 py-2 space-y-2">
-                  <Button 
-                    variant="outline" 
-                    size="sm" 
-                    className="w-full text-gray-700 border-gray-300 hover:bg-[#6c757d] hover:text-white hover:border-[#6c757d] transition-colors"
-                    onClick={() => setIsMobileMenuOpen(false)}
-                  >
-                    Iniciar Sesión
-                  </Button>
-                  <Button 
-                    size="sm" 
-                    className="w-full bg-[#D95D39] hover:bg-[#C54A2C] text-white"
-                    onClick={() => setIsMobileMenuOpen(false)}
-                  >
-                    Inscribirse Ahora
-                  </Button>
+                  {isAuthenticated ? (
+                    <>
+                      <div className="text-sm text-gray-600 mb-2">
+                        Signed in as {user?.name}
+                      </div>
+                      <Link to="/profile" onClick={() => setIsMobileMenuOpen(false)}>
+                        <Button variant="outline" size="sm" className="w-full mb-2">
+                          Profile
+                        </Button>
+                      </Link>
+                      {user?.role === 'admin' && (
+                        <Link to="/admin" onClick={() => setIsMobileMenuOpen(false)}>
+                          <Button variant="outline" size="sm" className="w-full mb-2">
+                            Admin Panel
+                          </Button>
+                        </Link>
+                      )}
+                      <Button 
+                        variant="outline" 
+                        size="sm" 
+                        className="w-full"
+                        onClick={handleLogout}
+                      >
+                        Sign Out
+                      </Button>
+                    </>
+                  ) : (
+                    <>
+                      <Link to="/login" onClick={() => setIsMobileMenuOpen(false)}>
+                        <Button 
+                          variant="outline" 
+                          size="sm" 
+                          className="w-full text-gray-700 border-gray-300 hover:bg-[#6c757d] hover:text-white hover:border-[#6c757d] transition-colors mb-2"
+                        >
+                          Sign In
+                        </Button>
+                      </Link>
+                      <Link to="/register" onClick={() => setIsMobileMenuOpen(false)}>
+                        <Button 
+                          size="sm" 
+                          className="w-full bg-[#D95D39] hover:bg-[#C54A2C] text-white"
+                        >
+                          Sign Up
+                        </Button>
+                      </Link>
+                    </>
+                  )}
                 </div>
               </div>
             </div>
