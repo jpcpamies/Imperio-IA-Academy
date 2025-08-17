@@ -31,7 +31,6 @@ $$ language 'plpgsql';
 CREATE TRIGGER update_users_updated_at BEFORE UPDATE
 ON users FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 
--- Insert admin user for testing
+-- Insert admin user for testing (password: admin123)
 INSERT INTO users (email, password_hash, name, role, email_verified) VALUES
 ('admin@aiacademia.com', '$2b$12$LQv3c1yqBWVHxkd0LHAkCOYz6TtxMQJqhN8/LewdBPj/VcSAg9S6O', 'Admin User', 'admin', true);
--- Password is 'admin123' - change this in production!

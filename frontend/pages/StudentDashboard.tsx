@@ -39,12 +39,14 @@ export function StudentDashboard() {
     streak: 5,
   });
 
+  const mockUserName = "Estudiante";
+
   return (
     <div className="min-h-screen bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="mb-8">
           <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-            ¡Bienvenido de vuelta!
+            ¡Bienvenido de vuelta, {mockUserName}!
           </h1>
           <p className="text-xl text-gray-600">
             Continúa tu transformación profesional con IA. Estás haciendo un gran progreso.
@@ -106,7 +108,7 @@ export function StudentDashboard() {
 
         {/* Enrolled Courses */}
         <div className="mb-8">
-          <h2 className="text-2xl font-bold text-gray-900 mb-6">Tus Librerías</h2>
+          <h2 className="text-2xl font-bold text-gray-900 mb-6">Tus Programas</h2>
           <div className="grid md:grid-cols-2 gap-6">
             {enrolledCourses.map((course) => (
               <Card key={course.id} className="border border-gray-200 bg-white shadow-sm hover:shadow-md transition-shadow duration-300">
@@ -134,7 +136,7 @@ export function StudentDashboard() {
                   <div className="flex flex-col sm:flex-row gap-2">
                     <Link to={`/courses/${course.id}`} className="flex-1">
                       <Button variant="outline" className="w-full text-gray-700 border-gray-300 hover:bg-gray-50 hover:text-gray-900">
-                        Ver Librería
+                        Ver Programa
                       </Button>
                     </Link>
                     <Link to={`/lessons/${course.nextLessonId}`} className="flex-1">
