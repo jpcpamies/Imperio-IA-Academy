@@ -2,6 +2,7 @@ import { api, APIError } from "encore.dev/api";
 import { authDB } from "./db";
 import bcrypt from "bcrypt";
 import crypto from "crypto";
+import { sanitizeEmail, sanitizeName, sanitizePassword, isValidEmail, validatePassword } from "./utils";
 
 export interface RegisterRequest {
   name: string;
@@ -15,72 +16,7 @@ export interface RegisterResponse {
   userId?: string;
 }
 
-// Helper function to sanitize and normalize email
-function sanitizeEmail(email: string): string {
-  if (!email || typeof email !== 'string') {
-    return '';
-  }
-  
-  // Remove all types of whitespace and invisible characters
-  const cleaned = email
-    .trim()
-    .replace(/[\u200B-\u200D\uFEFF]/g, '') // Remove zero-width characters
-    .replace(/\s+/g, '') // Remove all whitespace
-    .toLowerCase();
-  
-  return cleaned;
-}
-
-// Helper function to validate email format
-function isValidEmail(email: string): boolean {
-  if (!email || typeof email !== 'string') {
-    return false;
-  }
-  
-  const emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
-  return emailRegex.test(email);
-}
-
-// Helper function to sanitize name
-function sanitizeName(name: string): string {
-  if (!name || typeof name !== 'string') {
-    return '';
-  }
-  
-  // Remove invisible characters but preserve normal spaces
-  return name
-    .trim()
-    .replace(/[\u200B-\u200D\uFEFF]/g, '') // Remove zero-width characters
-    .replace(/\s+/g, ' '); // Normalize multiple spaces to single space
-}
-
-// Helper function to validate password strength
-function validatePassword(password: string): { isValid: boolean; message?: string } {
-  if (!password || typeof password !== 'string') {
-    return { isValid: false, message: "Password is required" };
-  }
-
-  // Only trim leading/trailing whitespace
-  const trimmedPassword = password.trim();
-
-  if (trimmedPassword.length < 8) {
-    return { isValid: false, message: "Password must be at least 8 characters long" };
-  }
-
-  if (trimmedPassword.length > 128) {
-    return { isValid: false, message: "Password must be less than 128 characters long" };
-  }
-
-  // Check for at least one letter and one number
-  const hasLetter = /[a-zA-Z]/.test(trimmedPassword);
-  const hasNumber = /[0-9]/.test(trimmedPassword);
-
-  if (!hasLetter || !hasNumber) {
-    return { isValid: false, message: "Password must contain at least one letter and one number" };
-  }
-
-  return { isValid: true };
-}
+// All helper functions moved to utils.ts for consistency
 
 // Registers a new user account.
 export const register = api<RegisterRequest, RegisterResponse>(
@@ -112,14 +48,16 @@ export const register = api<RegisterRequest, RegisterResponse>(
       throw APIError.invalidArgument("Please provide a valid email address");
     }
 
-    // Validate password
+    // Validate password using centralized function
     const passwordValidation = validatePassword(req.password);
     if (!passwordValidation.isValid) {
       console.log("Invalid password:", passwordValidation.message);
       throw APIError.invalidArgument(passwordValidation.message!);
     }
 
-    const sanitizedPassword = req.password.trim();
+    // CRITICAL: Use the same sanitization function everywhere
+    const sanitizedPassword = sanitizePassword(req.password);
+    console.log("Password sanitized for hashing, length:", sanitizedPassword.length);
 
     // Check if user already exists with case-insensitive email lookup
     let existingUser;
@@ -141,13 +79,19 @@ export const register = api<RegisterRequest, RegisterResponse>(
       throw APIError.alreadyExists("An account with this email already exists");
     }
 
-    // Hash password with enhanced error handling
+    // Hash password with enhanced error handling and detailed logging
     let passwordHash;
     try {
-      console.log("Hashing password");
+      console.log("CRITICAL DEBUG - About to hash password:");
+      console.log("  - Sanitized password length:", sanitizedPassword.length);
+      console.log("  - Sanitized password hex:", Buffer.from(sanitizedPassword, 'utf8').toString('hex'));
+      
       const saltRounds = 12;
       passwordHash = await bcrypt.hash(sanitizedPassword, saltRounds);
-      console.log("Password hashed successfully");
+      
+      console.log("Password hashed successfully:");
+      console.log("  - Hash length:", passwordHash.length);
+      console.log("  - Hash starts with:", passwordHash.substring(0, 10) + "...");
     } catch (hashError) {
       console.error("Password hashing error:", hashError);
       throw APIError.internal("Registration service error. Please try again.");

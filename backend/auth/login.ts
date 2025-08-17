@@ -3,6 +3,7 @@ import { authDB } from "./db";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { secret } from "encore.dev/config";
+import { sanitizeEmail, sanitizePassword, isValidEmail } from "./utils";
 
 const jwtSecret = secret("JWTSecret");
 
@@ -26,41 +27,7 @@ export interface LoginResponse {
   token: string;
 }
 
-// Helper function to sanitize and normalize email
-function sanitizeEmail(email: string): string {
-  if (!email || typeof email !== 'string') {
-    return '';
-  }
-  
-  // Remove all types of whitespace and invisible characters
-  const cleaned = email
-    .trim()
-    .replace(/[\u200B-\u200D\uFEFF]/g, '') // Remove zero-width characters
-    .replace(/\s+/g, '') // Remove all whitespace
-    .toLowerCase();
-  
-  return cleaned;
-}
-
-// Helper function to validate email format
-function isValidEmail(email: string): boolean {
-  if (!email || typeof email !== 'string') {
-    return false;
-  }
-  
-  const emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
-  return emailRegex.test(email);
-}
-
-// Helper function to sanitize password
-function sanitizePassword(password: string): string {
-  if (!password || typeof password !== 'string') {
-    return '';
-  }
-  
-  // Only trim leading/trailing whitespace, preserve internal spaces
-  return password.trim();
-}
+// All helper functions moved to utils.ts for consistency
 
 // Authenticates a user with email and password.
 export const login = api<LoginRequest, LoginResponse>(
@@ -78,7 +45,8 @@ export const login = api<LoginRequest, LoginResponse>(
     const sanitizedPassword = sanitizePassword(req.password);
 
     console.log("Sanitized email:", sanitizedEmail);
-    console.log("Password length:", sanitizedPassword.length);
+    console.log("Sanitized password length:", sanitizedPassword.length);
+    console.log("Sanitized password (first 5 chars):", sanitizedPassword.substring(0, 5) + "...");
 
     // Validate email format
     if (!isValidEmail(sanitizedEmail)) {
@@ -126,11 +94,23 @@ export const login = api<LoginRequest, LoginResponse>(
     console.log("User found, verifying password");
     console.log("User email verified:", user.email_verified);
 
-    // Verify password with enhanced error handling
+    // Verify password with enhanced error handling and detailed logging
     let isValidPassword = false;
     try {
+      console.log("CRITICAL DEBUG - About to compare passwords:");
+      console.log("  - Sanitized password length:", sanitizedPassword.length);
+      console.log("  - Sanitized password hex:", Buffer.from(sanitizedPassword, 'utf8').toString('hex'));
+      console.log("  - Stored hash length:", user.password_hash.length);
+      console.log("  - Hash starts with:", user.password_hash.substring(0, 10) + "...");
+      
       isValidPassword = await bcrypt.compare(sanitizedPassword, user.password_hash);
       console.log("Password verification completed, valid:", isValidPassword);
+      
+      if (!isValidPassword) {
+        console.log("❌ PASSWORD MISMATCH DETECTED:");
+        console.log("  - This suggests the password was hashed with different input");
+        console.log("  - Check registration vs login sanitization consistency");
+      }
     } catch (bcryptError) {
       console.error("Password verification error:", bcryptError);
       throw APIError.internal("Authentication service error. Please try again.");
