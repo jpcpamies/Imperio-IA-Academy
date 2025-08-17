@@ -1,6 +1,7 @@
 import { api, APIError } from "encore.dev/api";
 import { authDB } from "./db";
 import { Header } from "encore.dev/api";
+import { verifyToken } from "./verify-token";
 
 export interface GetProfileParams {
   authorization: Header<"Authorization">;
@@ -67,6 +68,3 @@ export const getProfile = api<GetProfileParams, GetProfileResponse>(
     };
   }
 );
-
-// Import verifyToken function
-import { verifyToken } from "./verify-token";
